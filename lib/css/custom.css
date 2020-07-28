@@ -1,0 +1,97 @@
+
+  #site-logo{
+    font-family: 'Calistoga' !important;
+    font-size: 30px;
+  }
+
+  #site-home-title{
+      font-family: 'Calistoga' !important;
+      font-size: 70px;
+      font-weight: regular;
+      margin-top: 10px;
+  }
+
+  #site-home-theme-1{
+      font-family:'Gloria Hallelujah' !important;
+      font-size:20px;
+      margin-top:30px;
+      font-weight: bold;
+  }
+
+  #site-home-theme-2{
+      font-family:'helvetica' !important;
+      font-size:25px;
+      margin-top:-20px;
+      margin-left: 10px;
+  }
+
+  #site-home-text-1{
+    font-family:'helvetica' !important;
+    margin-left: 10px;
+    font-size:16px;
+    color:black;
+    margin-top: 30px;
+  }
+
+  #footer{
+     font-family: helvetica;
+     font-size:13px;
+     padding:10px;
+     position: fixed;
+     bottom:0px;
+  }
+
+  #logged-in-header{
+
+  }
+
+  #logged-in-header-title{
+    font-family: 'Calistoga' !important;
+    color: #ffffff;
+    font-size: 20px;
+    text-shadow: 2px 2px 4px #000000;
+  }
+
+
+  .notification-bar-item{
+    margin-right:10px;
+  }
+
+  .page_header_spacer{
+    margin-top:35px;
+    border-bottom:1px solid #e1e1e1;
+  }
+
+  .color_scheme_opacity{
+    opacity: 0.9;
+  }
+
+  .spanbutton{
+     cursor: pointer;
+  }
+
+  .sub_menu_tab{
+     padding:5px;
+  }
+
+  .sub_menu_tab>a{
+     color: #000000;
+  }
+
+  .sub_menu_tab_active{
+     background-color:#f1f1f1;
+     padding:5px;
+     border-bottom:2px solid #6DB4EE;
+  }
+
+  .sub_menu_tab_active >a{
+    color:#000000;
+  }
+
+  .sub_menu_tab_active >a:hover{
+    color: #0B79D3;
+  }
+
+  .sub_menu_tab_active:hover{
+    border-bottom: 2px solid #0B79D3 ;
+  }
