@@ -10,6 +10,7 @@ $(document).ready(function(){
           alert($("#file_upload_type_document").val());
       })
 
+//---------------------------------------------------------------------------------------------------
 
       // file upload
       $("#file").on("change", function(){
@@ -45,15 +46,14 @@ $(document).ready(function(){
 
       })
 
-
-
 // -------------------------------------------------------------------------------------------
 
       // function to load files
       function run_file_upload(file_type, property){
             var image_size = property.size;
+            image_size = image_size/1024;
             alert(image_size);
-            if (image_size>500000){
+            if (image_size==0){
                 alert("The file is larger than the allowed size. Please resize.");
             }else{
                     var form_data = new FormData();
@@ -75,12 +75,16 @@ $(document).ready(function(){
                         },
                         success: function(data){
                             console.log("am here");
+                            console.log(data.status);
                             $("#spinner").hide();
 
-                            data = JSON.parse(data);
+                            //data = JSON.parse(data);
                             if (data.status=='success'){
-                                $("#spinner").html("File Uploader");
-                                $("#spinner").show();
+                                var msgblock = "<div class='py-3' id='myuploadedfile'><i class='fas fa-paperclip'></i> " + data.wp_filename;
+                                msgblock += "&nbsp;&nbsp;&nbsp;<span id='deletefile' title='Delete file' style='cursor:pointer'><i class='fas fa-times text-danger'></i></span>";
+                                msgblock += "</div>";
+                                $("#activity_notifier").html(msgblock);
+
 
                             }
 
@@ -89,5 +93,16 @@ $(document).ready(function(){
             } // end of if
       }
 // -------------------------------------------------------------------------------------------
+
+// Remove file
+    $("#activity_notifier").on("click", "span#deletefile", function(){
+        alert("Delete File");
+    });
+
+
+
+
+
+//----------------------------------------------------------------------------------------------
 
 });

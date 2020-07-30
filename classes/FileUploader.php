@@ -15,7 +15,12 @@
               $today = date('Ymd_H_i_s');
               $wp_name = $today.rand(100,999).'.'.$extension;
 
-              $location = "../../../uploads/{$source}/{$wp_name}";
+              if ($file_type=='document'){
+                  $location = "../../../uploads/{$source}/documents/{$wp_name}";
+              }else if($file_type='image'){
+                  $location = "../../../uploads/{$source}/images/{$wp_name}";
+              }
+
               $result = move_uploaded_file($file['tmp_name'], $location);
 
               $response = '';

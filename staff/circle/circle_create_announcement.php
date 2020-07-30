@@ -52,7 +52,22 @@
     }
 
 
+//-----------------------------------------------------------------------------------------------------------------
+// Postback function
+  if (isset($_POST['btnSubmit'])){
+      $title = FieldSanitizer::inClean($_POST['title']);
+      $message = FieldSanitizer::inClean($_POST['message']);
 
+
+      if (!isset($_POST['file_upload_type'])){
+          $file_type = '';
+          echo "No Set";
+      }else{
+         echo "Set";
+         $file_type = $_POST['file_upload_type'];
+      }
+
+  }
 
 
 
@@ -96,11 +111,17 @@
                         echo "<a href='{$general_link}'>Team</a>";
                   ?>
             </div>
-            <div class='col-xs-12 col-sm-12 col-md-2 col-lg-2 mt-3'>
-                  Projects
+            <div class='col-xs-12 col-sm-12 col-md-2 col-lg-2 mt-3 sub_menu_tab'>
+                  <?php
+                        $general_link = "circle_projects.php?en=".mask($_GET_URL_cell_id)."&us=".mask($_GET_URL_user_id);
+                        echo "<a href='{$general_link}'>Projects</a>";
+                  ?>
             </div>
-            <div class='col-xs-12 col-sm-12 col-md-2 col-lg-2 mt-3'>
-                  Files
+            <div class='col-xs-12 col-sm-12 col-md-2 col-lg-2 mt-3 sub_menu_tab'>
+                  <?php
+                        $general_link = "circle_files.php?en=".mask($_GET_URL_cell_id)."&us=".mask($_GET_URL_user_id);
+                        echo "<a href='{$general_link}'>Files</a>";
+                  ?>
             </div>
 
       </div>
@@ -126,7 +147,7 @@
 
                     <!-- Message //-->
                     <label for="message" class="text-info font-weight-normal">Message<span class='text-danger'>*</span></label>
-                    <textarea id="message" rows="5" name="message" class="form-control mb-3 " placeholder="Message" ></textarea>
+                    <textarea id="message" rows="5" name="message" class="form-control mb-3 " placeholder="Message" required></textarea>
 
                     <!-- File Type  -->
                     <div>
@@ -153,6 +174,9 @@
                     </div>
                     <!-- end of spinner //-->
 
+                    <div id='activity_notifier'>
+
+                    </div>
 
                     <!-- file uploader //-->
                     <div class="md-form" id='file_uploader' style="display:none;">

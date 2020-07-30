@@ -20,7 +20,7 @@
 
 
 
-    $page_title = 'Work Circle - General Room';
+    $page_title = 'Work Circle | General Room';
 
     require_once("../../config/step2/init_wp.php");
     require_once("../../nav/staff_nav.php");
@@ -77,7 +77,7 @@
             <div class='col-xs-12 col-sm-12 col-md-12 col-lg-12 mt-2 font-weight-bold' >
                   <?php  echo $circle_name.$circle_short_name; ?>
             </div>
-            <div class='col-xs-12 col-sm-12 col-md-2 col-lg-2 mt-3 ml-2 sub_menu_tab_active' >
+            <div class='col-xs-12 col-sm-12 col-md-2 col-lg-2 mt-3 ml-2 sub_menu_tab' >
                   <?php
                         $general_link = "circle_general_room.php?en=".mask($_GET_URL_cell_id)."&us=".mask($_GET_URL_user_id);
                         echo "<a href='{$general_link}'>General Room</a>";
@@ -101,7 +101,7 @@
                         echo "<a href='{$general_link}'>Projects</a>";
                   ?>
             </div>
-            <div class='col-xs-12 col-sm-12 col-md-2 col-lg-2 mt-3 ml-2 sub_menu_tab'>
+            <div class='col-xs-12 col-sm-12 col-md-2 col-lg-2 mt-3 ml-2 sub_menu_tab_active'>
                   <?php
                         $general_link = "circle_files.php?en=".mask($_GET_URL_cell_id)."&us=".mask($_GET_URL_user_id);
                         echo "<a href='{$general_link}'>Files</a>";

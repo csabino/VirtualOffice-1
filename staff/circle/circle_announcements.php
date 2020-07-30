@@ -82,26 +82,32 @@
                         $general_link = "circle_general_room.php?en=".mask($_GET_URL_cell_id)."&us=".mask($_GET_URL_user_id);
                         echo "<a href='{$general_link}'>General Room</a>";
                   ?>
-
             </div>
-            <div class='col-xs-12 col-sm-12 col-md-2 col-lg-2 mt-3 sub_menu_tab_active'>
+            <div class='col-xs-12 col-sm-12 col-md-2 col-lg-2 mt-3 ml-2 sub_menu_tab_active'>
                   <?php
                         $general_link = "circle_announcements.php?en=".mask($_GET_URL_cell_id)."&us=".mask($_GET_URL_user_id);
                         echo "<a href='{$general_link}'>Announcements</a>";
                   ?>
             </div>
-            <div class='col-xs-12 col-sm-12 col-md-2 col-lg-2 mt-3 sub_menu_tab'>
+            <div class='col-xs-12 col-sm-12 col-md-2 col-lg-2 mt-3 ml-2 sub_menu_tab'>
                   <?php
                         $general_link = "circle_team.php?en=".mask($_GET_URL_cell_id)."&us=".mask($_GET_URL_user_id);
                         echo "<a href='{$general_link}'>Team</a>";
                   ?>
             </div>
-            <div class='col-xs-12 col-sm-12 col-md-2 col-lg-2 mt-3'>
-                  Projects
+            <div class='col-xs-12 col-sm-12 col-md-2 col-lg-2 mt-3 ml-2 sub_menu_tab'>
+                  <?php
+                        $general_link = "circle_projects.php?en=".mask($_GET_URL_cell_id)."&us=".mask($_GET_URL_user_id);
+                        echo "<a href='{$general_link}'>Projects</a>";
+                  ?>
             </div>
-            <div class='col-xs-12 col-sm-12 col-md-2 col-lg-2 mt-3'>
-                  Files
+            <div class='col-xs-12 col-sm-12 col-md-2 col-lg-2 mt-3 ml-2 sub_menu_tab'>
+                  <?php
+                        $general_link = "circle_files.php?en=".mask($_GET_URL_cell_id)."&us=".mask($_GET_URL_user_id);
+                        echo "<a href='{$general_link}'>Files</a>";
+                  ?>
             </div>
+
 
       </div>
       <!-- end of main area //-->
