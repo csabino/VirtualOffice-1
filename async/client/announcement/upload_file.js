@@ -7,7 +7,7 @@ $(document).ready(function(){
 
       $("#file_upload_type_image").bind("click",function(){
           $("#file_uploader").show();
-          alert($("#file_upload_type_document").val());
+          //alert($("#file_upload_type_document").val());
       })
 
 //---------------------------------------------------------------------------------------------------

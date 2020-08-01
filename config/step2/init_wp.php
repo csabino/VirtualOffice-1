@@ -23,6 +23,7 @@ require_once("../../interface/UserInterface.php");
 require_once("../../interface/CellInterface.php");
 require_once("../../interface/CircleInterface.php");
 require_once("../../interface/FileUploaderInterface.php");
+require_once("../../interface/AnnouncementInterface.php");
 
 // Logged-In Header
 require_once("../../includes/logged_in_header.php");

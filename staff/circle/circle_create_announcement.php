@@ -54,20 +54,64 @@
 
 //-----------------------------------------------------------------------------------------------------------------
 // Postback function
+
+  $errFlag = 0;
+  $flagMsg = '';
+
   if (isset($_POST['btnSubmit'])){
+
       $title = FieldSanitizer::inClean($_POST['title']);
       $message = FieldSanitizer::inClean($_POST['message']);
+      $file = '';
 
-
+      // check if file upload type is checked
       if (!isset($_POST['file_upload_type'])){
-          $file_type = '';
-          echo "No Set";
+
+          $file_upload_type = '';
+
       }else{
-         echo "Set";
-         $file_type = $_POST['file_upload_type'];
+
+         $file_upload_type = $_POST['file_upload_type'];
+           // check if file has been uploaded
+           if (isset($_SESSION['announcement_file'])){
+              $file = $_SESSION['announcement_file'];
+           } // end of check for file upload
+
+      } // end of check file upload type
+
+
+
+      // check fi all require fields are filled
+      if ($title!='' && $message!=''){
+          // create data array and populate data
+          $dataArray = array("cell"=>$_GET_URL_cell_id, "author"=>$_GET_URL_user_id,
+                        "title"=>$title, "message"=>$message,"file_upload_type"=>$file_upload_type,
+                        "file"=>$file);
+
+
+          // call class and methods
+          $announcement = new Announcement();
+          $result = $announcement->new_announcement($dataArray);
+
+          if ($result){
+              $errFlag = 0;
+              $flagMsg = 'The <strong>Announcement</strong> has been successfully created and posted.';
+          }else{
+              $errFlag = 1;
+              $flagMsg = 'There was a problem creating the <strong>Announcement</strong>. <br/>Please try again or contact the Administrator.';
+          }
+
+      }else{
+              $errFlag = 1;
+              $flagMsg = "The <strong>Title</strong> and <strong>Message</strong> are required to create an <strong>Announcement</strong>";
       }
 
-  }
+
+
+
+
+
+  }// end of postback
 
 
 
@@ -141,6 +185,20 @@
                   name="compose announcement" action="<?php echo htmlspecialchars($form_action_link); ?>"
                   method="post">
 
+                    <!-- Postback feedback //-->
+                      <?php
+                          if (isset($_POST['btnSubmit'])){
+                              if ($errFlag){
+                                  miniErrorAlert($flagMsg);
+                              }else{
+                                  miniSuccessAlert($flagMsg);
+                                  unset($_SESSION['announcement_file']);
+                              }
+                          }
+                      ?>
+
+                    <!-- End of postback feedback //-->
+
                     <!-- Title //-->
                     <label for="title" class="text-info font-weight-normal">Title<span class='text-danger'>*</span></label>
                     <input type="text" id="title" name="title" class="form-control mb-3 " placeholder="Title" required>
@@ -155,7 +213,7 @@
                     </div>
                     <!-- Default inline 1-->
                     <div class="custom-control custom-radio custom-control-inline">
-                      <input type="radio" class="custom-control-input" id="file_upload_type_document" name="file_upload_type"  value="document">
+                      <input type="radio" class="custom-control-input" id="file_upload_type_document" name="file_upload_type"  value="document" <?php if(isset($_POST['btnSubmit'])){ if(!$errFlag){echo "unchecked";} } ?> >
                       <label class="custom-control-label" for="file_upload_type_document">Document</label>
                     </div>
 
@@ -175,7 +233,15 @@
                     <!-- end of spinner //-->
 
                     <div id='activity_notifier'>
+                        <?php
+                            if (isset($_SESSION['announcement_file'])){
+                                 $msgblock = "<div class='py-3' id='myuploadedfile'><i class='fas fa-paperclip'></i> ". $_SESSION['announcement_file'];
+                                 $msgblock .= "&nbsp;&nbsp;&nbsp;<span id='deletefile' title='Delete file' style='cursor:pointer'><i class='fas fa-times text-danger'></i></span>";
+                                 $msgblock .= "</div>";
 
+                                echo $msgblock;
+                            }
+                        ?>
                     </div>
 
                     <!-- file uploader //-->

@@ -13,7 +13,7 @@
   require_once("../functions/Alerts.php");
   require_once("../functions/Encrypt.php");
   require_once("../functions/Colors.php");
-  
+
 
 
   // Abstract - Abstract Directory
@@ -29,6 +29,7 @@
   require_once("../interface/CellInterface.php");
   require_once("../interface/CircleInterface.php");
   require_once("../interface/FileUploaderInterface.php");
+  require_once("../interface/AnnouncementInterface.php");
 
 
 

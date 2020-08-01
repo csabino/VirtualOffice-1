@@ -34,8 +34,8 @@
       $fileUtil = new FileUploader();
       $uploadAction = $fileUtil->uploadFile($file_type, $source, $file);
 
-      session_start();      
-      if ($uploadAction['status']==1){
+      session_start();
+      if ($uploadAction['status']=='success'){
           unset($_SESSION['announcement_file']);
           $_SESSION['announcement_file'] = $uploadAction['wp_filename'];
       }else{
