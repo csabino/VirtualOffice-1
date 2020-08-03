@@ -20,7 +20,7 @@
 
 
 
-    $page_title = 'Work Circle | General Room';
+    $page_title = 'Work Circle - Projects';
 
     require_once("../../config/step2/init_wp.php");
     require_once("../../nav/staff_nav.php");
@@ -73,8 +73,8 @@
 
 
       <!-- main page area //-->
-      <div class="row">
-            <div class='col-xs-12 col-sm-12 col-md-12 col-lg-12 mt-2 font-weight-bold' >
+      <div class="row border-bottom">
+            <div class='col-xs-12 col-sm-12 col-md-12 col-lg-12 mt-1 mb-4 font-weight-bold' >
                   <?php  echo $circle_name.$circle_short_name; ?>
             </div>
             <div class='col-xs-12 col-sm-12 col-md-2 col-lg-2 mt-3 ml-2 sub_menu_tab' >
@@ -109,6 +109,31 @@
             </div>
 
       </div>
+
+
+
+
+
+
+      <!-- Projects //-->
+      <div class="row mt-5">
+              <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 mb-3 text-info font-weight-bold" >
+                    <big><i class="fas fa-business-time"></i> Projects</big>
+              </div>
+              <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right">
+                    <?php
+                        $code1 = mask($_GET_URL_cell_id);
+                        $code2 = mask($_GET_URL_user_id );
+                        $create_project_link = "circle_create_project.php?en=".$code1."&us=".$code2;
+
+                    ?>
+                    <a href="<?php echo $create_project_link; ?>" class="btn btn-sm btn-primary btn-rounded"> <i class="fas fa-plus"></i> Create Project</a>
+              </div>
+      </div>
+      <!-- end of Projects //-->
+
+
+
       <!-- end of main area //-->
 
 

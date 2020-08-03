@@ -139,10 +139,10 @@
       <!-- Announcements //-->
       <div class="row mt-5">
               <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 mb-3 text-info font-weight-bold" >
-                    Announcements
+                    <big><i class="fas fa-bullhorn"></i> Announcements</big>
               </div>
               <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right">
-                    <button href="http://localhost/workplace/staff/circle/circle_announcements.php" class="btn btn-sm btn-primary btn-rounded"> Compose Announcement</button>
+                    <button href="http://localhost/workplace/staff/circle/circle_announcements.php" class="btn btn-sm btn-primary btn-rounded"> <i class="fas fa-plus"></i> Compose Announcement</button>
               </div>
               <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
@@ -165,7 +165,7 @@
                                           $recordFound = $get_announcements->rowCount();
 
                                           if ($recordFound>0){
-                                              foreach($get_announcements as $row){
+                                                                           foreach($get_announcements as $row){
                                                   $title = FieldSanitizer::outClean($row['title']);
                                                   $author_title = FieldSanitizer::outClean($row['user_title']);
                                                   $author_first_name = FieldSanitizer::outClean($row['first_name']);

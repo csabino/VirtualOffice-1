@@ -1,6 +1,6 @@
 <?php
   interface AuthInterface{
-      public function login($username,$password);
+      public function login($username, $password);
   }
 
  ?>

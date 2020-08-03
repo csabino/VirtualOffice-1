@@ -73,8 +73,8 @@
 
 
       <!-- main page area //-->
-      <div class="row">
-            <div class='col-xs-12 col-sm-12 col-md-12 col-lg-12 mt-2 font-weight-bold' >
+      <div class="row border-bottom">
+            <div class='col-xs-12 col-sm-12 col-md-12 col-lg-12 mt-2 mb-4 font-weight-bold' >
                   <?php  echo $circle_name.$circle_short_name; ?>
             </div>
             <div class='col-xs-12 col-sm-12 col-md-2 col-lg-2 mt-3 ml-2 sub_menu_tab_active' >
@@ -109,6 +109,48 @@
             </div>
 
       </div>
+
+
+
+      <!-- team display //-->
+
+      <div class="row mt-5">
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mb-3 text-info font-weight-bold" >
+                    <big><i class="far fa-building"></i> General Room </big>
+              </div>
+
+              <!-- General Discussion  //-->
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mb-4" style="height:350px; overflow:auto; border-bottom:2px solid #33b5e5;padding-bottom:2px;">
+                    THE Commissioner representing Lagos State at the Federal Character Commission (FCC) Abdulwasiu Kayode Bawa-Allah,
+                    on Friday pledged to stop the problem of non-indigenes violating the Federal Character Principle by impersonating Lagosians.
+                    <br/><br/>
+                    Bawa-Allah noted that some traditional rulers might be complicit in the problem out of ignorance.
+                    He spoke during a stakeholder engagement on the FCC’s activities with representatives of the three Lagos Senatorial Districts.
+                    President Muhammadu Buhari on July 2 appointed Bawa-Allah and one commissioner each from the 36 states of Nigeria and Federal Capital Territory (FCT).
+                    <br/><br/>
+                    The FCC is chaired by Dr. Muyiba Faridabah Dankaka. It was observed at the meeting that despite the FCC’s efforts, some non-indigenes fraudulently obtain Lagos certificates of origin, thereby depriving Lagosians of opportunities available under the Federal Character Principle. They noted that this explained the near non-existence of genuine Lagosians in some, particularly lower levels, of some Federal Government agencies. Bawa-Allah, a prince noted that one way out of the problem is to engage with taditional rulers who sign off such certificates.
+                    <br/><br/>
+                    He said: “The benefit of this appointment is that I am a born, raised, bred Lagosian. I have also played active politics in the state in the last 17 ye marars that I returned to Nigeria.
+                    <br/><br/>
+                    Also, coming from the Royal Family of Ojomu Ilase in Eti-Osa, and from the Eyo-Adimu Family in Isale Eko, I believe with this birthright and connection to the royalty, and understanding the fabric of Lagos State, this is a problem that we can overcome and solve with ease.
+              </div>
+              <!-- end of General Discussions //-->
+
+
+              <!-- Send post //-->
+              <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                     <div class="form-group shadow-textarea">
+                          <textarea id='post' class="form-control z-depth-1" rows="4" placeholder="Say something..." maxlength="200"></textarea>
+                            <!-- cell_id and user_id  //-->
+                            <input type='text' id='cell_id' value="<?php  ?>" 
+                    </div>
+                    <div class="text-right " id="lbl_character_size"><small>Remaining Characters : 160</small></div>
+              </div>
+              <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 py-3">
+                   <button class="btn btn-lg btn-blue"> Post</button>
+              </div>
+              <!-- end of post //-->
+      </div>
       <!-- end of main area //-->
 
 
@@ -116,8 +158,24 @@
 
 <br/><br/><br/>
 
+
 <?php
 
     //footer.php
     require('../../includes/footer.php');
  ?>
+
+
+<script>
+    $(document).ready(function(){
+
+          $("#post").on("keydown", function(e){
+                    if (this.value.length > 200){
+                       return false;
+                    }
+
+                    $("#lbl_character_size").html("<small>Remaining characters : " + (200 - this.value.length) + "</small>");
+          });
+    });
+
+</script>

@@ -9,12 +9,14 @@
     require_once("../../../interface/DBInterface.php");
     require_once("../../../interface/CellInterface.php");
     require_once("../../../interface/FileUploaderInterface.php");
-  
+    require_once("../../../interface/ProjectInterface.php");
+
 
     //--------------- Classes -----------------------------------
     require_once("../../../classes/FileUploader.php");
     require_once("../../../classes/StaffUser.php");
     require_once("../../../classes/Cell.php");
+    require_once("../../../classes/Project.php");
     require_once("../../../classes/PDO_QueryExecutor.php");
     require_once("../../../classes/PDODriver.php");
 
@@ -23,31 +25,39 @@
 
   if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH']=='XMLHttpRequest')
   {
-      //$source = $_POST['source'];
-      //$file_type = $_POST['file_type'];
-      $file_type = $_GET['file_type'];
-      $source = $_GET['source'];
-      $file = $_FILES['file'];
 
+      $cell_id = $_POST['cell_id'];
+      $creator = $_POST['creator'];
+      $title = $_POST['title'];
+      $description = $_POST['description'];
+      $start_date = $_POST['startDate'];
+      $end_date = $_POST['endDate'];
+      $source = $_POST['source'];
+      $operation = $_POST['operation'];
 
-      //$file = round($file/1000);  // calculate file size in Kb, Mb, Gb, Tb
+      $dataArray = array("cell_id"=>$cell_id, "creator"=>$creator, "title"=>$title,
+      "description"=>$description,"start_date"=>$start_date,"end_date"=>$end_date,
+      "source"=>$source, "operation"=>$operation);
 
-      $fileUtil = new FileUploader();
-      $uploadAction = $fileUtil->uploadFile($file_type, $source, $file);
+      if ($operation=='create'){
 
-      session_start();
-      if ($uploadAction['status']=='success'){
-          unset($_SESSION['announcement_file']);
-          $_SESSION['announcement_file'] = $uploadAction['wp_filename'];
-      }else{
-          unset($_SESSION['announcement_file']);
+          $project = new Project();
+          $create_project = $project->new_project($dataArray);
+          //$result = $create_project->rowCount();
+          echo $create_project;
       }
 
-      $result = json_encode($uploadAction);
 
-      echo $result;
+
+
+
+
+
+
 
 
   }
 
- ?>
+
+
+  ?>

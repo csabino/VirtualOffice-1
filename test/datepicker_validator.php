@@ -1,4 +1,4 @@
-<?php
+ <?php
 
     if (isset($_POST['btnSubmit'])){
         $date = $_POST['date'];

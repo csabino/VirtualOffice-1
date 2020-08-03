@@ -53,6 +53,26 @@ class Circle implements CircleInterface{
     }
 
 
+    public function get_circle_team_members($cell_id){
+        $this->cell_id = $cell_id;
+
+        $sqlQuery = "Select c.id, c.cell_id, c.user_id, u.title, u.last_name, u.first_name, u.position,
+                     u.avatar, c.roles, c.date_created, c.date_modified from cell_users c inner join users u
+                     on c.user_id=u.id where c.cell_id=:cell_id";
+
+        $QueryExecutor = new PDO_QueryExecutor();
+        $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+        // define parameters
+        $stmt->bindParam(":cell_id", $this->cell_id);
+
+        // execute $stmt
+        $stmt->execute();
+        return $stmt;
+
+    }
+
+
 
 
 } // end of class Circle

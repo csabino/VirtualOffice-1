@@ -20,6 +20,16 @@
   <link href="<?php echo $baseUrl; ?>css/style.css" rel="stylesheet">
    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
 
+   <!-- Stepper CSS -->
+  <link href="<?php echo $baseUrl; ?>css/addons-pro/stepper.css" rel="stylesheet">
+  <!-- Stepper CSS - minified-->
+  <link href="<?php echo $baseUrl; ?>css/addons-pro/stepper.min.css" rel="stylesheet">
+
+  <!-- Stepper JavaScript -->
+  <script type="text/javascript" src="<?php echo $baseUrl; ?>js/addons-pro/stepper.js"></script>
+  <!-- Stepper JavaScript - minified -->
+  <script type="text/javascript" src="<?php echo $baseUrl; ?>js/addons-pro/stepper.min.js"></script>
+
   <style>
       .navbar {
         z-index: 1040;

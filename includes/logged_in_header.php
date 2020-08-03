@@ -25,6 +25,11 @@
     <!-- DataTables Select CSS -->
     <link href="<?php echo $baseUrl; ?>lib/css/addons/datatables-select.min.css" rel="stylesheet">
 
+    <!-- Stepper CSS -->
+    <link href="<?php echo $baseUrl; ?>lib/css/addons-pro/stepper.css" rel="stylesheet">
+    <!-- Stepper CSS - minified-->
+    <link href="<?php echo $baseUrl; ?>lib/css/addons-pro/stepper.min.css" rel="stylesheet">
+
 
 
 

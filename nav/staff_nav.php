@@ -30,6 +30,7 @@
           <a class="dropdown-item" href="#"> <i class="fas fa-list-ol"></i> Tasks</a>
           <a class="dropdown-item" href="#"> <i class="far fa-file-alt"></i> Memos</a>
           <a class="dropdown-item" href="#"> <i class="far fa-list-alt"></i> Notes</a>
+          <a class="dropdown-item" href="#"> <i class="fas fa-list"></i> Reports</a>
         </div>
       </li>
       <!-- end office menu //-->
@@ -101,6 +102,18 @@
         </div>
       </li>
       <!-- end Assistants menu //-->
+
+      <!-- Shared menu //-->
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-555" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">Shared
+        </a>
+        <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink-555">
+          <a class="dropdown-item" href="#"> <i class="far fa-calendar"></i> Received</a>
+          <a class="dropdown-item" href="#"> <i class="far fa-clock"></i> Sent</a>
+        </div>
+      </li>
+      <!-- end Shared menu //-->
 
     </ul>
 
