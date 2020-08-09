@@ -139,17 +139,21 @@
 
               <!-- Send post //-->
               <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
-                     <div class="form-group shadow-textarea">
+                      <div class="form-group shadow-textarea">
                           <textarea id='post' class="form-control z-depth-1" rows="4" placeholder="Say something..." maxlength="200"></textarea>
                             <!-- cell_id and user_id  //-->
-                            <input type='text' id='cell_id' value="<?php  ?>" 
-                    </div>
-                    <div class="text-right " id="lbl_character_size"><small>Remaining Characters : 160</small></div>
+                            <input type='hidden' id='cell_id' value="<?php  ?>"  >
+                      </div>
+                      <div class="text-right " id="lbl_character_size"><small>Remaining Characters : 160</small></div>
+
               </div>
               <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 py-3">
                    <button class="btn btn-lg btn-blue"> Post</button>
               </div>
+
               <!-- end of post //-->
+
+
       </div>
       <!-- end of main area //-->
 

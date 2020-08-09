@@ -127,10 +127,10 @@
               <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
                       <!-- Stepper widget //-->
-                      <ul class="stepper linear horizontal " style="height:560px;">
+                      <ul class="stepper linear horizontal " style="height:600px;">
                             <!-- Step 1 //-->
-                            <li class="step active">
-                                <div data-step-label="" class="step-title waves-effect waves-dark">Step 1 - Definition</div>
+                            <li class="step active" >
+                                <div data-step-label="" class="step-title waves-effect waves-dark" style='pointer-events:none;'>Step 1 - Definition</div>
                                 <div class="step-new-content">
                                     <div class="row">
                                           <?php
@@ -138,7 +138,7 @@
                                            ?>
                                     </div>
                                     <div class="step-actions py-8">
-                                        <button id="step1_continue" class="waves-effect waves-dark btn btn-sm btn-primary next-step">CONTINUE</button>
+                                        <button id="step1_continue" class="waves-effect waves-dark btn btn-sm btn-primary next-step" style='display:none;'>CONTINUE</button>
                                     </div>
                                 </div>
                             </li>
@@ -147,7 +147,7 @@
 
                             <!-- Step 2 //-->
                             <li class="step">
-                                <div class="step-title waves-effect waves-dark">Step 2 - Checklist</div>
+                                <div class="step-title waves-effect waves-dark" style='pointer-events:none;'>Step 2 - Checklist</div>
                                 <div class="step-new-content">
                                     <div class="row">
                                         <?php
@@ -165,7 +165,7 @@
 
                             <!-- Step 3 //-->
                             <li class="step">
-                                <div class="step-title waves-effect waves-dark">Step 3 - Milestone</div>
+                                <div class="step-title waves-effect waves-dark" style='pointer-events:none;'>Step 3 - Milestone</div>
                                 <div class="step-new-content">
                                   <div class="row">
                                       <?php
@@ -198,6 +198,8 @@
 <br/><br/><br/>
 <input type="hidden" name="cell_id" id="cell_id" value="<?php echo $_GET_URL_cell_id ?>">
 <input type="hidden" name="user_id" id="user_id" value="<?php echo $_GET_URL_user_id; ?>">
+<input type='hidden' name='new_project_id' id='new_project_id' value="" >
+<input type='hidden' name='project_source' id='project_source' value="circle" >
 
 <?php
 
@@ -229,13 +231,16 @@
            //check if  title is filled in
            if ($("#title").val()!=''){
                  create_project();
-
+           }else{
+                alert("You have not supplied required information \nto create a project.");
            }
 
 
        }else if(btn_text=='Project Created'){
            if ($("#title").val()!=''){
                  update_project();
+           }else{
+
            }
 
        }
@@ -244,40 +249,118 @@
 
   //------------------------------------------------------------------------------------------------------
 
-  // Create Project
-  function create_project(){
-      var cell_id = $("#cell_id").val();
-      var creator = $("#user_id").val();
-      var title = $("#title").val();
-      var description = $("#description").val();
-      var startDate = $("input#startingDate").val();
-      var endDate = $("input#endingDate").val();
-      var source = 'circle';
-      var operation = '';
+    // Create Project
+    function create_project(){
+          var service_url = '../../async/server/projects/create_update_project.php';
+          var operation = 'create';
+          var project_log = 'Creating Project..';
+          execute_create_update_function(service_url, operation, project_log);
+    }//end of function create_project
 
-      alert(endDate);
+//---------------------------------------------------------------------------------------------------------
 
-      $.ajax({
-          url: '../../async/server/projects/create_project.php',
-          method: "POST",
-          data: {cell_id: cell_id, creator: creator, title: title, description: description, startDate: startDate, endDate: endDate, source: source, operation: 'create'},
-          dataType: 'json',
-          cache: false,
-          processdata: false,
-          beforeSend: function(){
-                console.log("Creating Project");
-          },
-          success: function(data){
-              alert(data);
+//---------------------------------------------------------------------------------------------------------
+//----------------------------  Update Project ------------------------------------------------------------
+
+    function update_project(){
+
+          // get $new_project_id
+          var service_url = '../../async/server/projects/create_update_project.php';
+          var operation = 'update';
+          var project_log = 'Updating Project..';
+          execute_create_update_function(service_url, operation, project_log);
+    }
+
+//---------------------------- end of Updating project //--------------------------------------------------
+
+    // function to perform either create or update of project based on user interaction
+
+    function execute_create_update_function(service_url, ops_mode, project_log){
+              var cell_id = $("#cell_id").val();
+              var creator = $("#user_id").val();
+              var title = $("#title").val();
+              var description = $("#description").val();
+              var startDate = $("input#startingDate").val();
+              var endDate = $("input#endingDate").val();
+              var source = $("#project_source").val();
+              var new_project_id = $("#new_project_id").val();
+
+
+              $.ajax({
+                  url: service_url,
+                  method: "POST",
+                  data: {cell_id: cell_id, creator: creator, title: title, description: description, startDate: startDate, endDate: endDate, source: source, operation: ops_mode, new_project_id: new_project_id},
+                  dataType: 'json',
+                  cache: false,
+                  processdata: false,
+                  beforeSend: function(){
+                        console.log(project_log);
+                  },
+                  success: function(data){
+
+                        if (data.status=='success'){
+
+                            var outcome = "<div class='alert alert-success py-1' role='alert'>";
+                            outcome += "<i class='far fa-check-circle'></i>&nbsp;&nbsp;&nbsp;&nbsp;" + data.msg + "</div>";
+
+                            $("#step1_output_status").html(outcome);
+
+                            // display continue button
+                            $("#step1_continue").show();
+                            $("#btn_create_project").text('Update Project')
+
+                            // Store new_project_id into hidden field
+                            $("#new_project_id").val(data.new_project_id);
+
+
+                        } else if (data.status=='failed'){
+                            var outcome = "<div class='alert alert-danger py-1' role='alert'>";
+                            outcome += "<i class='fas fa-exclamation-triangle'></i>&nbsp;&nbsp;&nbsp;&nbsp;" + data.msg + "</div>";
+                            $("#step1_output_status").html(outcome);
+
+                            //clear title field
+                            $("#title").val('');
+                            //$("#step1_continue").hide();
+                        }
+                  }
+
+              });  // end of ajax
+
+    }
+
+  //----------------------------- end of execute_create_update_function //----------------------------------------------
+  //--------------------------------------------------------------------------------------------------------------------
+
+
+
+
+ //---------------------------------------------------------------------------------------------------------------------
+// --------------------------- Disable Checklist button if new_project_id is not available in hidden field
+
+      $("#step1_continue").bind("click", function(){
+
+          // check to know if a new project has been created
+          var new_project_id = $("#new_project_id").val();
+
+          // if no project is created or selected execute the function
+          if (new_project_id==''){
+                $("#checklist_item").prop('disabled', true);
+                $("#checklist_description").prop('disabled', true);
+                $("#step2_btn_save").prop('disabled', true);
+
+                var status_msg = "Create or select a project to add checklist to it.";
+                var outcome = "<div class='alert alert-danger py-1' role='alert'>";
+                outcome += "<i class='fas fa-exclamation-triangle'></i>&nbsp;&nbsp;&nbsp;&nbsp;" + status_msg + "</div>";
+                $("#step2_output_status").html(outcome);
           }
+
 
       });
 
+//-----------------------------end of Disable checklist button if new_project _id is not available in hidden field ----------------
+//--------------------------------------------------------------------------------------------------------------------------------------
 
 
-
-
-    }
 
 
 

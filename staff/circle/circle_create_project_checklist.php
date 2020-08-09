@@ -8,12 +8,18 @@
         </div>
 
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <!-- step 2 status //-->
+                    <div id='step2_output_status'>
 
-                   <!-- Title //-->
+                    </div>
+                    <!-- end of Step 2 Status //-->
+
+
+                     <!-- Title //-->
                    <div class="form-group row">
                            <label for="target" class="col-xs-12 col-sm-12 col-md-3 col-form-label text-md-right">Item</label>
                            <div class="col-xs-12 col-sm-12 col-md-9">
-                                       <input class="form-control" id="checklist_title" placeholder="Title" required >
+                                       <input class="form-control" id="checklist_item" placeholder="Item" required >
 
                            </div>
                    </div>
@@ -23,7 +29,7 @@
                    <div class="form-group row">
                            <label for="target" class="col-xs-12 col-sm-12 col-md-3 col-form-label text-md-right">Description</label>
                            <div class="col-xs-12 col-sm-12 col-md-9">
-                                       <textarea class="form-control" id="description" placeholder="Description" ></textarea>
+                                       <textarea class="form-control" id="checklist_description" placeholder="Description" ></textarea>
 
                            </div>
                    </div>
@@ -35,7 +41,7 @@
                     <div class="form-group row">
                             <label for="target" class="col-xs-12 col-sm-12 col-md-3 col-form-label text-md-right"></label>
                             <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-                                <button class="btn btn-sm btn-success btn-rounded mb-4">Save</button>
+                                <button id='step2_btn_save' class="btn btn-sm btn-success btn-rounded mb-4">Save</button>
                             </div>
                     </div>
                     <!-- end of save button //-->
