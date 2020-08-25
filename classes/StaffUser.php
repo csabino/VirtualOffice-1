@@ -54,8 +54,28 @@
       }
 
 
+      public function get_user_by_id($user_id){
 
-  }
+          $sqlQuery = "Select * from users where id=:user_id";
+
+          // pdo object
+          $QueryExecutor = new PDO_QueryExecutor();
+          $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+          // pdo parameters
+          $stmt->bindParam(":user_id", $user_id);
+
+          // pdo execute
+          $stmt->execute();
+          return $stmt;
+      }
+
+
+
+
+
+
+  } // end of class
 
 
  ?>

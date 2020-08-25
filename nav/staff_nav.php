@@ -27,7 +27,7 @@
         </a>
         <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink-555">
           <a class="dropdown-item" href="<?php echo $baseUrl.'staff/circle/work_circle.php'; ?>"> <i class="fas fa-users"></i> Circle</a>
-          <a class="dropdown-item" href="#"> <i class="fas fa-list-ol"></i> Tasks</a>
+          <a class="dropdown-item" href="<?php echo $baseUrl.'staff/task/tasks.php?en='.mask($_SESSION['loggedIn_profile_user_id']); ?>"> <i class="fas fa-list-ol"></i> Tasks</a>
           <a class="dropdown-item" href="#"> <i class="far fa-file-alt"></i> Memos</a>
           <a class="dropdown-item" href="#"> <i class="far fa-list-alt"></i> Notes</a>
           <a class="dropdown-item" href="#"> <i class="fas fa-list"></i> Reports</a>

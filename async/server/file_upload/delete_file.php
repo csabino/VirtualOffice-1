@@ -9,7 +9,7 @@
     require_once("../../../interface/DBInterface.php");
     require_once("../../../interface/CellInterface.php");
     require_once("../../../interface/FileUploaderInterface.php");
-  
+
 
     //--------------- Classes -----------------------------------
     require_once("../../../classes/FileUploader.php");
@@ -25,27 +25,26 @@
   {
       //$source = $_POST['source'];
       //$file_type = $_POST['file_type'];
-      $file_type = $_GET['file_type'];
-      $source = $_GET['source'];
-      $file = $_FILES['file'];
 
+      $source = $_POST['source'];
+      $file = trim($_POST['file']);
+      //echo strlen($file);
 
-      //$file = round($file/1000);  // calculate file size in Kb, Mb, Gb, Tb
-
-      $fileUtil = new FileUploader();
-      $uploadAction = $fileUtil->uploadFile($file_type, $source, $file);
+      @unlink("../../../uploads/{$source}/documents/".$file);
+      @unlink("../../../uploads/{$source}/images/".$file);
 
       session_start();
-      if ($uploadAction['status']=='success'){
-          unset($_SESSION['announcement_file']);
-          $_SESSION['announcement_file'] = $uploadAction['wp_filename'];
-      }else{
-          unset($_SESSION['announcement_file']);
+      switch($source){
+        case 'announcement':
+            unset($_SESSION['announcement_file']);
+            break;
+        case 'projects':
+            unset($_SESSION['project_update_file']);
+            break;
       }
 
-      $result = json_encode($uploadAction);
 
-      echo $result;
+
 
 
   }

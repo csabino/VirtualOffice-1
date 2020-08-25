@@ -1,7 +1,7 @@
 <?php
 
     // get circle and user eligibility by circle idea
-    if (!isset($_GET['en']) || $_GET['en']==''){
+    if (!isset($_GET['q']) || $_GET['q']==''){
           header("location: work_circle.php");
     }
 
@@ -9,12 +9,19 @@
           header("location: work_circle.php");
     }
 
+    if (!isset($_GET['pid']) || $_GET['pid']==''){
+          header("location: work_circle.php");
+    }
 
-    $_GET_URL_cell_id = explode("-",htmlspecialchars(strip_tags($_GET['en'])));
+
+    $_GET_URL_cell_id = explode("-",htmlspecialchars(strip_tags($_GET['q'])));
     $_GET_URL_cell_id = $_GET_URL_cell_id[1];
 
     $_GET_URL_user_id = explode("-",htmlspecialchars(strip_tags($_GET['us'])));
     $_GET_URL_user_id = $_GET_URL_user_id[1];
+
+    $_GET_URL_project_id = explode("-",htmlspecialchars(strip_tags($_GET['pid'])));
+    $_GET_URL_project_id = $_GET_URL_project_id[1];
 
 
 
@@ -115,16 +122,17 @@
       <!-- list of projects //-->
       <div class="row mt-5">
               <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 mb-3 text-info font-weight-bold" >
-                    <big><i class="fas fa-business-time"></i> Projects</big>
+                    <big><i class="fas fa-business-time"></i> Project Updates</big>
               </div>
               <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right">
                     <?php
                         $code1 = mask($_GET_URL_cell_id);
-                        $code2 = mask($_GET_URL_user_id );
-                        $create_project_link = "circle_create_project.php?en=".$code1."&us=".$code2;
+                        $code2 = mask($_GET_URL_user_id);
+                        $code3 = mask($_GET_URL_project_id);
+                        $post_project_updates_link = "circle_project_create_update.php?q=".$code1."&us=".$code2."&pid=".$code3;
 
                     ?>
-                    <a href="<?php echo $create_project_link; ?>" class="btn btn-sm btn-primary btn-rounded"> <i class="fas fa-plus"></i> Create Project</a>
+                    <a href="<?php echo $post_project_updates_link; ?>" class="btn btn-sm btn-primary btn-rounded"> <i class="fas fa-plus"></i> Post Update</a>
               </div>
 
               <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -133,9 +141,9 @@
                             <thead>
                                 <tr>
                                     <th class="th-sm" >SN</th>
-                                    <th class="th-sm" >Projects</th>
-                                    <th class="th-sm" >Creator</th>
-                                    <th class="th-sm" >Date Created</th>
+                                    <th class="th-sm" >Project Updates</th>
+                                    <th class="th-sm" >Sender</th>
+                                    <th class="th-sm" >Date Posted</th>
                                 </tr>
                             </thead>
                             <tbody id="tblBody">
@@ -143,44 +151,52 @@
                                       // project list $counter
                                       $counter = 1;
                                       $project = new Project();
-                                      $get_projects = $project->get_projects_by_cell($_GET_URL_cell_id);
+                                      $get_projects_updates = $project->get_projects_updates_by_project($_GET_URL_project_id);
 
-                                      $recordFound = $get_projects->rowCount();
+                                      $recordFound = $get_projects_updates->rowCount();
+                                      $user = new StaffUser();
 
                                       if ($recordFound>0){
-                                          foreach($get_projects as $row){
-                                              $project_id = $row['id'];
-                                              $project_title = $row['project_title'];
-                                              $creator = $row['user_title'].' '.$row['last_name'].' '.$row['first_name'];
-                                              $completed = $row['completed'];
+                                          foreach($get_projects_updates as $row){
+                                              $project_updates_id = $row['id'];
+
+                                              $message = nl2br(FieldSanitizer::outClean($row['message']));
+
+
+                                              if (strlen($message)>120){
+                                                  $message = substr($message,0,120)."...";
+                                              }
+
+
+                                              $sender_id = $row['user_id'];
+                                              $user_info = $user->get_user_by_id($sender_id);
+                                              $sender = '';
+                                                foreach ($user_info as $uif) {
+                                                    $sender = $uif['title'].' '.$uif['last_name'].' '.$uif['first_name'];
+                                                }
+
                                               $date_created_raw = new DateTime($row['date_created']);
                                               $date_created = $date_created_raw->format('D jS F, Y');
                                               $time_created = $date_created_raw->format('g:i a');
 
 
                                               // display column data
-                                              $project_link = "<a href='circle_project_updates.php?q=".mask($_GET_URL_cell_id)."&us=".mask($_GET_URL_user_id)."&pid=".mask($project_id)."'>{$project_title}</a>";
-                                              $project_info_link = "<a title='Setting information about this project' href='circle_project_info.php?q=".mask($_GET_URL_cell_id)."&pid=".mask($project_id)."'><i class='fas fa-cogs'></i> Project Info (0)</a>";
-                                              $project_updates_link = "<a title='Latest progress updates on the project' href='circle_project_updates.php?q=".mask($_GET_URL_cell_id)."&pid=".mask($project_id)."'><i class='fas fa-sync'></i> Updates (0)</a>";
-                                              $project_tasks_link = "<a title='Assigned tasks to members' href='circle_project_tasks.php?q=".mask($_GET_URL_cell_id)."&pid=".mask($project_id)."'><i class='fas fa-tasks'></i> Tasks (0)</a>";
-                                              $project_files_link = "<a title='Files uploaded' href='circle_project_files.php?q=".mask($_GET_URL_cell_id)."&pid=".mask($project_id)."'><i class='far fa-copy'></i> Files (0)</a>";
+                                              $project_update_link = "<a href='circle_project_update_details.php?q=".mask($_GET_URL_cell_id)."&pid=".mask($_GET_URL_project_id)."&ud=".mask($project_updates_id)."'>{$message}</a>";
+
+
 
                                               echo "<tr>";
                                               echo "<td class='text-right px-5'>{$counter}.</td>";
-
-                                              echo "<td width='55%' class='px-2'><strong>{$project_link}</strong> ";
+                                              echo "<td width='55%' class='px-2'><strong>{$project_update_link}</strong> ";
                                                 echo "<small><div class='row px-0 py-1'> "; // begin of row
-                                                echo "<div class='col-xs-4 col-sm-4 col-md-3 col-lg-3'> {$project_info_link} </div> ";
-                                                echo "<div class='col-xs-4 col-sm-4 col-md-3 col-lg-3'> {$project_updates_link} </div> ";
-                                                echo "<div class='col-xs-4 col-sm-4 col-md-3 col-lg-3'> {$project_tasks_link} </div> ";
-                                                echo "<div class='col-xs-4 col-sm-4 col-md-3 col-lg-3'> {$project_files_link} </div>  ";
+                                                echo "<div class='col-xs-4 col-sm-4 col-md-3 col-lg-3'> Comments (0) </div> ";
                                                 echo "</div></small>"; // end of row
                                               echo "</td>"; // end of table column
 
 
                                               echo "<td width='25%' class='px-2'>";
                                                   echo "<div class='chip' style='background-color:pink;'>";
-                                                      echo "<img class='border-1' src='https://mdbootstrap.com/img/Photos/Avatars/avatar-6.jpg' alt='Author'>{$creator}";
+                                                      echo "<img class='border-1' src='https://mdbootstrap.com/img/Photos/Avatars/avatar-6.jpg' alt='Author'>{$sender}";
                                                   echo "<div>";
                                               echo "</td>";
 

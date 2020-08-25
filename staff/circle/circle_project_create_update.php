@@ -1,7 +1,7 @@
-<?php
+  <?php
 
     // get circle and user eligibility by circle idea
-    if (!isset($_GET['en']) || $_GET['en']==''){
+    if (!isset($_GET['q']) || $_GET['q']==''){
           header("location: work_circle.php");
     }
 
@@ -9,18 +9,25 @@
           header("location: work_circle.php");
     }
 
+    if (!isset($_GET['pid']) || $_GET['pid']==''){
+          header("location: work_circle.php");
+    }
 
-    $_GET_URL_cell_id = explode("-",htmlspecialchars(strip_tags($_GET['en'])));
+
+    $_GET_URL_cell_id = explode("-",htmlspecialchars(strip_tags($_GET['q'])));
     $_GET_URL_cell_id = $_GET_URL_cell_id[1];
 
     $_GET_URL_user_id = explode("-",htmlspecialchars(strip_tags($_GET['us'])));
     $_GET_URL_user_id = $_GET_URL_user_id[1];
 
+    $_GET_URL_project_id = explode("-",htmlspecialchars(strip_tags($_GET['pid'])));
+    $_GET_URL_project_id = $_GET_URL_project_id[1];
 
 
 
 
-    $page_title = 'Work Circle | General Room';
+
+    $page_title = 'Work Circle - Projects';
 
     require_once("../../config/step2/init_wp.php");
     require_once("../../nav/staff_nav.php");
@@ -38,9 +45,11 @@
         exit;
     }
 
+
     $circle_id = '';
     $circle_name = '';
     $circle_short_name = '';
+
 
     foreach($my_circle as $row){
         $circle_id = $row['circle_id'];
@@ -51,67 +60,58 @@
 
     }
 
-
-//-----------------------------------------------------------------------------------------------------------------
-// Postback function
-
+//------------------------------------------------------------------------------------------------------------------------
+// isPostback
   $errFlag = 0;
   $flagMsg = '';
 
   if (isset($_POST['btnSubmit'])){
+        $message = FieldSanitizer::inClean($_POST['message']);
+        $file = '';
 
-      $title = FieldSanitizer::inClean($_POST['title']);
-      $message = FieldSanitizer::inClean($_POST['message']);
-      $file = '';
-
-      // check if file upload type is checked
-      if (!isset($_POST['file_upload_type'])){
-
-          $file_upload_type = '';
-
-      }else{
-
-         $file_upload_type = $_POST['file_upload_type'];
-           // check if file has been uploaded
-           if (isset($_SESSION['announcement_file'])){
-              $file = $_SESSION['announcement_file'];
-           } // end of check for file upload
-
-      } // end of check file upload type
+        // check if file upload type is unchecked
+        if (!isset($_POST['file_upload_type'])){
+            $file_upload_type = '';
+        }else{
+            $file_upload_type = $_POST['file_upload_type'];
+            // check if file has been uploaded
+            if (isset($_SESSION['project_update_file'])){
+                $file = $_SESSION['project_update_file'];
+            } // end of check for file upload
+        }
 
 
+        // check if all required fields are filled
+        if ($message!=''){
+            // create data array and populate data
+            $dataArray = array("cell"=>$_GET_URL_cell_id,"sender"=>$_GET_URL_user_id,
+                         "project"=>$_GET_URL_project_id,"message"=>$message,
+                         "source"=>"project", "file_upload_type"=>$file_upload_type,
+                         "file"=>$file);
 
-      // check if all require fields are filled
-      if ($title!='' && $message!=''){
-          // create data array and populate data
-          $dataArray = array("cell"=>$_GET_URL_cell_id, "author"=>$_GET_URL_user_id,
-                        "title"=>$title, "message"=>$message,"file_upload_type"=>$file_upload_type,
-                        "file"=>$file);
+            // call class and methods
+            $project = new Project();
+            $result = $project->new_projects_update($dataArray);
 
+            if ($result){
+                $errFlag = 0;
+                $flagMsg = 'The <strong>Update</strong> has been successfully created and posted.';
+            }else{
+                $errFlag = 1;
+                $flagMsg = 'There was a problem creating the <strong>Update</strong>. <br/>Please try again or contact the Administrator.';
+            }
 
-          // call class and methods
-          $announcement = new Announcement();
-          $result = $announcement->new_announcement($dataArray);
+        }else{
+            $errFlag = 1;
+            $flagMsg = "The <strong>Message</strong> is required to create an <strong>Update</strong>";
+        }// end of if statement
 
-          if ($result){
-              $errFlag = 0;
-              $flagMsg = 'The <strong>Announcement</strong> has been successfully created and posted.';
-          }else{
-              $errFlag = 1;
-              $flagMsg = 'There was a problem creating the <strong>Announcement</strong>. <br/>Please try again or contact the Administrator.';
-          }
-
-      }else{
-              $errFlag = 1;
-              $flagMsg = "The <strong>Title</strong> and <strong>Message</strong> are required to create an <strong>Announcement</strong>";
-      }
+  } // end of check file upload type
 
 
 
+//------------------------------------------------------------------------------------------------------------------------
 
-
-
-  }// end of postback
 
 
 
@@ -131,9 +131,9 @@
 
 
 
-      <!-- sub menu  //-->
-      <div class="row">
-            <div class='col-xs-12 col-sm-12 col-md-12 col-lg-12 mt-2 mb-2 font-weight-bold' >
+      <!-- main page area //-->
+      <div class="row border-bottom">
+            <div class='col-xs-12 col-sm-12 col-md-12 col-lg-12 mt-1 mb-4 font-weight-bold' >
                   <?php  echo $circle_name.$circle_short_name; ?>
             </div>
             <div class='col-xs-12 col-sm-12 col-md-2 col-lg-2 mt-3 ml-2 sub_menu_tab' >
@@ -141,9 +141,8 @@
                         $general_link = "circle_general_room.php?en=".mask($_GET_URL_cell_id)."&us=".mask($_GET_URL_user_id);
                         echo "<a href='{$general_link}'>General Room</a>";
                   ?>
-
             </div>
-            <div class='col-xs-12 col-sm-12 col-md-2 col-lg-2 mt-3 ml-2 sub_menu_tab_active'>
+            <div class='col-xs-12 col-sm-12 col-md-2 col-lg-2 mt-3 ml-2 sub_menu_tab'>
                   <?php
                         $general_link = "circle_announcements.php?en=".mask($_GET_URL_cell_id)."&us=".mask($_GET_URL_user_id);
                         echo "<a href='{$general_link}'>Announcements</a>";
@@ -155,13 +154,13 @@
                         echo "<a href='{$general_link}'>Team</a>";
                   ?>
             </div>
-            <div class='col-xs-12 col-sm-12 col-md-2 col-lg-2 mt-3 sub_menu_tab'>
+            <div class='col-xs-12 col-sm-12 col-md-2 col-lg-2 mt-3 ml-2 sub_menu_tab_active'>
                   <?php
                         $general_link = "circle_projects.php?en=".mask($_GET_URL_cell_id)."&us=".mask($_GET_URL_user_id);
                         echo "<a href='{$general_link}'>Projects</a>";
                   ?>
             </div>
-            <div class='col-xs-12 col-sm-12 col-md-2 col-lg-2 mt-3 sub_menu_tab'>
+            <div class='col-xs-12 col-sm-12 col-md-2 col-lg-2 mt-3 ml-2 sub_menu_tab'>
                   <?php
                         $general_link = "circle_files.php?en=".mask($_GET_URL_cell_id)."&us=".mask($_GET_URL_user_id);
                         echo "<a href='{$general_link}'>Files</a>";
@@ -169,20 +168,47 @@
             </div>
 
       </div>
-      <!-- end of sub menu //-->
 
 
-      <!-- main body area //-->
+
+      <!-- project update title and back button //-->
       <div class="row mt-5">
-          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-info font-weight-bold" >
-                Compose Announcement
-          </div>
+              <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 mb-3 text-info font-weight-bold" >
+                    <big><i class="fas fa-business-time"></i> Create Project Update</big>
+                    <?php
+                          $project = new Project();
+                          $get_project = $project->get_project_by_id($_GET_URL_project_id);
+                          $project_title = '';
+                          foreach($get_project as $gp){
+                              $project_title = $gp['project_title'];
+                          }
+                          echo '<br/>'.$project_title;
+
+                    ?>
+              </div>
+              <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right">
+                    <?php
+                        $code1 = mask($_GET_URL_cell_id);
+                        $code2 = mask($_GET_URL_user_id);
+                        $code3 = mask($_GET_URL_project_id);
+                        $post_project_updates_link = "circle_project_updates.php?q=".$code1."&us=".$code2."&pid=".$code3;
+
+                    ?>
+                    <a href="<?php echo $post_project_updates_link; ?>" class="btn btn-sm btn-primary btn-rounded"> <i class="fas chevron-left"></i> Project Updates</a>
+              </div>
+      </div>
+      <!-- end of project update title and back button //-->
+
+
+      <!-- post form //-->
+      <div class="row mt-5">
+
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <?php
-                    $form_action_link = 'circle_create_announcement.php?en='.mask($_GET_URL_cell_id)."&us=".mask($_GET_URL_user_id);
+                    $form_action_link = 'circle_project_create_update.php?q='.mask($_GET_URL_cell_id)."&us=".mask($_GET_URL_user_id)."&pid=".mask($_GET_URL_project_id);
                 ?>
                 <form class="border border-light p-4 " style="border-radius:5px;"
-                  name="compose announcement" action="<?php echo htmlspecialchars($form_action_link); ?>"
+                  name="create_project_update" action="<?php echo htmlspecialchars($form_action_link); ?>"
                   method="post">
 
                     <!-- Postback feedback //-->
@@ -192,16 +218,13 @@
                                   miniErrorAlert($flagMsg);
                               }else{
                                   miniSuccessAlert($flagMsg);
-                                  unset($_SESSION['announcement_file']);
+                                  unset($_SESSION['project_update_file']);
                               }
                           }
                       ?>
 
                     <!-- End of postback feedback //-->
 
-                    <!-- Title //-->
-                    <label for="title" class="text-info font-weight-normal">Title<span class='text-danger'>*</span></label>
-                    <input type="text" id="title" name="title" class="form-control mb-3 " placeholder="Title" required>
 
                     <!-- Message //-->
                     <label for="message" class="text-info font-weight-normal">Message<span class='text-danger'>*</span></label>
@@ -219,7 +242,7 @@
 
                     <!-- Default inline 2-->
                     <div class="custom-control custom-radio custom-control-inline">
-                      <input type="radio" class="custom-control-input" id="file_upload_type_image" name="file_upload_type" value="image">
+                      <input type="radio" class="custom-control-input" id="file_upload_type_image" name="file_upload_type" value="image"  <?php if(isset($_POST['btnSubmit'])){ if(!$errFlag){echo "unchecked";} } ?> >
                       <label class="custom-control-label" for="file_upload_type_image">Image</label>
                     </div>
 
@@ -234,8 +257,8 @@
 
                     <div id='activity_notifier'>
                         <?php
-                            if (isset($_SESSION['announcement_file'])){
-                                 $msgblock = "<div class='py-3' id='myuploadedfile_div'><i class='fas fa-paperclip'></i> <span id='myuploadedfile'>".$_SESSION['announcement_file']."</span>";
+                            if (isset($_SESSION['project_update_file'])){
+                                 $msgblock = "<div class='py-3' id='myuploadedfile_div'><i class='fas fa-paperclip'></i> <span id='myuploadedfile'>".$_SESSION['project_update_file']."</span>";
                                  $msgblock .= "&nbsp;&nbsp;&nbsp;<span id='deletefile' title='Delete file' style='cursor:pointer'><i class='fas fa-times text-danger'></i></span>";
                                  $msgblock .= "</div>";
 
@@ -260,7 +283,7 @@
 
 
                     <div class='mt-3'>
-                      <button id="btnSubmit" name="btnSubmit" class="btn btn-info btn-sm btn-rounded" type="submit"> Send</button>
+                      <button id="btnSubmit" name="btnSubmit" class="btn btn-info btn-sm btn-rounded" type="submit"> Post Update</button>
                     </div>
 
                 </form>
@@ -268,7 +291,16 @@
 
 
       </div>
-      <!-- end of main body area //-->
+
+
+
+
+      <!-- end of post form //-->
+
+
+
+
+      <!-- end of main area //-->
 
 
   </div> <!-- end of container //-->
@@ -281,4 +313,5 @@
     require('../../includes/footer.php');
  ?>
 
-<script src="../../async/client/announcement/upload_file.js"></script>
+ <script src="../../lib/js/custom/tblData.js"></script>
+ <script src="../../async/client/project/upload_file.js"></script>

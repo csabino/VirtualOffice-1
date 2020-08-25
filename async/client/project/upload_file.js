@@ -62,7 +62,7 @@ $(document).ready(function(){
                     //form_data.append("file_type", file_type);
 
                     $.ajax({
-                        url: '../../async/server/file_upload/announcement_upload_file.php?source=announcements&file_type='+file_type,
+                        url: '../../async/server/file_upload/project_upload_file.php?source=projects&file_type='+file_type,
                         method: "POST",
                         data: form_data,
                         dataType:  'json',
@@ -96,13 +96,33 @@ $(document).ready(function(){
 
 // Remove file
     $("#activity_notifier").on("click", "span#deletefile", function(){
+        var file_name = $("#myuploadedfile").text();
+        file_name = file_name.trim();
+        //alert(file_name);
+        var source = 'projects';
+
+
+
+        $.post("../../async/server/file_upload/delete_file.php",{"source":source,"file":file_name},function(data){
+           $("#activity_notifier").html("");
+
+        });
+
+        // clear fields
+        $("input.file-path").val(null);
+
+        // uncheck file radio button
+        $("#file_upload_type_document").prop("checked", false);
+        $("#file_upload_type_image").prop("checked", false);
 
     });
-
-
-
-
-
+// end of Remove file
 //----------------------------------------------------------------------------------------------
 
-});
+
+
+
+
+
+
+}); // end of document ready

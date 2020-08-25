@@ -165,7 +165,7 @@
                                           $recordFound = $get_announcements->rowCount();
 
                                           if ($recordFound>0){
-                                                                           foreach($get_announcements as $row){
+                                              foreach($get_announcements as $row){
                                                   $title = FieldSanitizer::outClean($row['title']);
                                                   $author_title = FieldSanitizer::outClean($row['user_title']);
                                                   $author_first_name = FieldSanitizer::outClean($row['first_name']);
@@ -195,8 +195,8 @@
 
 
                                                   $counter++;
-                                              }
-                                          }
+                                              } // end of foreach
+                                          } // end of is statement
 
                                      ?>
 

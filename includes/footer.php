@@ -2,7 +2,7 @@
  <!-- /End your project here-->
      <div class="container-fluid" style='background-color:#f1f1f1;' id='footer' >
           <div class="row">
-              <div class='col-xs-12 col-sm-12 col-md-12 col-lg-12' >&copy; <?php echo date('Y') ?> Federal University of Agriculture, Abeokuta, Ogun State, Nigeria. All rights reserved.</div>
+              <div class='col-xs-12 col-sm-12 col-md-12 col-lg-12' >&copy; <?php echo date('Y') ?> Monaticalpha Limited, Abule-Ado, Sattelite town, Lagos State, Nigeria. All rights reserved.</div>
           </div>
      </div>
 
