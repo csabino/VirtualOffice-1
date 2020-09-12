@@ -132,8 +132,8 @@
 
 
       <!-- sub menu  //-->
-      <div class="row">
-            <div class='col-xs-12 col-sm-12 col-md-12 col-lg-12 mt-2 mb-2 font-weight-bold' >
+      <div class="row border-bottom">
+            <div class='col-xs-12 col-sm-12 col-md-12 col-lg-12 mt-2 mb-4 font-weight-bold' >
                   <?php  echo $circle_name.$circle_short_name; ?>
             </div>
             <div class='col-xs-12 col-sm-12 col-md-2 col-lg-2 mt-3 ml-2 sub_menu_tab' >

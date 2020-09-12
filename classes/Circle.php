@@ -72,6 +72,22 @@ class Circle implements CircleInterface{
 
     }
 
+      public function user_has_authority($cell_id, $user_id){
+        $this->cell_id = $cell_id;
+        $this->user_id = $user_id;
+
+        $sqlQuery = "Select roles from cell_users where (cell_id=:cell_id and user_id=:user_id) and roles!='' ";
+        $QueryExecutor =  new PDO_QueryExecutor();
+        $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+        // define parameters
+        $stmt->bindParam(":cell_id", $this->cell_id);
+        $stmt->bindParam(":user_id", $this->user_id);
+
+        // execute sql query
+        $stmt->execute();
+        return $stmt;
+      }
 
 
 

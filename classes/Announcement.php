@@ -4,12 +4,15 @@
   error_reporting(E_ALL);
 
   class Announcement implements AnnouncementInterface{
+      private $announcement_id;
       private $cell_id;
       private $author;
+      private $user_id;
       private $title;
       private $message;
       private $file_upload_type;
       private $file;
+      private $comment;
       private $date_created;
       private $date_modified;
 
@@ -78,7 +81,68 @@
       }
 
 
-  }
+
+      public function get_announcement_by_id($announcement_id){
+          $this->announcement_id = $announcement_id;
+
+          $sqlQuery = "Select a.id, a.cell_id, a.author, u.title , u.last_name, u.first_name, u.avatar, a.title as subject,
+                        a.message, a.file_type, a.file, a.date_created, a.date_modified from announcements a inner join
+                        users u on a.author=u.id where a.id=:announcement_id";
+          $QueryExecutor = new PDO_QueryExecutor();
+          $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+          // set field and parameters
+          $stmt->bindParam(":announcement_id", $this->announcement_id);
+
+          // execute pdo object
+          $stmt->execute();
+          return $stmt;
+
+      }
+
+
+      public function post_comment($fields){
+          $this->announcement_id = $fields['announcement_id'];
+          $this->user_id = $fields['user_id'];
+          $this->comment = $fields['comment'];
+
+          $sqlQuery = "Insert into announcements_comments set announcement_id=:announcement_id, user_id=:user_id,
+                      comment=:comment";
+
+          // pdo object
+          $QueryExecutor = new PDO_QueryExecutor();
+          $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+          // set fields and parameters
+          $stmt->bindParam(":announcement_id", $this->announcement_id);
+          $stmt->bindParam("user_id", $this->user_id);
+          $stmt->bindParam("comment", $this->comment);
+
+          // execute pdo object
+          $stmt->execute();
+          return $stmt;
+      }
+
+
+      public function get_comments(){
+          $sqlQuery = "Select c.id, c.announcement_id, c.user_id, u.title, u.first_name, u.last_name, u.avatar,
+          c.comment, c.date_posted from announcements_comments c inner join users u on c.user_id=u.id";
+
+
+          $QueryExecutor = new PDO_QueryExecutor();
+          $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+          $stmt->execute();
+          return $stmt;
+      }
+
+
+
+
+
+
+
+  } // end of class
 
 
 

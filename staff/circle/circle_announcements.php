@@ -20,7 +20,7 @@
 
 
 
-    $page_title = 'Work Circle -  General Room';
+    $page_title = 'Work Circle -  Announcement Details';
 
     require_once("../../config/step2/init_wp.php");
     require_once("../../nav/staff_nav.php");
@@ -57,19 +57,28 @@
 
   // get user role in cells
   $cell = new Cell();
-  $user_cell_roles = $cell->get_user_roles_in_cell($_GET_URL_cell_id, $_GET_URL_user_id);
+  $circle = new Circle();
 
-  $roles = '';
-  foreach($user_cell_roles as $row){
-      $roles = $row['roles'];
-  }
+  //$user_cell_roles = $cell->get_user_roles_in_cell($_GET_URL_cell_id, $_GET_URL_user_id);
+  $cell_user_roles = $circle->user_has_authority($_GET_URL_cell_id, $_GET_URL_user_id);
+  //echo $cell_user_roles->rowCount();
 
-  $roles = explode(',', $roles);
-  foreach($roles as $role){
-       if ($_GET_URL_user_id==$role){
-           $has_authority = true;
-       }
-  }
+
+  //echo ($user_cell_roles->rowCount());
+
+  if ($cell_user_roles->rowCount()){ $has_authority = true;}
+
+
+
+//   $roles = '';
+//   foreach($user_cell_roles as $row){
+//       $roles = $row['roles'];
+//   }
+//   $roles = explode(',', $roles);
+// // Snippet to display the roles of the user in Circle
+//   foreach($roles as $role){
+//
+//   }
 
 
 
@@ -97,7 +106,7 @@
       <!-- circle navigation bar //-->
 
       <div class="row border-bottom">
-            <div class='col-xs-12 col-sm-12 col-md-12 col-lg-12 mt-1 mb-4 font-weight-bold' >
+            <div class='col-xs-12 col-sm-12 col-md-12 col-lg-12 mt-2 mb-4 font-weight-bold' >
                   <?php  echo $circle_name.$circle_short_name; ?>
             </div>
             <div class='col-xs-12 col-sm-12 col-md-2 col-lg-2 mt-3 ml-2 sub_menu_tab' >
@@ -142,7 +151,14 @@
                     <big><i class="fas fa-bullhorn"></i> Announcements</big>
               </div>
               <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right">
-                    <button href="http://localhost/workplace/staff/circle/circle_announcements.php" class="btn btn-sm btn-primary btn-rounded"> <i class="fas fa-plus"></i> Compose Announcement</button>
+                <?php
+                    if ($has_authority) {
+                      $create_announcement_link = "circle_create_announcement.php?en=".mask($_GET_URL_cell_id)."&us=".mask($_GET_URL_user_id);
+                ?>
+                    <a href="<?php echo $create_announcement_link; ?>" class="btn btn-sm btn-primary btn-rounded"> <i class="fas fa-plus"></i> Compose Announcement</a>
+                <?php
+                    }
+                ?>
               </div>
               <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
@@ -166,6 +182,7 @@
 
                                           if ($recordFound>0){
                                               foreach($get_announcements as $row){
+                                                  $announcement_id = $row['id'];
                                                   $title = FieldSanitizer::outClean($row['title']);
                                                   $author_title = FieldSanitizer::outClean($row['user_title']);
                                                   $author_first_name = FieldSanitizer::outClean($row['first_name']);
@@ -176,12 +193,13 @@
                                                   $date_created = $date_created_raw->format('l jS F, Y');
                                                   $time_created = $date_created_raw->format('g:i a');
 
+                                                  $title_link = "<a href='circle_announcement_details.php?q=".mask($announcement_id)."&en=".mask($_GET_URL_cell_id)."&us=".mask($_GET_URL_user_id)."'>{$title}</a>";
 
                                                   // display columns data
                                                   echo "<tr>";
                                                   echo "<td class='text-right px-5'>{$counter}.</td>";
 
-                                                  echo "<td width='55%' class='px-2'>{$title} <div class='py-1'><small> <span><i class='far fa-eye'></i> Views(0)</span> &nbsp;&nbsp; <i class='far fa-comment-dots'></i> Comments(0)";
+                                                  echo "<td width='55%' class='px-2'>{$title_link} <div class='py-1'><small> <span><i class='far fa-eye'></i> Views(0)</span> &nbsp;&nbsp; <i class='far fa-comment-dots'></i> Comments(0)";
                                                   echo "</small></div></td>";
 
                                                   echo "<td width='25%' class='px-2'>";
