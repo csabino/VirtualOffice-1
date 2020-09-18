@@ -202,6 +202,11 @@
                                                       $comment_count = $cc['comment_number'];
                                                   }
 
+                                                  $views = 0;
+                                                  $get_announcement_views = $announcements->get_announcement_views($announcement_id);
+                                                  foreach($get_announcement_views as $gav){
+                                                      $views = $gav['views'];
+                                                  }
 
 
 
@@ -209,7 +214,7 @@
                                                   echo "<tr>";
                                                   echo "<td class='text-right px-5'>{$counter}.</td>";
 
-                                                  echo "<td width='55%' class='px-2'>{$title_link} <div class='py-1'><small> <span><i class='far fa-eye'></i> Views(0)</span> &nbsp;&nbsp; <i class='far fa-comment-dots'></i> Comments({$comment_count})";
+                                                  echo "<td width='55%' class='px-2'>{$title_link} <div class='py-1'><small> <span><i class='far fa-eye'></i> Views({$views})</span> &nbsp;&nbsp; <i class='far fa-comment-dots'></i> Comments({$comment_count})";
                                                   echo "</small></div></td>";
 
                                                   echo "<td width='25%' class='px-2'>";

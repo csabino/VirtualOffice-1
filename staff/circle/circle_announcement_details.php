@@ -419,8 +419,12 @@
   <input type='hidden' name='last_comment_id' id='last_comment_id' value="<?php echo $last_comment_id; ?>" />
 <br/><br/><br/>
 
-<?php
 
+
+<?php
+    //increase announcement views
+    $result = $announcement->increment_announcement_views($_GET_URL_announcement_id);
+  
     //footer.php
     require('../../includes/footer.php');
  ?>

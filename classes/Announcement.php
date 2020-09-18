@@ -213,10 +213,84 @@
       }
 
 
-      public function get_announcement_count($announcement_id){
+      public function get_announcement_views($announcement_id){
         $this->announcement_id = $announcement_id;
+        $sqlQuery = "Select views from announcements_views where announcement_id=:announcement_id";
+
+        $QueryExecutor = new PDO_QueryExecutor();
+        $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+        // bind parameters
+        $stmt->bindParam(":announcement_id", $this->announcement_id);
+
+        //execute PDO
+        $stmt->execute();
+        return $stmt;
 
       }
+
+
+      public function increment_announcement_views($announcement_id){
+        $views_count = 0;
+
+        $this->announcement_id = $announcement_id;
+
+        $get_views = $this->get_announcement_views($this->announcement_id);
+
+          if ($get_views->rowCount())
+          {
+            foreach($get_views as $gv)
+            {
+                $views_count = $gv['views'];
+            }
+          }
+
+          $this->execute_views_increment($this->announcement_id, $views_count);
+      }
+
+
+
+      private function execute_views_increment($announcement_id, $views_count){
+
+        $sqlQuery = '';
+        $timestamp = date('Y-m-d H:i:s');
+
+        if ($views_count==0){
+           $views_count++;
+           $sqlQuery = "Insert into announcements_views set announcement_id=:announcement_id, views=:view_count, last_updated=:timestamp";
+
+           // pdo object
+           $QueryExecutor = new PDO_QueryExecutor();
+           $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+           // bind parameters to pdo object
+           $stmt->bindParam(":announcement_id", $announcement_id);
+           $stmt->bindParam(":view_count", $views_count);
+           $stmt->bindParam(":timestamp", $timestamp);
+
+        }else{
+           $views_count++;
+           $sqlQuery = "Update announcements_views set views=:view_count, last_updated=:timestamp where announcement_id=:announcement_id";
+
+           // pdo object
+           $QueryExecutor = new PDO_QueryExecutor();
+           $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+           // bind parameters to pdo object
+           $stmt->bindParam(":view_count", $views_count);
+           $stmt->bindParam(":announcement_id", $announcement_id);
+           $stmt->bindParam(":timestamp", $timestamp);
+
+        } // end of if statement
+
+
+        // execute pdo object
+        $stmt->execute();
+      }
+
+
+
+
 
 
   } // end of class

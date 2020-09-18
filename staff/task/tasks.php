@@ -60,6 +60,7 @@
                                     <th class="th-sm" >SN</th>
                                     <th class="th-sm" >Task</th>
                                     <th class="th-sm" >Creator</th>
+                                    <th class="th-sm" >Creator</th>
                                     <th class="th-sm" >Date Created</th>
                                 </tr>
                             </thead>
