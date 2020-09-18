@@ -195,11 +195,21 @@
 
                                                   $title_link = "<a href='circle_announcement_details.php?q=".mask($announcement_id)."&en=".mask($_GET_URL_cell_id)."&us=".mask($_GET_URL_user_id)."'>{$title}</a>";
 
+                                                  $get_comment_count = $announcements->comment_count($announcement_id);
+                                                  $comment_count = 0;
+
+                                                  foreach($get_comment_count as $cc){
+                                                      $comment_count = $cc['comment_number'];
+                                                  }
+
+
+
+
                                                   // display columns data
                                                   echo "<tr>";
                                                   echo "<td class='text-right px-5'>{$counter}.</td>";
 
-                                                  echo "<td width='55%' class='px-2'>{$title_link} <div class='py-1'><small> <span><i class='far fa-eye'></i> Views(0)</span> &nbsp;&nbsp; <i class='far fa-comment-dots'></i> Comments(0)";
+                                                  echo "<td width='55%' class='px-2'>{$title_link} <div class='py-1'><small> <span><i class='far fa-eye'></i> Views(0)</span> &nbsp;&nbsp; <i class='far fa-comment-dots'></i> Comments({$comment_count})";
                                                   echo "</small></div></td>";
 
                                                   echo "<td width='25%' class='px-2'>";

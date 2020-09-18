@@ -13,6 +13,7 @@
       private $file_upload_type;
       private $file;
       private $comment;
+      private $comment_id;
       private $date_created;
       private $date_modified;
 
@@ -124,22 +125,98 @@
       }
 
 
-      public function get_comments(){
+      public function get_comments($announcement_id){
           $sqlQuery = "Select c.id, c.announcement_id, c.user_id, u.title, u.first_name, u.last_name, u.avatar,
-          c.comment, c.date_posted from announcements_comments c inner join users u on c.user_id=u.id";
+          c.comment, c.date_posted from announcements_comments c inner join users u on c.user_id=u.id
+          where c.announcement_id=:announcement_id order by c.id desc";
 
-
+          // pdo object
           $QueryExecutor = new PDO_QueryExecutor();
           $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
 
+          // bind param to object
+          $stmt->bindParam(":announcement_id", $announcement_id);
+
+          // execute pdo object
           $stmt->execute();
           return $stmt;
       }
 
 
 
+      public function get_comments_range($announcement_id, $start, $count){
+        //$sqlQuery = "Select c.id, c.announcement_id, c.user_id, u.title, u.first_name, u.last_name, u.avatar,
+        //c.comment, c.date_posted from announcements_comments c inner join users u on c.user_id=u.id order by c.id desc limit {$start}, {$count";
+        $sqlQuery = "Select c.id, c.announcement_id, c.user_id, u.title, u.first_name, u.last_name, u.avatar,
+        c.comment, c.date_posted from announcements_comments c inner join users u on c.user_id=u.id
+        where c.announcement_id=:announcement_id and c.id>{$start}";
 
 
+        //pdo object
+        $QueryExecutor = new PDO_QueryExecutor();
+        $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+        // bind param to pdo object
+        $stmt->bindParam(":announcement_id", $announcement_id);
+
+
+        // execute pdo object
+        $stmt->execute();
+        return $stmt;
+      }
+
+
+
+
+
+      public function comment_count($announcement_id){
+        $sqlQuery = "Select count(*) as comment_number from announcements_comments where announcement_id=:announcement_id";
+
+        // pdo object
+        $QueryExecutor = new PDO_QueryExecutor();
+        $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+        // bind parameters
+        $stmt->bindParam(":announcement_id", $announcement_id);
+
+        // execute stmt
+        $stmt->execute();
+        return $stmt;
+      }
+
+
+
+      public function delete_comment($fields){
+        $this->announcement_id = $fields['announcement_id'];
+        $this->user_id = $fields['user_id'];
+        $this->comment_id = $fields['comment_id'];
+
+        //echo "Announcement ID: ".$this->announcement_id;
+        //echo "<br/> User ID: ".$this->user_id;
+        //echo "<br/>Comment ID: ".$this->comment_id;
+
+        $sqlQuery = "Delete from announcements_comments where id=:comment_id and announcement_id=:announcement_id and user_id=:user_id";
+
+        // pdo object
+        $QueryExecutor = new PDO_QueryExecutor();
+        $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+        // bind parameters
+        $stmt->bindParam(":comment_id", $this->comment_id);
+        $stmt->bindParam(":user_id", $this->user_id);
+        $stmt->bindParam(":announcement_id", $this->announcement_id);
+
+
+        //execute pdo
+        $stmt->execute();
+        return $stmt;
+      }
+
+
+      public function get_announcement_count($announcement_id){
+        $this->announcement_id = $announcement_id;
+
+      }
 
 
   } // end of class

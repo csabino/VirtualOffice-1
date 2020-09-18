@@ -6,7 +6,7 @@
         }
 
         static function outClean($field){
-            $result = trim(addslashes(htmlspecialchars($field)));
+            $result = trim(stripslashes(htmlspecialchars($field)));
             return $result;
         }
     }

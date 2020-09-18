@@ -195,13 +195,13 @@
                         echo "<a href='{$general_link}'>Team</a>";
                   ?>
             </div>
-            <div class='col-xs-12 col-sm-12 col-md-2 col-lg-2 mt-3 sub_menu_tab'>
+            <div class='col-xs-12 col-sm-12 col-md-2 col-lg-2 mt-3  ml-2 sub_menu_tab'>
                   <?php
                         $general_link = "circle_projects.php?en=".mask($_GET_URL_cell_id)."&us=".mask($_GET_URL_user_id);
                         echo "<a href='{$general_link}'>Projects</a>";
                   ?>
             </div>
-            <div class='col-xs-12 col-sm-12 col-md-2 col-lg-2 mt-3 sub_menu_tab'>
+            <div class='col-xs-12 col-sm-12 col-md-2 col-lg-2 mt-3 ml-2 sub_menu_tab'>
                   <?php
                         $general_link = "circle_files.php?en=".mask($_GET_URL_cell_id)."&us=".mask($_GET_URL_user_id);
                         echo "<a href='{$general_link}'>Files</a>";
@@ -270,8 +270,20 @@
 
                                  $file_url = "<a target='_blank' href='../../uploads/announcements/documents/${file}'>${file_type} Attachment (${file_size})</a>";
                                }else{
+                                 $file_size = filesize("../../uploads/announcements/images/${file}");
+                                 if ($file_size<1000000){
+                                    $file_size = round(($file_size/1024),2);
+                                    $file_size = $file_size.' KB';
+                                 } else{
+                                    $file_size = round(($file_size/1024/1024),2);
+                                    $file_size = $file_size.' MB';
+                                 }
                                  $file_url = "<a target='_blank' href='../../uploads/announcements/images/${file}'>${file_type} Attachment (${file_size})</a>";
                                }
+
+
+
+
                                echo "<small><i class='fas fa-paperclip'></i> $file_url </small>";
                             }
                          ?>
@@ -292,12 +304,12 @@
 
       <!-- comment area //-->
       <div class="row py-2">
-          <div class="col-xs-8 col-sm-8 text-right">
+          <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 text-right">
               <div class="form-group blue-border-focus">
                   <textarea class="form-control" id="comment" row="3" placeholder="Have your say..."></textarea>
               </div>
           </div>
-          <div class="col-xs-2 col-sm-2 text-left align-middle">
+          <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-left align-middle">
               <button id="btn_send_comment" class="btn btn-sm btn-primary align-middle">Send</button>
           </div>
 
@@ -309,20 +321,32 @@
       <div class="row">
           <?php
               $announcement = new Announcement();
-              $get_comments = $announcement->get_comments();
+              $get_comments = $announcement->get_comments($_GET_URL_announcement_id);
               $total_comments = $get_comments->rowCount();
           ?>
-          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 py-3">
               <strong>Comments (<span id='total_comments'><?php echo $total_comments; ?></span>)</strong>
           </div>
       </div>
+
+      <div id="comment-panel" class='py-2'>
+
       <?php
+          $last_comment_id = 0;
+
           foreach($get_comments as $gc)
           {
+
+            if ($last_comment_id==''){
+              $last_comment_id = $gc['id'];
+            }
+
             $commentId = $gc['id'];
             $title = $gc['title'];
             $firstname = $gc['first_name'];
             $lastname = $gc['last_name'];
+            $author_id = $gc['user_id'];
+            $comment = nl2br(FieldSanitizer::outClean($gc['comment']));
             $avatar = '../images/avatar_100.png';
 
             if ($gc['avatar']!=''){
@@ -334,8 +358,16 @@
 
             $time_posted = $date_posted_raw->format('g:i a');
 
+            //generate delete link if comment is by same user
+            $delete_pane = '';
+            if ($author_id==$_GET_URL_user_id ){
+              $delete_pane = "<div id='delete{$commentId}' class='btn_delete text-danger' style='cursor:pointer;'><small> <i class='fas fa-times text-danger'></i> Delete</small></div> ";
+            }
+
+
+
       ?>
-            <div id="comment-panel" class='py-3'>
+
                 <div class="row" id="<?php echo $commentId; ?>" >
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-left">
                         <div class='px-2' style="float:left; border:0px solid red;">
@@ -348,21 +380,24 @@
                                   <span id="time_posted"><small><?php echo $time_posted; ?></small></span>
                               </div>
 
-                              <div id='comment'> </div>
+                              <div id='comment'> <?php echo $comment; ?> </div>
+                              <?php echo $delete_pane; ?>
                         </div>
 
                     </div>
 
                 </div>
-            </div> <!-- end of comment panel //-->
 
 
+            <hr>
 
             <!-- end of comment listing //-->
       <?php
+
           }
 
        ?>
+      </div> <!-- end of comment panel //-->
 
 
 
@@ -381,6 +416,7 @@
 
   <input type='hidden' name='announcement_id' id="announcement_id" value="<?php echo $_GET_URL_announcement_id; ?>"  />
   <input type='hidden' name='user_id' id="user_id" value="<?php echo $_GET_URL_user_id; ?>"  />
+  <input type='hidden' name='last_comment_id' id='last_comment_id' value="<?php echo $last_comment_id; ?>" />
 <br/><br/><br/>
 
 <?php

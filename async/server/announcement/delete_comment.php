@@ -26,38 +26,20 @@ require_once("../../../functions/FieldSanitizer.php");
 if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH']=='XMLHttpRequest')
   {
 
-    $comment = FieldSanitizer::inClean($_POST['comment']);
+    $comment_id = $_POST['comment_id'];
     $user_id = $_POST['user_id'];
     $announcement_id = $_POST['announcement_id'];
-    $last_comment_id = $_POST['last_comment_id'];
 
-    $dataArray = array("announcement_id"=>$announcement_id, "user_id"=>$user_id, "comment"=>$comment);
+
+    $dataArray = array("announcement_id"=>$announcement_id, "user_id"=>$user_id, "comment_id"=>$comment_id);
 
     // check that fields are not blank
-    if ($comment!='' && $user_id!='' && $announcement_id!='')
+    if ($comment_id!='' && $user_id!='' && $announcement_id!='')
     {
         $announcement = new Announcement();
-        $comment = $announcement->post_comment($dataArray);
+        $comment = $announcement->delete_comment($dataArray);
+        echo $comment->rowCount();
 
-        // if post is successfully saved, retrieve new posts and display it on page
-        if ($comment->rowCount())
-        {
-           //print("Comment is well saved");
-           $count = 5;
-           $start = $last_comment_id;
-           $result = $announcement->get_comments_range($announcement_id, $start, $count);
-
-           if ($result->rowCount())
-           {
-                $comment_pane = commentFactory($result, $user_id);
-                //var_dump(json_encode($comment_pane));
-                echo $comment_pane;
-
-           }else{
-
-           }
-
-        }
     }
     // end of check for blank fields
 
@@ -77,7 +59,7 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
 
 
 
-  Function commentFactory($result, $user_id){
+  Function commentFactory($result){
           $get_comments = $result;
           $comment_pane = '';
 
@@ -88,7 +70,6 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
             $title = $gc['title'];
             $firstname = $gc['first_name'];
             $lastname = $gc['last_name'];
-            $author_id = $gc['user_id'];
             $fullname = $title.' '.$lastname.' '.$firstname;
             $comment = nl2br(FieldSanitizer::outClean($gc['comment']));
             $avatar = '../images/avatar_100.png';
@@ -104,7 +85,7 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
 
 
             $delete_pane = '';
-            if ($author_id==$user_id ){
+            if ($author_id==$_GET_URL_user_id ){
               $delete_pane = "<div id='delete{$commentId}' class='btn_delete text-danger' style='cursor:pointer;'><small> <i class='fas fa-times text-danger'></i> Delete</small></div> ";
             }
 
@@ -124,8 +105,8 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
                               </div>
 
                               <div id='comment'>{$comment}</div>
-                              {$delete_pane}
-                        </div>
+                              <div id='delete{$commentId}' class='btn_delete text-danger' style='cursor:pointer;'><small> <i class='fas fa-times text-danger'></i> Delete</small></div>
+                            
 
                     </div>
 
