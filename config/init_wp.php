@@ -32,6 +32,7 @@
   require_once("../interface/FileUploaderInterface.php");
   require_once("../interface/AnnouncementInterface.php");
   require_once("../interface/ProjectInterface.php");
+  require_once("../interface/TaskInterface.php");
 
 
 

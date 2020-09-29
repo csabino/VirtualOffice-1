@@ -26,6 +26,7 @@ require_once("../../interface/CircleInterface.php");
 require_once("../../interface/FileUploaderInterface.php");
 require_once("../../interface/AnnouncementInterface.php");
 require_once("../../interface/ProjectInterface.php");
+require_once("../../interface/TaskInterface.php");
 
 // Logged-In Header
 require_once("../../includes/logged_in_header.php");

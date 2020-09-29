@@ -9,7 +9,6 @@
       private $end_date;
       private $source;
       private $operation;
-
       private $project_id;
       private $message;
       private $file_upload_type;
@@ -213,7 +212,7 @@
         public function get_projects_updates_by_project($project_id){
             $this->project_id = $project_id;
 
-            $sqlQuery = "Select * from projects_updates where project_id=:project_id";
+            $sqlQuery = "Select * from projects_updates where project_id=:project_id order by id desc ";
 
             // pdo object
             $QueryExecutor = new PDO_QueryExecutor();
@@ -225,6 +224,22 @@
             // pdo object execute
             $stmt->execute();
             return $stmt;
+        }
+
+
+        public function get_projects_updates_by_id($project_updates_id){
+          $sqlQuery = "Select * from projects_updates where id=:id";
+
+          // pdo object
+          $QueryExecutor = new PDO_QueryExecutor();
+          $stmt = $QueryExecutor()->customQuery()->prepare($sqlQuery);
+
+          // bind parameter to pdo object
+          $stmt->bindParam(":id", $project_updates_id);
+
+          // execute pdo object
+          $stmt->execute();
+          return $stmt;
         }
 
 

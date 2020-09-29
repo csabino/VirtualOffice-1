@@ -9,7 +9,12 @@
           header("location: work_circle.php");
     }
 
+
     if (!isset($_GET['pid']) || $_GET['pid']==''){
+          header("location: work_circle.php");
+    }
+
+    if (!isset($_GET['ud']) || $_GET['ud']==''){
           header("location: work_circle.php");
     }
 
@@ -20,8 +25,16 @@
     $_GET_URL_user_id = explode("-",htmlspecialchars(strip_tags($_GET['us'])));
     $_GET_URL_user_id = $_GET_URL_user_id[1];
 
+
     $_GET_URL_project_id = explode("-",htmlspecialchars(strip_tags($_GET['pid'])));
     $_GET_URL_project_id = $_GET_URL_project_id[1];
+
+
+    $_GET_URL_project_update_id = explode("-",htmlspecialchars(strip_tags($_GET['ud'])));
+    $_GET_URL_project_update_id = $_GET_URL_project_update_id[1];
+
+
+
 
 
 
@@ -145,97 +158,29 @@
                     <a href="<?php echo $post_project_updates_link; ?>" class="btn btn-sm btn-primary btn-rounded"> <i class="fas fa-plus"></i> Post Update</a>
               </div>
 
-              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      </div>
 
-                      <table id='tblData' class="table table-responsive table-striped table-bordered table-sm" cellspacing="0" width="100%">
-                            <thead>
-                                <tr>
-                                    <th class="th-sm" >SN</th>
-                                    <th class="th-sm" >Project Updates</th>
-                                    <th class="th-sm" >Sender</th>
-                                    <th class="th-sm" >Date Posted</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tblBody">
-                                <?php
-                                      // project list $counter
-                                      $counter = 1;
-                                      $project = new Project();
-                                      $get_projects_updates = $project->get_projects_updates_by_project($_GET_URL_project_id);
-
-                                      $recordFound = $get_projects_updates->rowCount();
-                                      $user = new StaffUser();
-
-                                      if ($recordFound>0){
-                                          foreach($get_projects_updates as $row){
-                                              $project_updates_id = $row['id'];
-
-                                              $message = nl2br(FieldSanitizer::outClean($row['message']));
-
-
-                                              if (strlen($message)>120){
-                                                  $message = substr($message,0,120)."...";
-                                              }
-
-
-                                              $sender_id = $row['user_id'];
-                                              $user_info = $user->get_user_by_id($sender_id);
-                                              $sender = '';
-                                                foreach ($user_info as $uif) {
-                                                    $sender = $uif['title'].' '.$uif['last_name'].' '.$uif['first_name'];
-                                                }
-
-                                              $file_type = '';
-
-                                              if ($row['file_type']!=''){
-                                                $file_type = '<i class="fas fa-paperclip"></i> '.$row['file_type'];
-                                              }
-
-                                              $date_created_raw = new DateTime($row['date_created']);
-                                              $date_created = $date_created_raw->format('D jS F, Y');
-                                              $time_created = $date_created_raw->format('g:i a');
-
-
-                                              // display column data
-                                              $project_update_link = "<a href='circle_project_update_details.php?q=".mask($_GET_URL_cell_id)."&us=".mask($_GET_URL_user_id)."&pid=".mask($_GET_URL_project_id)."&ud=".mask($project_updates_id)."'>{$message}</a>";
+      <div class-"row mt-5">
+          <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10 border">
+                <?php
+                    $project = new Project();
+                    $get_projects_update = $project->get_projects_updates_by_id($_GET_URL_project_update_id);
 
 
 
-                                              echo "<tr>";
-                                              echo "<td class='text-right px-5'>{$counter}.</td>";
-                                              echo "<td width='55%' class='px-2'><strong>{$project_update_link}</strong> ";
-                                                echo "<small><div class='row px-0 py-1'> "; // begin of row
-                                                echo "<div class='col-xs-4 col-sm-4 col-md-3 col-lg-3'> <i class='far fa-comment-dots'></i>  Comments (0) </div>
-                                                      <div class='col-xs-4 col-sm-4 col-md-3 col-lg-3'><i class='far fa-eye'></i> Views (0) </div>
-                                                      <div class='col-xs-4 col-sm-4 col-md-3 col-lg-3'>{$file_type} </div> ";
-                                                echo "</div></small>"; // end of row
-                                              echo "</td>"; // end of table column
+                ?>
 
 
-                                              echo "<td width='25%' class='px-2'>";
-                                                  echo "<div class='chip' style='background-color:pink;'>";
-                                                      echo "<img class='border-1' src='https://mdbootstrap.com/img/Photos/Avatars/avatar-6.jpg' alt='Author'>{$sender}";
-                                                  echo "<div>";
-                                              echo "</td>";
-
-                                              echo "<td width='26%' class='px-2'> <i class='far fa-calendar'></i> {$date_created} <div class='py-1'> <small> <i class='far fa-clock'></i> {$time_created}  </small></div> </td>";
-
-                                              $counter++;
-                                          } // end of foreach
-                                      } // end of if statement
-
-                                ?>
-
-                            </tbody>
-                      </table>
+                <div class="py-2 px-2" id="project_updates_details_header" style="background-color:#f1f1f1;">
 
 
+                </div>
 
-              </div>
+          </div>
       </div>
 
 
-      <!-- end of list projects //-->
+
 
       <!-- end of main area //-->
 
