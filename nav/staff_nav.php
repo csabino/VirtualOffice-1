@@ -28,7 +28,7 @@
         <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink-555">
           <a class="dropdown-item" href="<?php echo $baseUrl.'staff/circle/work_circle.php'; ?>"> <i class="fas fa-users"></i> Circle</a>
           <a class="dropdown-item" href="<?php echo $baseUrl.'staff/task/tasks.php?en='.mask($_SESSION['ulogin_userid']); ?>"> <i class="fas fa-list-ol"></i> Tasks</a>
-          <a class="dropdown-item" href="#"> <i class="far fa-file-alt"></i> Memos</a>
+          <a class="dropdown-item" href="<?php echo $baseUrl.'staff/memo/memos.php?en='.mask($_SESSION['ulogin_userid']); ?>"> <i class="far fa-file-alt"></i> Memos</a>
           <a class="dropdown-item" href="#"> <i class="far fa-list-alt"></i> Notes</a>
           <a class="dropdown-item" href="#"> <i class="fas fa-list"></i> Reports</a>
         </div>
@@ -109,8 +109,8 @@
           aria-haspopup="true" aria-expanded="false">Shared
         </a>
         <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink-555">
-          <a class="dropdown-item" href="#"> <i class="far fa-calendar"></i> Received</a>
-          <a class="dropdown-item" href="#"> <i class="far fa-clock"></i> Sent</a>
+          <a class="dropdown-item" href="<?php echo $baseUrl.'staff/shared/resource_received.php?en='.mask($_SESSION['ulogin_userid']); ?>"> <i class="fas fa-download"></i> Received</a>
+          <a class="dropdown-item" href="<?php echo $baseUrl.'staff/shared/resource_sent.php?en='.mask($_SESSION['ulogin_userid']); ?>"> <i class="fas fa-upload"></i> Sent</a>
         </div>
       </li>
       <!-- end Shared menu //-->

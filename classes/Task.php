@@ -1,6 +1,7 @@
 <?php
 
 class Task implements TaskInterface {
+  private $task_id;
   private $author;
   private $user_id;
   private $title;
@@ -8,6 +9,7 @@ class Task implements TaskInterface {
   private $project_name;
   private $description;
   private $source;
+  private $task_update;
 
 
   public function new_task($fields){
@@ -67,6 +69,66 @@ class Task implements TaskInterface {
 
 
   }
+
+
+  public function get_task_by_id($task_id){
+      $sqlQuery = "Select t.id, t.title as subject, t.description, t.file_type, t.file, u.title, u.first_name, u.last_name, t.creator,
+      t.source, t.project_id, t.project_name, t.assigned_to, t.status, t.date_created from tasks t inner join users u
+      on t.creator = u.id ";
+
+      // pdo object
+      $QueryExecutor = new PDO_QueryExecutor();
+      $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+      // execute pdo object
+      $stmt->execute();
+      return $stmt;
+  }
+
+
+  public function post_task_update($fields){
+    $this->task_id = $fields['task_id'];
+    $this->user_id = $fields['user_id'];
+    $this->task_update = $fields['task_update'];
+
+
+    // sqlQuery
+    $sqlQuery = "Insert into tasks_updates set task_id=:task_id, user_id=:user_id, updates=:task_update";
+
+    // pdo object
+    $QueryExecutor = new PDO_QueryExecutor();
+    $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+    // bind pdo parameter
+    $stmt->bindParam(":task_id", $this->task_id);
+    $stmt->bindParam(":user_id", $this->user_id);
+    $stmt->bindParam(":task_update", $this->task_update);
+
+    // execute Pdo
+    $stmt->execute();
+    return $stmt;
+
+  }
+
+
+  public function get_task_updates_by_id($task_id){
+    $this->task_id = $task_id;
+    $sqlQuery = "Select * from tasks_updates where task_id=:task_id order by id desc";
+
+    //pdo object
+    $QueryExecutor = new PDO_QueryExecutor();
+    $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+    //bind parameters
+    $stmt->bindParam(":task_id", $this->task_id);
+
+    // execute pdo object
+    $stmt->execute();
+    return $stmt;
+
+  }
+
+
 
 }
 

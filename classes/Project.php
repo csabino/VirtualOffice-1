@@ -232,7 +232,7 @@
 
           // pdo object
           $QueryExecutor = new PDO_QueryExecutor();
-          $stmt = $QueryExecutor()->customQuery()->prepare($sqlQuery);
+          $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
 
           // bind parameter to pdo object
           $stmt->bindParam(":id", $project_updates_id);

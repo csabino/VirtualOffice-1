@@ -1,0 +1,11 @@
+<?php
+
+  interface MemoInterface{
+      
+  }
+
+
+
+
+
+?>
