@@ -228,7 +228,7 @@
                     }
                 ?>
               </div>
-              <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10 border" style="padding:0px;">
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 border" style="padding:0px;">
                   <?php
                         $announcement = new Announcement();
                         $get_announcement = $announcement->get_announcement_by_id($_GET_URL_announcement_id);
@@ -288,7 +288,7 @@
                             }
                          ?>
                   </div>
-                  <div class='py-5 px-2' id="announcement_body">
+                  <div class='py-3 px-2' id="announcement_body">
                       <?php
 
                           echo nl2br($message);
@@ -306,7 +306,7 @@
       <div class="row py-2">
           <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 text-right">
               <div class="form-group blue-border-focus">
-                  <textarea class="form-control" id="comment" row="3" placeholder="Have your say..."></textarea>
+                  <textarea class="form-control" id="comment" rows="4" placeholder="Have your say..."></textarea>
               </div>
           </div>
           <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-left align-middle">
@@ -364,23 +364,24 @@
               $delete_pane = "<div id='delete{$commentId}' class='btn_delete text-danger' style='cursor:pointer;'><small> <i class='fas fa-times text-danger'></i> Delete</small></div> ";
             }
 
-
+            $user_fullname = $title.' '.$lastname.' '.$firstname;
+            $user_fullname_link = "<a href='../../staff/profile/user_profile.php?q=".mask($author_id)."'>{$user_fullname}</a>";
 
       ?>
 
                 <div class="row" id="<?php echo $commentId; ?>" >
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-left">
-                        <div class='px-2' style="float:left; border:0px solid red;">
+                        <div class='px-2' style="float:left; border:0px solid red; width:7%;">
                             <img src="<?php echo $avatar; ?>" width="50px" class="img-fluid img-responsive z-depth-1 rounded-circle" />
                         </div>
-                        <div style="float:left; border:0px solid black;">
+                        <div style="float:left; border:0px solid black; width:93%;">
                               <div>
-                                  <span id='user'><?php echo $title.' '.$lastname.' '.$firstname; ?></span>&nbsp;&nbsp;
+                                  <span id='user' class='font-weight-bold'><?php echo "{$user_fullname_link}"; ?></span>&nbsp;&nbsp;
                                   <span id='date_posted'><small><?php echo $date_posted;  ?></small></span>&nbsp;
                                   <span id="time_posted"><small><?php echo $time_posted; ?></small></span>
                               </div>
 
-                              <div id='comment'> <?php echo $comment; ?> </div>
+                              <div class='py-2' id='comment'> <?php echo $comment; ?> </div>
                               <?php echo $delete_pane; ?>
                         </div>
 
@@ -424,7 +425,7 @@
 <?php
     //increase announcement views
     $result = $announcement->increment_announcement_views($_GET_URL_announcement_id);
-  
+
     //footer.php
     require('../../includes/footer.php');
  ?>

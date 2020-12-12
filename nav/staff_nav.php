@@ -35,7 +35,7 @@
       </li>
       <!-- end office menu //-->
 
-      <!-- Projects menu //-->
+      <!-- Projects menu -->
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-555" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false">  Projects
@@ -50,6 +50,19 @@
       </li>
       <!-- end projects menu //-->
 
+      <!-- Projects menu
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-555" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">  Conference
+        </a>
+        <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink-555">
+          <a class="dropdown-item" href="<?php echo $baseUrl.'staff/conference/meeting.php?en='.mask($_SESSION['ulogin_userid']); ?>"> <i class="fas fa-users"></i> Meeting</a>
+        </div>
+      </li>
+
+      //-->
+
+
       <!-- Files menu //-->
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-555" data-toggle="dropdown"
@@ -59,7 +72,7 @@
           <a class="dropdown-item" href="#"> <i class="far fa-file-alt"></i> Documents</a>
           <a class="dropdown-item" href="#"> <i class="far fa-images"></i> Images</a>
           <a class="dropdown-item" href="#"> <i class="fas fa-headphones"></i> Audios</a>
-          <a class="dropdown-item" href="#"> <i class="far fa-file-video"></i> Videos</a>
+          <a class="dropdown-item" href="<?php echo $baseUrl.'staff/files/videos.php?en='.mask($_SESSION['ulogin_userid']); ?>"> <i class="far fa-file-video"></i> Videos</a>
         </div>
       </li>
       <!-- end files menu //-->
@@ -140,10 +153,10 @@
             <img src="<?php echo $baseUrl."images/avatars/avatar-2.jpg";  ?>" class="img-fluid rounded-circle z-depth-0"
               alt="My Avatar" >
           </a>
-          <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left dropdown-secondary"
+          <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left dropdown-primary"
             aria-labelledby="navbarDropdownMenuLink-55">
-            <a class="dropdown-item" href="#"> <i class="far fa-user"></i> Profile</a>
-            <a class="dropdown-item" href="#"> <i class="fas fa-key"></i> Change Password</a>
+            <a class="dropdown-item" href="<?php echo $baseUrl.'staff/profile/my_profile.php?q='.mask($_SESSION['ulogin_userid']); ?>"> <i class="far fa-user"></i> Profile</a>
+            <a class="dropdown-item" href="<?php echo $baseUrl.'staff/profile/change_password.php?q='.mask($_SESSION['ulogin_userid']); ?>"> <i class="fas fa-key"></i> Change Password</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="logout.php"> <i class="fas fa-sign-out-alt"></i> Logout</a>
           </div>

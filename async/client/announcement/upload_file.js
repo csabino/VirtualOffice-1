@@ -53,8 +53,8 @@ $(document).ready(function(){
             var image_size = property.size;
             image_size = image_size/1024;
             //alert(image_size);
-            if (image_size>10000){
-                alert("The file is larger than the allowed 10MB size. Please resize and try again.");
+            if (image_size>20000){
+                alert("The file is larger than the allowed 20MB size. Please resize and try again.");
             }else{
                     var form_data = new FormData();
                     form_data.append("file", property);
@@ -96,7 +96,10 @@ $(document).ready(function(){
 
 // Remove file
     $("#activity_notifier").on("click", "span#deletefile", function(){
-
+        //alert("Delete file");
+        $.post("../../async/server/announcement/remove_uploaded_file.php",function(data){
+              $("#myuploadedfile_div").remove();
+        });
     });
 
 

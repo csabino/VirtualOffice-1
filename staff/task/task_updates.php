@@ -23,7 +23,7 @@
     //require_once("../includes/staff_header.php");
 
 
-
+    $last_taskupdate_id = '';
 
 
 
@@ -124,32 +124,41 @@
       <div class="row">
           <?php
 
-              $get_updates = $task->get_task_updates_by_id($_GET_URL_task_id);
+              $get_updates = $task->get_task_updates_by_taskid($_GET_URL_task_id);
               $total_updates = $get_updates->rowCount();
           ?>
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 py-3">
-              <strong>Updates (<span id='total_updates'><?php echo $total_updates; ?></span>)</strong>
+              <span><strong><big>Updates</big> (<span id='total_updates'><?php echo $total_updates; ?></span>)</strong></span>
           </div>
       </div>
 
-      <div class="row py-2">
+      <div class="row py-2" id="row_post_pane">
           <?php
           if ($total_updates>0){
             foreach($get_updates as $gu){
               $update_id = $gu['id'];
+              if ($last_taskupdate_id==''){
+                  $last_taskupdate_id = $update_id;
+              }
+
               $updates = nl2br(FieldSanitizer::outClean($gu['updates']));
               $date_posted_raw = new DateTime($gu['date_posted']);
               $date_posted = $date_posted_raw->format('l jS F, Y');
               $time_posted = $date_posted_raw->format('g:i a');
 
-              echo "<div class='col-xs-12 col-md-10 col-lg-10 border py-2 px-2 mt-3 z-depth-1' style='margin-left:12px; border-radius:5px; padding: 2px;'>";
-                echo "<div class='row'>";
-                    echo "<div class='col-xs-12 col-md-12 col-lg-12 px-3'>";
+              echo "<div id='{$update_id}' class='col-xs-12 col-md-10 col-lg-10 border py-2 px-2 mt-3 z-depth-1' style='margin-left:12px; border-radius:5px; padding: 2px;'>";
+                echo "<div class='row' >";
+                    echo "<div class='col-xs-12 col-md-12 col-lg-12 px-4 py-1'>";
                         echo "<small><i class='far fa-calendar-alt'></i> &nbsp;{$date_posted}&nbsp;&nbsp;&nbsp;<i class='far fa-clock'></i>{$time_posted}</small>";
                     echo "</div>";
-                    echo "<div class='col-xs-12 col-md-12 col-lg-12'>";
+                    echo "<div class='col-xs-12 col-md-12 col-lg-12 px-4'>";
                         echo $updates;
                     echo "</div>";
+                    echo "<div class='col-xs-12 col-md-12 col-lg-12 px-4 text-right'>
+                        <a id='del{$update_id}' class='btn-floating btn-sm btn-danger selectDeletePost' data-toggle='modal' data-target='#confirmDelete'>
+                            <i class='far fa-trash-alt'></i>
+                        </a>
+                     </div>";
                 echo "</div>";
               echo "</div>";
 
@@ -164,9 +173,36 @@
 
   </div> <!-- end of container //-->
 
-<br/><br/><br/>
-<input type="text" id='user_id' value="<?php echo $_GET_URL_user_id; ?>" >
-<input type="text" id="task_id" value="<?php echo $_GET_URL_task_id;  ?>" >
+<br/><br/><br/><br/>
+<input type="hidden" id='user_id' value="<?php echo $_GET_URL_user_id; ?>" >
+<input type="hidden" id="task_id" value="<?php echo $_GET_URL_task_id;  ?>" >
+<input type="hidden" id="last_taskupdate_id" value="<?php echo $last_taskupdate_id;  ?>" >
+<input type="hidden" id="confirm_delete_post_id" value="">
+
+<br/><br/><br/><br/>
+<!-- Confirm Delete Modal -->
+<div class="modal fade" id="confirmDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirm Delete</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Do you wish to delete this post? <br/><small>Note: This action is not reversible.</small>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
+        <button type="button" class="btn btn-danger"  data-dismiss="modal" id='delete_task_update'> <i class='far fa-trash-alt'></i> Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end of Confirm Delete Modal -->
+
 
 <?php
 
@@ -174,3 +210,4 @@
     require('../../includes/footer.php');
  ?>
   <script src="../../async/client/task/post_update.js"></script>
+  <script src="../../async/client/task/delete_update.js"></script>

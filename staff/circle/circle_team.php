@@ -136,13 +136,21 @@
 
                           foreach($circle_team as $row)
                           {
+                              $member_id = $row['user_id'];
                               $member_title = $row['title'];
                               $member_first_name = $row['first_name'];
                               $member_last_name = $row['last_name'];
                               $member_fullname = $member_title.' '.$member_last_name.' '.substr($member_first_name,0,1).'.';
                               $position = $row['position'];
+                              $avatar = "../../images/generic_avatar.jpg";
+
+                              if ($row['avatar']!=''){
+                                $avatar = "../../staff/avatars/".$row['avatar'];
+                              }
 
                               $gradient = gradient();
+                              $member_profile_url = '../../staff/profile/user_profile.php?q='.mask($member_id);
+                              $member_fullname_link = "<a href='{$member_profile_url}'>{$member_fullname}</a>";
 
 
 
@@ -154,11 +162,11 @@
                                 <!-- Background  color //-->
                                 <div class="card-up <?php echo $gradient; ?>"></div>
                                 <!--Avatar-->
-                                <div class="avatar mx-auto"><img src="../../images/generic_avatar.jpg" class="rounded-circle img-responsive" alt="Example photo"></div>
+                                <div class="avatar mx-auto"><img src="<?php echo $avatar; ?>" class="rounded-circle img-responsive" alt="Avatar"></div>
 
                                 <div class="card-body">
                                     <!--Name-->
-                                    <h4 class="card-title mt-1"><?php echo $member_fullname; ?></h4>
+                                    <h4 class="card-title mt-1"><?php echo $member_fullname_link; ?></h4>
                                     <hr>
                                     <!--Quotation-->
                                     <p><?php echo $position; ?> </p>

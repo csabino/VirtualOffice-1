@@ -18,8 +18,12 @@ $(document).ready(function(){
             //prepend data as result
             //alert(data);
             $("#comment-panel").prepend(data);
+
             var updated_last_comment_id = $("#comment-panel").children(".row").first().attr("id");
             $("#last_comment_id").val(updated_last_comment_id);
+
+            //slideDown animation latest post
+            $(".row#"+updated_last_comment_id).hide().slideDown(1000);
 
             // Clear the comment textarea
             $('#comment').val('')
@@ -77,3 +81,5 @@ $(document).ready(function(){
   });
 
 });
+
+//----------------------------------------------------------------------------------------------------------

@@ -95,3 +95,8 @@
   .sub_menu_tab_active:hover{
     border-bottom: 2px solid #0B79D3 ;
   }
+
+  a.customlink:link{
+    color: #33b5e5;
+    font-weight: bold;
+  }

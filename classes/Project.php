@@ -133,6 +133,39 @@
 
            $response = '';
 
+
+           if ($new_project_id!=''){
+              $sqlQuery = "Update projects set title=:title, description=:description, cell_id=:cell_id, creator=:user_id,
+              start_date=:start_date, end_date=:end_date, source=:source where id=:new_project_id";
+
+              // pdo object
+              $QueryExecutor = new PDO_QueryExecutor();
+              $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+              // binding pdo parameters
+              $stmt->bindParam(":title", $this->title);
+              $stmt->bindParam(":description", $this->description);
+              $stmt->bindParam(":cell_id", $this->cell_id);
+              $stmt->bindParam(":user_id", $this->user_id);
+              $stmt->bindParam(":start_date", $this->start_date);
+              $stmt->bindParam(":end_date", $this->end_date);
+              $stmt->bindParam(":source", $this->source);
+              $stmt->bindParam(":new_project_id", $new_project_id);
+
+
+              // pdo object execute
+              $stmt->execute();
+
+              if ($stmt->rowCount()){
+                  $response = array('status'=>'success', 'msg'=>'The Project has been successfully updated.');
+              }else{
+                  $response = array('status'=>'failed', 'msg'=>'An error occurred updating the Project.');
+              }
+           }else{
+                $response = array('status'=>'failed', 'msg'=>'No Project has been created or selected');
+           }
+
+           return $response;
       }
 
 

@@ -227,6 +227,7 @@
   $("#btn_create_project").bind("click", function(e){
 
        var btn_text = $("#btn_create_project").text();
+
        if (btn_text=='Create Project'){
            //check if  title is filled in
            if ($("#title").val()!=''){
@@ -236,7 +237,7 @@
            }
 
 
-       }else if(btn_text=='Project Created'){
+       }else if(btn_text=='Update Project'){
            if ($("#title").val()!=''){
                  update_project();
            }else{
@@ -305,12 +306,15 @@
 
                             $("#step1_output_status").html(outcome);
 
-                            // display continue button
-                            $("#step1_continue").show();
-                            $("#btn_create_project").text('Update Project')
+                            if (ops_mode=='create'){                    
 
-                            // Store new_project_id into hidden field
-                            $("#new_project_id").val(data.new_project_id);
+                                // display continue button
+                                $("#step1_continue").show();
+                                $("#btn_create_project").text('Update Project')
+
+                                // Store new_project_id into hidden field
+                                $("#new_project_id").val(data.new_project_id);
+                            }
 
 
                         } else if (data.status=='failed'){
@@ -318,9 +322,13 @@
                             outcome += "<i class='fas fa-exclamation-triangle'></i>&nbsp;&nbsp;&nbsp;&nbsp;" + data.msg + "</div>";
                             $("#step1_output_status").html(outcome);
 
-                            //clear title field
-                            $("#title").val('');
-                            //$("#step1_continue").hide();
+
+                            if (ops_mode=='create'){
+                                //clear title field
+                                $("#title").val('');
+                                //$("#step1_continue").hide();
+                            }
+
                         }
                   }
 

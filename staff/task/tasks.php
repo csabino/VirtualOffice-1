@@ -78,9 +78,15 @@
                                       // foreach
                                       foreach($task_list as $tlst){
                                           $task_id = $tlst['id'];
-                                          $title = $tlst['subject'];
+                                          $title = FieldSanitizer::outClean($tlst['subject']);
                                           $creator = $tlst['title'].' '.$tlst['first_name'].' '.$tlst['last_name'];
-                                          $project_name = $tlst['project_name'];
+                                          $creator_avatar = '..\..\images\avatardefault100.png';
+                                          if ($tlst['avatar']!=''){
+                                              $creator_avatar = '../avatars/'.$tlst['avatar'];
+                                          }
+
+
+                                          $project_name = FieldSanitizer::outClean($tlst['project_name']);
                                           $project_cell_id = '';
 
                                           $task_updates_link = '';
@@ -89,14 +95,16 @@
                                           if ($tlst['project_id']!=''){
                                                $get_project_name = $project->get_project_by_id($tlst['project_id']);
                                                foreach($get_project_name as $gpn){
-                                                  $project_name = FieldSanitizer::outClean($gpn['title']);
+                                                  $project_name =  FieldSanitizer::outClean($gpn['title']);
                                                   $project_cell_id = ($gpn['cell_id']);
                                                }
+
+
                                                $task_href = "circle_project_task_updates.php?q=".mask($task_id)."&us=".mask($_GET_URL_user_id)."&cid=".mask($project_cell_id)."&pid=".mask($tlst['project_id']);
-                                               $task_updates_link= "<a href='{$task_href}' class='font-weight-bold'>{$title}</a>";
+                                               $task_updates_link= "<a href='{$task_href}' class='text-secondary font-weight-bold'>{$title}</a>";
                                           }else{
                                                $task_href = "task_updates.php?q=".mask($task_id)."&us=".mask($_GET_URL_user_id);
-                                               $task_updates_link = "<a href='{$task_href}'>{$title}</a>";
+                                               $task_updates_link = "<a class='text-info font-weight-bold' href='{$task_href}'>{$title}</a>";
                                           }
                                           // end of if project_id
 
@@ -107,12 +115,12 @@
                                           $time_created = $date_created_raw->format('g:i a');
 
                                           // Edit link info
-                                          $edit_href = 'task_edit.php?q='.mask($_GET_URL_user_id)."&t=".mask($task_id);
+                                          $edit_href = 'edit_task.php?q='.mask($_GET_URL_user_id)."&t=".mask($task_id);
                                           $edit_link = "<a class='text-info' href='{$edit_href}'><i class='far fa-edit'></i> Edit</a>";
 
                                           // Delete link info
                                           $delete_href = 'task_delete.php?q='.mask($_GET_URL_user_id)."&t=".mask($task_id);
-                                          $delete_link = "<a class='text-danger' href='{$delete_href}'><i class='far fa-trash-alt'></i> Delete</a>";
+                                          $delete_link = "<a id='del{$task_id}' class='text-danger sel_delete_task' href='{$delete_href}' data-toggle='modal' data-target='#confirmDelete'><i class='far fa-trash-alt'></i> Delete</a>";
 
 
 
@@ -127,7 +135,7 @@
                                           echo "</td>";
                                           echo "<td width='20%' class='px-2'>";
                                                echo "<div class='chip' style='background-color:pink;'>";
-                                               echo "<img class='border-1' src='https://mdbootstrap.com/img/Photos/Avatars/avatar-6.jpg' alt='Author'>{$creator}";
+                                               echo "<img class='border-1' src='{$creator_avatar}' width='100px' alt='Author'>{$creator}";
                                                echo "<div>";
                                           echo "</td>";
                                           echo "<td width='20%' class='px-2'>{$project_name}</td>";
@@ -160,6 +168,43 @@
   </div> <!-- end of container //-->
 
 <br/><br/><br/>
+<input type="hidden" id="selected_del_task_id"/>
+<input type="hidden" id="current_user_id" value="<?php echo $_GET_URL_user_id; ?>" />
+
+<!--    //-->
+
+
+<!-- Modal -->
+<div class="modal fade" id="confirmDelete" tabindex="-1" role="dialog" aria-labelledby="confirmDelete"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirm Delete</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Do you really wish to delete this record? <br/>
+        <small>Note: This action is not reversible.</small>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
+        <button type="button" id="delete_task" class="btn btn-danger" data-dismiss="modal"><i class="far fa-trash-alt"></i> Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!--  //-->
+
+
+
+
+
 
 <?php
 
@@ -167,3 +212,31 @@
     require('../../includes/footer.php');
  ?>
   <script src="../../lib/js/custom/tblData.js"></script>
+  <script>
+    $("body").on("click","#delete_task",function(){
+         var task_id = $("#selected_del_task_id").val();
+         var current_user_id = $("#current_user_id").val();
+
+         //-------------------- Ajax module -----------------------------------
+         $.ajax({
+           method: "POST",
+           url: "../../async/server/task/delete_task.php",
+           data: {user_id: current_user_id, task_id: task_id},
+           cache: false,
+         }).done(function(data){
+            var result = jQuery.parseJSON(data);
+            alert(result.status);
+         });
+         //--------------------end of Ajax module ------------------------------
+
+         //reload page
+         location.reload(true);
+    });
+
+    $("body").on("click",".sel_delete_task",function(){
+        var task_id = $(this).attr("id").replace(/\D/g,'');
+        $("#selected_del_task_id").val(task_id);
+
+    });
+
+  </script>

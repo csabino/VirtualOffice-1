@@ -1,7 +1,7 @@
 <?php
     class FieldSanitizer{
         static function inClean($field){
-            $result = trim(addslashes(htmlentities(htmlspecialchars($field))));
+            $result = trim(addslashes($field));
             return $result;
         }
 

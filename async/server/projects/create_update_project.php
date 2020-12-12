@@ -1,4 +1,4 @@
-<?php
+ <?php
 
     //-------------- Abstract -----------------------------------
     require_once("../../../abstract/User.php");
@@ -48,8 +48,11 @@
           echo json_encode($create_project);
 
       } else if( $operation=='update'){
+
+            echo $new_project_id;
             if ($new_project_id!='' && $title!=''){
                 $update_project = $project->update_project($dataArray);
+                echo json_encode($update_project);
 
             }else{
 

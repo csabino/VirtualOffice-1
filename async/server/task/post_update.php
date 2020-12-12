@@ -36,7 +36,30 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
     if ($task_update!='' && $user_id!='' && $task_id!=''){
         $task = new Task();
         $publish = $task->post_task_update($dataArray);
-        echo $publish->rowCount();
+        $resultCount = $publish->rowCount();
+        $output = '';
+        $status = '';
+
+        if ($resultCount > 0){
+           //print("Result Count");
+           $publishedUpdateId = $task->get_user_task_updates_last_id($user_id);
+           //print('Last Published Id '.$publishedUpdateId);
+           $get_updates = $task->get_task_updates_by_id($publishedUpdateId);
+           //print("Get Updates: ".$get_updates->rowCount());
+           $output = commentFactory($get_updates, $user_id);
+           $status = 'success';
+
+        }else{
+           $status = 'failed';
+        }
+
+        $response = array("status"=>$status,"output"=>$output,"lastTaskUpdateId"=>$publishedUpdateId);
+        echo json_encode($response);
+
+
+        //echo $output;
+
+
     }
 
 } // end of if isset($_SERVER['HTTP_X_REQUESTED_WITH'])
@@ -46,67 +69,41 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
 
 
   Function commentFactory($result, $user_id){
-          $get_comments = $result;
+          //print("In commentFactory");
+          $get_updates = $result;
           $comment_pane = '';
 
-          foreach($get_comments as $gc)
+          foreach($get_updates as $gu)
           {
-            $last_comment_id = $gc['id'];
-            $commentId = $gc['id'];
-            $title = $gc['title'];
-            $firstname = $gc['first_name'];
-            $lastname = $gc['last_name'];
-            $author_id = $gc['user_id'];
-            $fullname = $title.' '.$lastname.' '.$firstname;
-            $comment = nl2br(FieldSanitizer::outClean($gc['comment']));
-            $avatar = '../images/avatar_100.png';
-
-            if ($gc['avatar']!=''){
-              $avatar = '../avatars/'.$gc['avatar'];
-            }
-
-            $date_posted_raw = new DateTime($gc['date_posted']);
-            $date_posted = $date_posted_raw->format('D. jS M. Y');
-
+            //print("Inside foreach");
+            $update_id = $gu['id'];
+            $updates = nl2br(FieldSanitizer::outClean($gu['updates']));
+            $date_posted_raw = new DateTime($gu['date_posted']);
+            $date_posted = $date_posted_raw->format('l jS F, Y');
             $time_posted = $date_posted_raw->format('g:i a');
 
 
-            $delete_pane = '';
-            if ($author_id==$user_id ){
-              $delete_pane = "<div id='delete{$commentId}' class='btn_delete text-danger' style='cursor:pointer;'><small> <i class='fas fa-times text-danger'></i> Delete</small></div> ";
-            }
-
-
-        $comment_pane .= "
-
-                <div class='row' id='{$commentId}' >
-                    <div class='col-xs-12 col-sm-12 col-md-12 col-lg-12 text-left'>
-                        <div class='px-2' style='float:left; border:0px solid red;'>
-                            <img src='{$avatar}' width='50px' class='img-fluid img-responsive z-depth-1 rounded-circle' />
+            $comment_pane .= "
+                    <div  id='{$update_id}' class='col-xs-12 col-md-10 col-lg-10 border py-2 px-2 mt-3 z-depth-1' style='margin-left:12px; border-radius:5px; padding: 2px;'>
+                        <div class='row'>
+                            <div class='col-xs-12 col-md-12 col-lg-12 px-4 py-1'>
+                              <small><i class='far fa-calendar-alt'></i> &nbsp;{$date_posted}&nbsp;&nbsp;&nbsp;<i class='far fa-clock'></i>{$time_posted}</small>
+                            </div>
+                            <div class='col-xs-12 col-md-12 col-lg-12 px-4'>
+                            {$updates}
+                            </div>
+                            <div class='col-xs-12 col-md-12 col-lg-12 px-4 text-right'>
+                                <a id='del{$update_id}' class='btn-floating btn-sm btn-danger selectDeletePost' data-toggle='modal' data-target='#confirmDelete'>
+                                    <i class='far fa-trash-alt'></i>
+                                </a>
+                             </div>
                         </div>
-                        <div style='float:left; border:0px solid black;'>
-                              <div>
-                                  <span id='user'>{$fullname}</span>&nbsp;&nbsp;
-                                  <span id='date_posted'><small>{$date_posted}</small></span>&nbsp;
-                                  <span id='time_posted'><small>{$time_posted}</small></span>
-                              </div>
-
-                              <div id='comment'>{$comment}</div>
-                              {$delete_pane}
-                        </div>
-
                     </div>
-
-                </div>
-            <hr><!-- end of comment panel //-->
-            ";
-
-
-
-
-    }// end of foreach
+                ";
+          }// end of foreach
 
     //$response = array("comment_pane"=>$comment_pane,"last_comment_id"=>$last_comment_id);
+    //print($comment_pane);
     return $comment_pane;
   } // end of function
 

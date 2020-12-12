@@ -184,16 +184,23 @@
                                               foreach($get_announcements as $row){
                                                   $announcement_id = $row['id'];
                                                   $title = FieldSanitizer::outClean($row['title']);
+                                                  $author_id = $row['author'];
                                                   $author_title = FieldSanitizer::outClean($row['user_title']);
                                                   $author_first_name = FieldSanitizer::outClean($row['first_name']);
                                                   $author_last_name = FieldSanitizer::outClean($row['last_name']);
                                                   $author = $author_title.' '.$author_last_name.' '.substr($author_first_name,0,1).'.';
 
+                                                  $avatar = '../../images/user_avatar.png';
+
+                                                  if ($row['avatar']!=''){
+                                                    $avatar = '../../staff/avatars/'.$row['avatar'];
+                                                  }
+
                                                   $date_created_raw = new DateTime($row['date_created']);
                                                   $date_created = $date_created_raw->format('l jS F, Y');
                                                   $time_created = $date_created_raw->format('g:i a');
 
-                                                  $title_link = "<a href='circle_announcement_details.php?q=".mask($announcement_id)."&en=".mask($_GET_URL_cell_id)."&us=".mask($_GET_URL_user_id)."'>{$title}</a>";
+                                                  $title_link = "<a class='customlink' href='circle_announcement_details.php?q=".mask($announcement_id)."&en=".mask($_GET_URL_cell_id)."&us=".mask($_GET_URL_user_id)."'>{$title}</a>";
 
                                                   $get_comment_count = $announcements->comment_count($announcement_id);
                                                   $comment_count = 0;
@@ -219,7 +226,7 @@
 
                                                   echo "<td width='25%' class='px-2'>";
                                                       echo "<div class='chip' style='background-color:pink;'>";
-                                                          echo "<img class='border-1' src='https://mdbootstrap.com/img/Photos/Avatars/avatar-6.jpg' alt='Author'>{$author}";
+                                                          echo "<a href='../profile/user_profile.php?q=".mask($author_id)."'><img class='border-1' src='{$avatar}' alt='Author'>{$author}</a>";
                                                       echo "<div>";
                                                   echo "</td>";
 

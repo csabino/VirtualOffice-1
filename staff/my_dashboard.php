@@ -10,26 +10,30 @@
 
 
     if (isset($_SESSION['loggedIn_profile_user_id'])){
-        // get user profile information
 
 
+
+
+        echo "Other times -".$_SESSION['loggedIn_profile_avatar'];
 
     }else{
-        $_SESSION['loggedIn_profile_user_id'] = $_SESSION['ulogin_userid'];
-        $_SESSION['loggedIn_profile_file_no'] =   $_SESSION['ulogin_fileno'];
-
-        $user_profile = $user->get_user_by_id($_SESSION['loggedIn_profile_user_id']);
-        print_r($user_profile);
-
+        // get user profile information
+        echo "first launch";
+        $user_profile = $user->get_user_by_id($_SESSION['ulogin_userid']);
+        $user_title; $first_name; $last_name; $other_names;
         foreach($user_profile as $up){
             $_SESSION['loggedIn_profile_title'] = $up['title'];
             $_SESSION['loggedIn_profile_firstname'] = $up['first_name'];
             $_SESSION['loggedIn_profile_lastname'] = $up['last_name'];
             $_SESSION['loggedIn_profile_other_names'] = $up['other_names'];
+            $_SESSION['loggedIn_profile_avatar'] = $up['avatar'];
         }
-
-
+        $_SESSION['loggedIn_profile_user_id'] = $_SESSION['ulogin_userid'];
+        $_SESSION['loggedIn_profile_file_no'] =   $_SESSION['ulogin_fileno'];
     }
+
+
+
 
 
 

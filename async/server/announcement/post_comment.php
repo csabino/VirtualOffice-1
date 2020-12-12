@@ -19,6 +19,7 @@ require_once("../../../classes/Announcement.php");
 
 //-------------- Functions ---------------------------------
 require_once("../../../functions/FieldSanitizer.php");
+require_once("../../../functions/Encrypt.php");
 
 
 
@@ -108,22 +109,23 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
               $delete_pane = "<div id='delete{$commentId}' class='btn_delete text-danger' style='cursor:pointer;'><small> <i class='fas fa-times text-danger'></i> Delete</small></div> ";
             }
 
+            $user_fullname_link = "<a href='../../staff/profile/user_profile.php?q=".mask($author_id)."'>{$fullname}</a>";
 
         $comment_pane .= "
 
                 <div class='row' id='{$commentId}' >
                     <div class='col-xs-12 col-sm-12 col-md-12 col-lg-12 text-left'>
-                        <div class='px-2' style='float:left; border:0px solid red;'>
+                        <div class='px-2' style='float:left; border:0px solid red; width:7%;'>
                             <img src='{$avatar}' width='50px' class='img-fluid img-responsive z-depth-1 rounded-circle' />
                         </div>
-                        <div style='float:left; border:0px solid black;'>
+                        <div style='float:left; border:0px solid black; width:93%;'>
                               <div>
-                                  <span id='user'>{$fullname}</span>&nbsp;&nbsp;
+                                  <span id='user' class='font-weight-bold'>{$user_fullname_link}</span>&nbsp;&nbsp;
                                   <span id='date_posted'><small>{$date_posted}</small></span>&nbsp;
                                   <span id='time_posted'><small>{$time_posted}</small></span>
                               </div>
 
-                              <div id='comment'>{$comment}</div>
+                              <div class='py-2' id='comment'>{$comment}</div>
                               {$delete_pane}
                         </div>
 
