@@ -28,6 +28,7 @@ require_once("../../interface/AnnouncementInterface.php");
 require_once("../../interface/ProjectInterface.php");
 require_once("../../interface/TaskInterface.php");
 require_once("../../interface/MemoInterface.php");
+require_once("../../interface/ContactInterface.php");
 
 // Logged-In Header
 require_once("../../includes/logged_in_header.php");

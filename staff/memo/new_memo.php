@@ -47,13 +47,14 @@
       // Check if all fields are filled in
       if ($title!='' && $remark!='' && $file!=''){
             // create data array and populate data
-
+            $memo_type = "upload";
             $dataArray = array("author"=>$_GET_URL_user_id,"title"=>$title,
-                          "remark"=>$remark, "file_upload_type"=>$file_upload_type,"file"=>$file);
+                          "remark"=>$remark, "file_upload_type"=>$file_upload_type,"file"=>$file,
+                          "memo_type"=>$memo_type);
 
             // call class and method
             $memo = new Memo();
-            $result = $memo->new_memo($dataArray);
+            $result = $memo->upload_memo($dataArray);
 
             if ($result){
                 $errFlag = 0;

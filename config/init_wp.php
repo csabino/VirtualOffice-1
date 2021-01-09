@@ -34,6 +34,7 @@
   require_once("../interface/ProjectInterface.php");
   require_once("../interface/TaskInterface.php");
   require_once("../interface/MemoInterface.php");
+  require_once("../interface/ContactInterface.php");
 
 
 

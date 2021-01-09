@@ -97,7 +97,7 @@
           aria-haspopup="true" aria-expanded="false">Contacts
         </a>
         <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink-555">
-          <a class="dropdown-item" href="#"> <i class="fas fa-user-plus"></i> Add Contact</a>
+          <a class="dropdown-item" href="<?php echo $baseUrl.'staff/contact/add_contact.php?en='.mask($_SESSION['ulogin_userid']); ?>"> <i class="fas fa-user-plus"></i> Add Contact</a>
           <a class="dropdown-item" href="#"> <i class="fas fa-people-carry"></i> Co-workers</a>
         </div>
       </li>

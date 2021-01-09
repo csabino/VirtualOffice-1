@@ -197,7 +197,7 @@
 
 
                                               // display column data
-                                              $project_update_link = "<a href='circle_project_update_details.php?q=".mask($_GET_URL_cell_id)."&us=".mask($_GET_URL_user_id)."&pid=".mask($_GET_URL_project_id)."&ud=".mask($project_updates_id)."'>{$message}</a>";
+                                              $project_update_link = "<a class='text-info' href='circle_project_update_details.php?q=".mask($_GET_URL_cell_id)."&us=".mask($_GET_URL_user_id)."&pid=".mask($_GET_URL_project_id)."&ud=".mask($project_updates_id)."'>{$message}</a>";
 
 
 

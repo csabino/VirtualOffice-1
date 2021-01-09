@@ -161,19 +161,62 @@
 
       </div>
 
+      <!--     //-->
       <div class-"row mt-5">
-          <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10 border">
+
+          <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 border" style="background-color:#f1f1f1;">
                 <?php
                     $project = new Project();
                     $get_projects_update = $project->get_projects_updates_by_id($_GET_URL_project_update_id);
 
 
+                    $message = '';
+                    $source = '';
+                    $file_type = '';
+                    $file = '';
+                    $date_created = '';
+                    $author_id = '';
+                    $author_avatar = '../../images/user_avatar.png';
+                    $author_fullname = '';
+
+                    // ------------------   Get Update Details ----------------------
+                    foreach($get_projects_update as $gpu){
+                      $message = $gpu['message'];
+                      $author_id = $gpu['user_id'];
+                    }
+
+                    //--------------------- Get User Info ---------------------------
+                    $user = new StaffUser();
+                    $get_author = $user->getUserById($author_id);
+                    foreach($get_author as $gu)
+                    {
+                       $author_avatar = $gu['avatar'];
+                       $author_fullname = $gu['title'].' '.$gu['last_name'].' '.$gu['first_name'];
+                       $date_created = new DateTime($gu['date_created']);
+                       $date_created =  $date_created->format('D jS F, Y');
+                    }
+
+                    if ($author_avatar!=''){
+                      $author_avatar = "../avatars/".$author_avatar;
+                    }
+
+
+
+
+                    //---------------------------------------------------------------
 
                 ?>
 
+                <div class="text-center py-1" style="float:left;width:60px;">
+                    <img src='<?php echo $author_avatar; ?>' width='70%' class='img-fluid img-responsive z-depth-1 rounded-circle'>
+                </div>
+                <div class="py-1" id="project_updates_details_header" >
+                    <?php
+                        echo "<div class='text-info font-weight-normal' >{$author_fullname}</div>";
+                        echo "<div style='margin-bottom:15px;font-size:13px;'>{$date_created}</div>";
+                        echo "<div>{$message}</div>";
 
-                <div class="py-2 px-2" id="project_updates_details_header" style="background-color:#f1f1f1;">
-
+                    ?>
 
                 </div>
 
@@ -185,10 +228,153 @@
 
       <!-- end of main area //-->
 
+      <!-- comment area //-->
+      <div class="row py-2">
+          <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 text-right">
+              <div class="form-group blue-border-focus">
+                  <textarea class="form-control" id="comment" rows="4" placeholder="Comment..."></textarea>
+              </div>
+          </div>
+          <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-left align-middle">
+              <button id="btn_send_comment" class="btn btn-sm btn-primary align-middle">Send</button>
+          </div>
+
+      </div>
+      <!-- end of comment area //-->
+
+
+      <!--  Comment listing //-->
+      <!-- comment listing //-->
+      <div class="row">
+          <?php
+              $project = new Project();
+              $get_comments = $project->get_projects_updates_comments($_GET_URL_project_update_id);
+              $total_comments = $get_comments->rowCount();
+          ?>
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 py-3">
+              <strong>Comments (<span id='total_comments'><?php echo $total_comments; ?></span>)</strong>
+          </div>
+      </div>
+
+      <div id="comment-panel" class='py-2'>
+
+      <?php
+          $last_comment_id = 0;
+
+          foreach($get_comments as $gc)
+          {
+
+            if ($last_comment_id==''){
+              $last_comment_id = $gc['id'];
+            }
+
+            $commentId = $gc['id'];
+            $title = $gc['title'];
+            $firstname = $gc['first_name'];
+            $lastname = $gc['last_name'];
+            $author_id = $gc['author'];
+            $comment = nl2br(FieldSanitizer::outClean($gc['comment']));
+            $avatar = '../images/avatar_100.png';
+
+            if ($gc['avatar']!=''){
+              $avatar = '../avatars/'.$gc['avatar'];
+            }
+
+            $date_posted_raw = new DateTime($gc['date_posted']);
+            $date_posted = $date_posted_raw->format('D. jS M. Y');
+
+            $time_posted = $date_posted_raw->format('g:i a');
+
+            //generate delete link if comment is by same user
+            $delete_pane = '';
+            if ($author_id==$_GET_URL_user_id ){
+              $delete_pane = "<div id='delete{$commentId}' class='btn_select_delete text-danger' data-toggle='modal' data-target='#confirmDelete'
+               style='cursor:pointer;'><small> <i class='fas fa-times text-danger'></i> Delete</small></div> ";
+            }
+
+            $user_fullname = $title.' '.$lastname.' '.$firstname;
+            $user_fullname_link = "<a href='../../staff/profile/user_profile.php?q=".mask($author_id)."'>{$user_fullname}</a>";
+
+      ?>
+
+                <div class="row" id="<?php echo $commentId; ?>" >
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-left">
+                        <div class='px-2' style="float:left; border:0px solid red; width:7%;">
+                            <img src="<?php echo $avatar; ?>" width="50px" class="img-fluid img-responsive z-depth-1 rounded-circle" />
+                        </div>
+                        <div style="float:left; border:0px solid black; width:93%;">
+                              <div>
+                                  <span id='user' class='font-weight-bold'><?php echo "{$user_fullname_link}"; ?></span>&nbsp;&nbsp;
+                                  <span id='date_posted'><small><?php echo $date_posted;  ?></small></span>&nbsp;
+                                  <span id="time_posted"><small><?php echo $time_posted; ?></small></span>
+                              </div>
+
+                              <div class='py-2' id='comment'> <?php echo $comment; ?> </div>
+                              <?php echo $delete_pane; ?>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            <hr>
+
+            <!-- end of comment listing //-->
+      <?php
+
+          }
+
+       ?>
+      </div> <!-- end of comment panel //-->
+
+
+
+
+
+
+
+
+
+      <!--  end of comment listing //-->
+
 
   </div> <!-- end of container //-->
 
+
+<input type="text" id="selected_del_comment_id"/>
+<input type="text" id="project_update_id" value="<?php echo $_GET_URL_project_update_id; ?>" >
+<input type="text" id="user_id" value="<?php echo $_GET_URL_user_id; ?>" >
+<input type="text" id="last_comment_id" value="<?php echo $last_comment_id; ?>" >
+<input type="text" id="total_comments" value="" >
+
 <br/><br/><br/>
+
+<!----------------------------- Modal --------------------------------------->
+<!--------------------------------------------------------------------------->
+<div class="modal fade" id="confirmDelete" tabindex="-1" role="dialog" aria-labelledby="confirmDelete"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirm Delete</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Do you really wish to delete this record? <br/>
+        <small>Note: This action is not reversible.</small>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
+        <button type="button" id="btn_delete" class="btn btn-danger" data-dismiss="modal"><i class="far fa-trash-alt"></i> Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End of Modal //-->
+
 
 <?php
 
@@ -197,3 +383,4 @@
  ?>
 
  <script src="../../lib/js/custom/tblData.js"></script>
+ <script src="../../async/client/project/post_comment.js"></script>/

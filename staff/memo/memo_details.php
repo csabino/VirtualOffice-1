@@ -23,6 +23,8 @@
     //require_once("../includes/staff_header.php");
 
 
+  $last_comment_id = '';
+
 
 
 
@@ -183,6 +185,9 @@
           foreach($get_memo_comments as $gmc)
           {
             $commentId = $gmc['id'];
+
+            if ($last_comment_id==''){ $last_comment_id = $commentId; }
+
             $title = $gmc['title'];
             $firstname = $gmc['first_name'];
             $lastname = $gmc['last_name'];
@@ -202,7 +207,7 @@
             //generate delete link if comment is by same user
             $delete_pane = '';
             if ($author_id==$_GET_URL_user_id ){
-              $delete_pane = "<div id='delete{$commentId}' class='btn_delete text-danger' style='cursor:pointer;'><small> <i class='fas fa-times text-danger'></i> Delete</small></div> ";
+              $delete_pane = "<div id='delete{$commentId}' data-toggle='modal' data-target='#confirmDelete' class='btn_delete text-danger px-2' style='cursor:pointer;'><small> <i class='fas fa-times text-danger'></i> Delete</small></div> ";
             }
 
 
@@ -215,13 +220,13 @@
                             <img src="<?php echo $avatar; ?>" width="50px" class="img-fluid img-responsive z-depth-1 rounded-circle" />
                         </div>
                         <div style="float:left; border:0px solid black;">
-                              <div>
-                                  <span id='user'><?php echo $title.' '.$lastname.' '.$firstname; ?></span>&nbsp;&nbsp;
+                              <div class='px-2'>
+                                  <span id='user' class='font-weight-bold' ><small><?php echo $title.' '.$lastname.' '.$firstname; ?></small></span>&nbsp;&nbsp;
                                   <span id='date_posted'><small><?php echo $date_posted;  ?></small></span>&nbsp;
                                   <span id="time_posted"><small><?php echo $time_posted; ?></small></span>
                               </div>
 
-                              <div id='comment'> <?php echo $comment; ?> </div>
+                              <div class='py-1 px-2' id='comment'> <?php echo $comment; ?> </div>
                               <?php echo $delete_pane; ?>
                         </div>
 
@@ -251,10 +256,45 @@
 <br/><br/><br/>
 <input type="hidden" id='user_id' value="<?php echo $_GET_URL_user_id; ?>" >
 <input type="hidden" id="memo_id" value="<?php echo $_GET_URL_memo_id;  ?>" >
+<input type="hidden" id="last_comment_id" value="<?php echo $last_comment_id; ?>" >
+<input type="hidden" id="select_del_memo_comment_id" >
+
+
+<br/><br/><br/>
+
+<!-- Modal Module -------------------------------->
+
+<div class="modal fade" id="confirmDelete" tabindex="-1" role="dialog" aria-labelledby="confirmDelete"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirm Delete</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+         Do you really wish to delete the comment? <br/>
+         <small>Note: The action is not reversible.</small>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
+        <button type="button" id="delete_memo_comment" class="btn btn-danger" data-dismiss="modal"><i class="far fa-trash-alt"></i> Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--  End of Modal    ----------------------------------------------->
+
 
 <?php
 
     //footer.php
     require('../../includes/footer.php');
  ?>
-  <script src="../../async/client/memo/post_comment.js"></script>
+
+<script src="../../async/client/memo/post_comment.js"></script>
+<script src="../../async/client/memo/delete_comment.js"></script>

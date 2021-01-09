@@ -159,7 +159,7 @@
 
 
                                               // display column data
-                                              $project_link = "<a href='circle_project_updates.php?q=".mask($_GET_URL_cell_id)."&us=".mask($_GET_URL_user_id)."&pid=".mask($project_id)."'>{$project_title}</a>";
+                                              $project_link = "<a class='customlink' href='circle_project_updates.php?q=".mask($_GET_URL_cell_id)."&us=".mask($_GET_URL_user_id)."&pid=".mask($project_id)."'>{$project_title}</a>";
                                               $project_info_link = "<a title='Setting information about this project' href='circle_project_info.php?q=".mask($_GET_URL_cell_id)."&pid=".mask($project_id)."'><i class='fas fa-cogs'></i> Project Info (0)</a>";
                                               $project_updates_link = "<a title='Latest progress updates on the project' href='circle_project_updates.php?q=".mask($_GET_URL_cell_id)."&pid=".mask($project_id)."'><i class='fas fa-sync'></i> Updates (0)</a>";
                                               $project_tasks_link = "<a title='Assigned tasks to members' href='circle_project_tasks.php?q=".mask($_GET_URL_cell_id)."&pid=".mask($project_id)."'><i class='fas fa-tasks'></i> Tasks (0)</a>";

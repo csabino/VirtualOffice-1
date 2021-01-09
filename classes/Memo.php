@@ -2,6 +2,7 @@
 
   class Memo implements MemoInterface{
 
+    private $id;
     private $memo_id;
     private $title;
     private $file_type;
@@ -9,21 +10,24 @@
     private $author;
     private $remark;
     private $comment;
+    private $comment_id;
     private $user_id;
     private $sender;
     private $recipient_email;
     private $recipient_fileno;
+    private $memo_type;
 
 
-    public function new_memo($fields){
+    public function upload_memo($fields){
       $this->author = $fields['author'];
       $this->title = $fields['title'];
       $this->remark = $fields['remark'];
       $this->file_type = $fields['file_upload_type'];
       $this->file = $fields['file'];
+      $this->memo_type = $fields['memo_type'];
 
       $sqlQuery = "Insert into memos set title=:title, file_type=:file_type, file=:file, author=:author,
-                  remark=:remark";
+                  remark=:remark, memo_type=:memo_type";
 
       // pdo Object
       $QueryExecutor = new PDO_QueryExecutor();
@@ -35,6 +39,38 @@
       $stmt->bindParam(":remark", $this->remark);
       $stmt->bindParam(":file_type", $this->file_type);
       $stmt->bindParam(":file",$this->file);
+      $stmt->bindParam(":memo_type", $this->memo_type);
+
+      //execute pdo Object
+      $stmt->execute();
+      return $stmt;
+    }
+
+
+    public function update_upload_memo($fields){
+      $this->id = $fields['memo_id'];
+      $this->author = $fields['author'];
+      $this->title = $fields['title'];
+      $this->remark = $fields['remark'];
+      $this->file_type = $fields['file_upload_type'];
+      $this->file = $fields['file'];
+      $this->memo_type = $fields['memo_type'];
+
+      $sqlQuery = "Update memos set title=:title, file_type=:file_type, file=:file, author=:author,
+                  remark=:remark, memo_type=:memo_type where id=:id";
+
+      // pdo Object
+      $QueryExecutor = new PDO_QueryExecutor();
+      $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+      // bind parameters
+      $stmt->bindParam(":id", $this->id);
+      $stmt->bindParam(":title", $this->title);
+      $stmt->bindParam(":author", $this->author);
+      $stmt->bindParam(":remark", $this->remark);
+      $stmt->bindParam(":file_type", $this->file_type);
+      $stmt->bindParam(":file",$this->file);
+      $stmt->bindParam(":memo_type", $this->memo_type);
 
       //execute pdo Object
       $stmt->execute();
@@ -45,7 +81,7 @@
     public function get_memo_listing($_GET_URL_user_id){
       $this->author = $_GET_URL_user_id;
       $sqlQuery = "Select m.id, m.title as subject, m.file_type, m.file, m.author, u.title, u.first_name,
-                  u.last_name,m.remark, m.date_created from memos m inner join users u on
+                  u.last_name, u.avatar, m.remark, m.memo_type, m.date_created from memos m inner join users u on
                   m.author=u.id where m.author=:author order by m.id desc";
 
       // pdo object
@@ -121,6 +157,27 @@
     }
 
 
+    public function get_user_last_memo_comment($user_id, $memo_id){
+      $this->memo_id = $memo_id;
+      $this->user_id = $user_id;
+
+      $sqlQuery = "Select mu.id, mu.memo_id, mu.user_id, u.title, u.first_name, u.last_name, u.avatar,
+                  mu.comment, mu.date_posted from memos_comments mu inner join users u on mu.user_id=u.id where
+                  mu.memo_id=:memo_id and mu.user_id=:user_id order by mu.id desc limit 1";
+
+      // pdo Object
+      $QueryExecutor = new PDO_QueryExecutor();
+      $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+      // bind parameter
+      $stmt->bindParam(":memo_id", $this->memo_id);
+      $stmt->bindParam(":user_id", $this->user_id);
+
+      // execute pdo object
+      $stmt->execute();
+      return $stmt;
+    }
+
     public function share_memo($fields){
       $this->memo_id = $fields['memo_id'];
       $this->sender = $fields['sender'];
@@ -194,6 +251,25 @@
     }
 
 
+    public function delete_memo_comment($fields){
+        $this->user_id = $fields['user_id'];
+        $this->comment_id = $fields['comment_id'];
+
+        $sqlQuery = "Delete from memos_comments where id=:comment_id and user_id=:user_id";
+
+        // $QueryExecutor
+        $QueryExecutor = new PDO_QueryExecutor();
+        $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+        // bind parameter
+        $stmt->bindParam(":comment_id", $this->comment_id);
+        $stmt->bindParam(":user_id", $this->user_id);
+
+        // execute pdo object
+        $stmt->execute();
+
+        return $stmt;
+    }
 
 
 

@@ -155,7 +155,7 @@
                                          ?>
                                     </div>
                                     <div class="step-actions">
-                                        <button class="waves-effect waves-dark btn btn-sm btn-primary next-step">CONTINUE</button>
+                                        <button id='step2_continue' class="waves-effect waves-dark btn btn-sm btn-primary next-step">CONTINUE</button>
                                         <button id='step2_back' class="waves-effect waves-dark btn btn-sm btn-secondary previous-step">BACK</button>
                                     </div>
                                 </div>
@@ -174,7 +174,9 @@
                                   </div>
 
                                     <div class="step-actions">
-                                        <button class="waves-effect waves-dark btn btn-sm btn-primary m-0 mt-4" type="button">SUBMIT</button>
+                                        <button class="waves-effect waves-dark btn btn-sm btn-secondary previous-step mt-4">BACK</button>
+                                        <button class="waves-effect waves-dark btn btn-sm btn-primary mt-4">SUBMIT</button>
+
                                     </div>
                                 </div>
                             </li>
@@ -264,7 +266,6 @@
 //----------------------------  Update Project ------------------------------------------------------------
 
     function update_project(){
-
           // get $new_project_id
           var service_url = '../../async/server/projects/create_update_project.php';
           var operation = 'update';
@@ -306,7 +307,7 @@
 
                             $("#step1_output_status").html(outcome);
 
-                            if (ops_mode=='create'){                    
+                            if (ops_mode=='create'){
 
                                 // display continue button
                                 $("#step1_continue").show();
@@ -369,8 +370,33 @@
 //--------------------------------------------------------------------------------------------------------------------------------------
 
 
+//---------------------------------------- TAB 2 - Checklist ----------------------------------------------------------------------
+//*********************************************************************************************************************************
 
 
+      $("#step2_btn_save").bind("click", function(){
+          if ($("#checklist_item").val()!=''){
+                $("#checklist_item-error").hide();
+          }
+      });
+
+
+
+//--------------------------------------------- Checklist change event of Item------------------------------------------------------
+      $("#checklist_item").bind("change", function(){
+          
+
+      });
+//----------------------------------------------------------------------------------------------------------------------------------
+
+      $("#checklist_description").bind("focus", function(){
+        if ($("#checklist_item").val()!=''){
+              $("#checklist_item-error").hide();
+        }
+          alert("Inside description");
+      });
+
+//----------------------------------------------------------------------------------------------------------------------------------
 
 
 

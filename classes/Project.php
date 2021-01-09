@@ -3,6 +3,7 @@
   class Project implements ProjectInterface{
       private $cell_id;
       private $user_id;
+      private $author;
       private $title;
       private $description;
       private $start_date;
@@ -13,7 +14,9 @@
       private $message;
       private $file_upload_type;
       private $file;
-
+      private $comment;
+      private $comment_id;
+      private $project_update_id;
 
 
 
@@ -276,8 +279,106 @@
         }
 
 
+        public function projects_updates_comments($fields)
+        {
+            $this->author = $fields['user_id'];
+            $this->comment = $fields['comment'];
+            $this->project_update_id = $fields['project_update_id'];
+
+            // to get time-stamp for 'created' field
+            $timestamp = date('Y-m-d H:i:s');
+            $date_posted = $timestamp;
+
+            // sqlQuery
+            $sqlQuery = "Insert into projects_updates_comments set project_update_id=:project_update_id,
+            author=:author, comment=:comment, date_posted=:date_posted";
+
+            // pdo object
+            $QueryExecutor = new PDO_QueryExecutor();
+            $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+            //bind parameter to pdo object
+            $stmt->bindParam(":project_update_id", $this->project_update_id);
+            $stmt->bindParam(":author", $this->author);
+            $stmt->bindParam(":comment", $this->comment);
+            $stmt->bindParam(":date_posted", $date_posted);
+
+            // execute pdo objects
+            $stmt->execute();
+
+            return $stmt;
+        }
+
+        public function get_projects_updates_comments($project_update_id){
+
+            $this->project_update_id = $project_update_id;
+
+            // sql Query
+            $sqlQuery = "Select puc.id, puc.project_update_id, puc.author, puc.comment,
+            u.file_no, u.title, u.first_name, u.last_name, u.other_names, u.avatar, puc.date_posted from projects_updates_comments puc
+            inner join users u on puc.author=u.id where puc.project_update_id=:project_update_id order by puc.id desc";
+
+            // pdo object
+            $QueryExecutor = new PDO_QueryExecutor();
+            $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+            // bind parameters
+            $stmt->bindParam(":project_update_id", $this->project_update_id);
 
 
+            // execute pdo objects
+            $stmt->execute();
+
+            return $stmt;
+
+        }
+
+
+        public function get_projects_updates_comments_range($project_update_id, $start, $count){
+
+            $this->project_update_id = $project_update_id;
+
+            // sql Query
+            $sqlQuery = "Select puc.id, puc.project_update_id, puc.author, puc.comment,
+            u.file_no, u.title, u.first_name, u.last_name, u.other_names, u.avatar, puc.date_posted from projects_updates_comments puc
+            inner join users u on puc.author=u.id where project_update_id=:project_update_id and puc.id>{$start} order by puc.id desc";
+
+            // pdo object
+            $QueryExecutor = new PDO_QueryExecutor();
+            $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+            //bind parameters
+            $stmt->bindParam(":project_update_id", $this->project_update_id);
+
+            // execute pdo objects
+            $stmt->execute();
+
+            return $stmt;
+
+        }
+
+
+        public function delete_project_update_comment($fields){
+            //fields
+            $this->comment_id = $fields['comment_id'];
+            $this->user_id = $fields['user_id'];
+            $this->project_update_id = $fields['project_update_id'];
+
+            // sql Query
+            $sqlQuery = "Delete from projects_updates_comments where id=:id";
+
+            // pdo Query
+            $QueryExecutor = new PDO_QueryExecutor();
+            $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+            // bind parameters
+            $stmt->bindParam(":id", $this->comment_id);
+
+            // execute
+            $stmt->execute();
+
+            return $stmt;
+        }
 
 
 

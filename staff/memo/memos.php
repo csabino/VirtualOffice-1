@@ -49,7 +49,8 @@
                         $new_memo_link = "new_memo.php?q=".$code1;
 
                     ?>
-                    <a href="<?php echo $new_memo_link; ?>" class="btn btn-sm btn-primary btn-rounded"> <i class="fas fa-plus"></i>&nbsp; New Memo</a>
+                    <a href="<?php echo $new_memo_link; ?>" class="btn btn-sm btn-info btn-rounded"> <i class="fas fa-plus"></i>&nbsp; Upload Memo</a>
+                    <a href="<?php echo $new_memo_link; ?>" class="btn btn-sm btn-primary btn-rounded"> <i class="fas fa-plus"></i>&nbsp; Create Memo</a>
               </div>
 
               <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -80,8 +81,13 @@
                                           $memo_id = $mlst['id'];
                                           $title = $mlst['subject'];
                                           $author= $mlst['title'].' '.$mlst['first_name'].' '.$mlst['last_name'];
+                                          $creator_avatar= '..\..\images\avatardefault100.png';
+                                          if ($mlst['avatar']!=''){
+                                              $creator_avatar = '../avatars/'.$mlst['avatar'];
+                                          }
                                           $file_type = $mlst['file_type'];
                                           $file = $mlst['file'];
+                                          $memo_type = $mlst['memo_type'];
 
                                           $date_created_raw = new DateTime($mlst['date_created']);
                                           $date_created = $date_created_raw->format('D. jS M., Y');
@@ -89,12 +95,20 @@
 
                                           //Memo details link
                                           $details_href = 'memo_details.php?q='.mask($_GET_URL_user_id)."&m=".mask($memo_id);
-                                          $details_link =  "<a class='' href='{$details_href}'>{$title}. <small><i class='fas fa-paperclip'></i> {$file_type}</small></a>";
+                                          $details_link =  "<a class='text-info font-weight-bold' href='{$details_href}'>{$title}. <small style='color:black;'><i class='fas fa-paperclip'></i> {$file_type}</small></a>";
 
 
                                           // Edit link info
-                                          $edit_href = 'memo_edit.php?q='.mask($_GET_URL_user_id)."&m=".mask($memo_id);
-                                          $edit_link = "<a class='text-info' href='{$edit_href}'><i class='far fa-edit'></i> Edit</a>";
+                                          if ($memo_type=='upload')
+                                          {
+                                              $edit_href = 'edit_memo_upload.php?q='.mask($_GET_URL_user_id)."&m=".mask($memo_id);
+                                              $edit_link = "<a class='text-info' href='{$edit_href}'><i class='far fa-edit'></i> Edit</a>";
+
+                                          }else{
+                                              $edit_href = 'edit_memo_create.php?q='.mask($_GET_URL_user_id)."&m=".mask($memo_id);
+                                              $edit_link = "<a class='text-info' href='{$edit_href}'><i class='far fa-edit'></i> Edit</a>";
+
+                                          }
 
                                           // Delete link info
                                           $delete_href = 'memo_delete.php?q='.mask($_GET_URL_user_id)."&m=".mask($memo_id);
@@ -105,7 +119,7 @@
                                           echo "<tr>";
                                           echo "<td class='text-right px-1' width='1px' >{$counter}.</td>";
                                           echo "<td width='40%' class='px-2'><strong>{$details_link}</strong>";
-                                               echo "<small><div class='row px-0 py-1'> "; // begin of rows
+                                               echo "<small><div class='row px-0 py-2'> "; // begin of rows
                                                   echo "<div class='col-xs-4 col-sm-4 col-md-3 col-lg-3'>{$edit_link}</div>";
                                                   echo "<div class='col-xs-4 col-sm-4 col-md-3 col-lg-3'>{$delete_link}</div>";
 
@@ -113,7 +127,7 @@
                                           echo "</td>";
                                           echo "<td width='20%' class='px-2'>";
                                                echo "<div class='chip' style='background-color:pink;'>";
-                                               echo "<img class='border-1' src='https://mdbootstrap.com/img/Photos/Avatars/avatar-6.jpg' alt='Author'>{$author}";
+                                               echo "<img class='border-1' src='{$creator_avatar}' alt='Author'>{$author}";
                                                echo "<div>";
                                           echo "</td>";
                                           echo "<td width='20%' class='px-2'></td>";

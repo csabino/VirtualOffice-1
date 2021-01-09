@@ -9,7 +9,7 @@ if (!isset($_GET['q']) || $_GET['q']==''){
 $_GET_URL_user_id = explode("-",htmlspecialchars(strip_tags($_GET['q'])));
 $_GET_URL_user_id = $_GET_URL_user_id[1];
 
-    $page_title = 'My Profile';
+    $page_title = 'User Profile';
 
     require_once("../../config/step2/init_wp.php");
     require_once("../../nav/staff_nav.php");

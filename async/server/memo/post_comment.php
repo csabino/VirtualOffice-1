@@ -29,15 +29,31 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
     $comment = FieldSanitizer::inClean($_POST['comment']);
     $user_id = $_POST['user_id'];
     $memo_id = $_POST['memo_id'];
+    $last_comment_id = $_POST['last_comment_id'];
 
     $dataArray = array("memo_id"=>$memo_id, "user_id"=>$user_id, "comment"=>$comment);
+
+    $status = '';
+    $output = '';
 
     //check that fields are not _blank
     if ($comment!='' && $user_id!='' && $memo_id!=''){
         $memo = new Memo();
         $publish = $memo->post_memo_comment($dataArray);
-        echo $publish->rowCount();
+        if ($publish->rowCount())
+        {
+            //get last memo comment by the user
+            $comment = $memo->get_user_last_memo_comment($user_id, $memo_id);
+            $output = commentFactory($comment, $user_id);
+            $status = 'success';
+
+        }else{
+            $status = 'failed';
+        }
     }
+
+    $response = array("status"=>$status, "output"=>$output);
+    echo json_encode($response);
 
 } // end of if isset($_SERVER['HTTP_X_REQUESTED_WITH'])
 
@@ -73,32 +89,32 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
 
             $delete_pane = '';
             if ($author_id==$user_id ){
-              $delete_pane = "<div id='delete{$commentId}' class='btn_delete text-danger' style='cursor:pointer;'><small> <i class='fas fa-times text-danger'></i> Delete</small></div> ";
+              $delete_pane = "<div id='delete{$commentId}' data-toggle='modal' data-target='#confirmDelete' class='btn_delete text-danger px-2' style='cursor:pointer;'><small> <i class='fas fa-times text-danger'></i> Delete</small></div> ";
             }
 
 
         $comment_pane .= "
 
-                <div class='row' id='{$commentId}' >
-                    <div class='col-xs-12 col-sm-12 col-md-12 col-lg-12 text-left'>
-                        <div class='px-2' style='float:left; border:0px solid red;'>
-                            <img src='{$avatar}' width='50px' class='img-fluid img-responsive z-depth-1 rounded-circle' />
-                        </div>
-                        <div style='float:left; border:0px solid black;'>
-                              <div>
-                                  <span id='user'>{$fullname}</span>&nbsp;&nbsp;
-                                  <span id='date_posted'><small>{$date_posted}</small></span>&nbsp;
-                                  <span id='time_posted'><small>{$time_posted}</small></span>
-                              </div>
+              <div class='row border py-3 z-depth-1 mt-3' style='border-radius:8px;' id='{$commentId}' >
+                  <div class='col-xs-12 col-sm-12 col-md-10 col-lg-10 text-left'>
+                      <div class='px-2' style='float:left; border:0px solid red;'>
+                          <img src='${avatar}' width='50px' class='img-fluid img-responsive z-depth-1 rounded-circle' />
+                      </div>
+                      <div style='float:left; border:0px solid black;'>
+                            <div class='px-2'>
+                                <span id='user' class='font-weight-bold' ><small>{$fullname}</small></span>&nbsp;&nbsp;
+                                <span id='date_posted'><small>{$date_posted}</small></span>&nbsp;
+                                <span id='time_posted'><small>{$time_posted}</small></span>
+                            </div>
 
-                              <div id='comment'>{$comment}</div>
-                              {$delete_pane}
-                        </div>
+                            <div class='py-1 px-2' id='comment'>{$comment}</div>
+                            {$delete_pane}
+                      </div>
 
-                    </div>
+                  </div>
 
-                </div>
-            <hr><!-- end of comment panel //-->
+              </div>
+
             ";
 
 
