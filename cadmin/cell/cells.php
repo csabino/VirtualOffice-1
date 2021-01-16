@@ -7,6 +7,8 @@
 
     $cell = new Cell();
     $get_cells = $cell->get_all_cells();
+
+
     $number_of_cells = $get_cells->num_rows;
 
  ?>
@@ -72,7 +74,7 @@
                           $counter = 1;
                           foreach($get_cells as $row){
                               $cell_id = $row['id'];
-                              $cell_name = $row['name'];
+                              $cell_name = FieldSanitizer::outClean($row['name']);
                               $cell_parent_id = $row['parent'];
                               $cell_parent_name = '';
                               $cell_type_id = $row['type'];
@@ -83,7 +85,7 @@
                               $get_cell_parent = $cell->get_parent_cell_by_id($cell_parent_id);
 
                               foreach($get_cell_parent as $gcp){
-                                  $cell_parent_name = $gcp['name'];
+                                  $cell_parent_name = FieldSanitizer::outClean($gcp['name']);
 
                               }
 
@@ -129,9 +131,9 @@
 
                               // display columns data
                               echo "<tr>";
-                              echo "<td width='5%'>{$counter}.</td><td>{$cell_name}</td>
-                                    <td>{$cell_parent_name}</td><td>{$cell_type_name}</td>
-                                    <td align='center'>{$btn_cell_view} {$btn_cell_edit} {$btn_cell_delete}</td>";
+                              echo "<td width='2%'>{$counter}.</td><td width='23%'>{$cell_name}</td>
+                                    <td width='23%'>{$cell_parent_name}</td><td width='23%'>{$cell_type_name}</td>
+                                    <td width='21%' align='center'>{$btn_cell_view} {$btn_cell_edit} {$btn_cell_delete}</td>";
                               echo "</tr>";
 
                               $counter++;

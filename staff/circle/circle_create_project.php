@@ -174,8 +174,11 @@
                                   </div>
 
                                     <div class="step-actions">
+                                        <?php
+                                              $general_link = "circle_projects.php?en=".mask($_GET_URL_cell_id)."&us=".mask($_GET_URL_user_id);
+                                        ?>
                                         <button class="waves-effect waves-dark btn btn-sm btn-secondary previous-step mt-4">BACK</button>
-                                        <button class="waves-effect waves-dark btn btn-sm btn-primary mt-4">SUBMIT</button>
+                                        <a href="<?php echo $general_link; ?>" class="waves-effect waves-dark btn btn-sm btn-primary mt-4" >SUBMIT</a>
 
                                     </div>
                                 </div>
@@ -220,9 +223,19 @@
 
   <script src="../../lib/js/custom/circle/project-stepper.js"></script>
   <script src="../../lib/js/custom/circle/from-to-date.js"></script>
+  <script src="../../lib/js/custom/project/from-to-date.js"></script>
   <script src="../../lib/js/custom/circle/stepper-buttons-functions.js"></script>
 
   <script>
+
+  // ----------------------------------- Pop over ------------------------------------
+
+  $(function () {
+    $('[data-toggle="popover"]').popover();
+  })
+
+
+  //----------------------------------------------------------------------------------
 
   //-------------------
 
@@ -372,32 +385,160 @@
 
 //---------------------------------------- TAB 2 - Checklist ----------------------------------------------------------------------
 //*********************************************************************************************************************************
-
-
-      $("#step2_btn_save").bind("click", function(){
-          if ($("#checklist_item").val()!=''){
-                $("#checklist_item-error").hide();
-          }
-      });
-
-
-
 //--------------------------------------------- Checklist change event of Item------------------------------------------------------
       $("#checklist_item").bind("change", function(){
-          
+
 
       });
-//----------------------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------- Checklist Description change focus event --------------------------------------------
 
       $("#checklist_description").bind("focus", function(){
         if ($("#checklist_item").val()!=''){
               $("#checklist_item-error").hide();
         }
-          alert("Inside description");
+
       });
 
-//----------------------------------------------------------------------------------------------------------------------------------
 
 
+//--------------------------------------------- Checklist Save Item by Save button click --------------------------------------------
+
+$("#step2_btn_save").bind("click", function(){
+    if ($("#checklist_item").val()!=''){
+          $("#checklist_item-error").hide();
+
+          var project_id = $('#new_project_id').val();
+          var user_id = $('#user_id').val();
+          var checklist_item = $("#checklist_item").val();
+          var checklist_description = $("#checklist_description").val();
+          $.ajax({
+            url: '../../async/server/projects/create_project_checklist.php',
+            method: "POST",
+            data: {project_id: project_id, user_id: user_id, checklist_item: checklist_item, checklist_description: checklist_description},
+            dataType: 'html',
+            cache: false,
+            processdata: false,
+            beforeSend: function(){},
+            success: function(data){
+
+               //var result = jQuery.parseJSON(data);
+               if (data!=''){
+                  $("#chkLstItems").append(data);
+               }
+
+               //alert(data);
+
+            }
+          });
+    }
+});
+
+
+//-----------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------- Checklist Delete Icon Click ---------------------------------------------
+
+$(document).on("click",".delChkLst", function(){
+    var selected_checklist_id = $(this).attr('id');
+    var checkList_id = $(this).attr('id').replace(/\D/g,'');
+
+    $.post("../../async/server/projects/delete_checklist.php", {"checklist_id":checkList_id}, function(data){
+          if (data==1){
+            $("#chkLst"+checkList_id).remove();
+          }
+    });
+
+});
+
+
+
+
+//------------------------------------------ End of Checklist Delete Icon Click ----------------------------------------
+
+//--------------------------------------------- Milestone Title lost focus event --------------------------------------------
+
+      $("#milestones_title").bind("focusout", function(){
+        if ($("#milestones_title").val()!=''){
+              $("#milestones_title-error").hide();
+        }
+
+      });
+
+
+
+//--------------------------------------------- Milestone Description change focus event --------------------------------------------
+
+      $("#milestone_description").bind("focus", function(){
+        if ($("#milestones_title").val()!=''){
+              $("#milestones_title-error").hide();
+        }
+
+      });
+
+//------------------------------------------ Save Milestone //---------------------------------------------------------
+$("#save_milestone").bind("click", function( event){
+    event.preventDefault();
+
+    if ($("#milestones_title").val()!=''){
+        $("#milestones_title-error").hide();
+
+        var project_id = $('#new_project_id').val();
+        var user_id = $('#user_id').val();
+        var milestone_title = $("#milestones_title").val();
+        var description = $("#milestone_description").val();
+        var milestone_date = $("#milestoneDate").val();
+
+        console.log("Project Id: " + project_id);
+        console.log("User_Id: " + user_id);
+        console.log("Milestone_title: " + milestone_title);
+        console.log("Description: " + description);
+        console.log("Milestone Date: " + milestone_date);
+
+        $.ajax({
+          url: '../../async/server/projects/create_project_milestone.php',
+          method: "POST",
+          data: {project_id: project_id, user_id: user_id, milestone_title, description: description,
+            milestone_date: milestone_date},
+          dataType: 'html',
+          cache: false,
+          processdata: false,
+          beforeSend: function(){},
+          success: function(data){
+
+              if (data!=''){
+                $("#milestoneItems").append(data);
+                //$("#divAddedMilestones").scrollTop = $("#divAddedMilestones").scrollHeight;
+                //$('#divAddedMilestones').scrollTop($('#divAddedMilestones')[0].scrollHeight);
+                $("#divAddedMilestones").animate({"scrollTop": $("#divAddedMilestones")[0].scrollHeight}, "slow");
+              }
+
+          }
+
+        })
+    }
+});
+
+
+
+// -------------------------------------------End of saving of milestone ----------------------------------------------
+
+
+//------------------------------------------- Milestone Delete Icon Click ---------------------------------------------
+
+$(document).on("click",".delMilestone", function(){
+    var selected_milestone_id = $(this).attr('id');
+    var milestone_id = $(this).attr('id').replace(/\D/g,'');
+
+    $.post("../../async/server/projects/delete_milestone.php", {"milestone_id":milestone_id}, function(data){
+          if (data==1){
+            $("#milestone"+ milestone_id).remove();
+          }
+    });
+
+});
+
+
+
+
+//------------------------------------------ End of Milestone Delete Icon Click ----------------------------------------
 
   </script>

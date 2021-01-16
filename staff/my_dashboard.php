@@ -9,16 +9,22 @@
     $user = new StaffUser();
 
 
+
     if (isset($_SESSION['loggedIn_profile_user_id'])){
 
 
 
 
-        echo "Other times -".$_SESSION['loggedIn_profile_avatar'];
+        //echo "Other times -".$_SESSION['loggedIn_profile_avatar'];
+        //echo $_SESSION['ulogin_id'];
+        //echo $_SESSION['ulogin_userid'];
+
 
     }else{
         // get user profile information
-        echo "first launch";
+        //echo "first launch";
+        //echo $_SESSION['ulogin_userid'];
+        //echo "<br/>";
         $user_profile = $user->get_user_by_id($_SESSION['ulogin_userid']);
         $user_title; $first_name; $last_name; $other_names;
         foreach($user_profile as $up){
@@ -129,6 +135,13 @@
       </div>
       <!-- end of page header //-->
 
+      <div>
+
+        
+      </div>
+
+
+
 
   </div> <!-- end of container //-->
 
@@ -146,4 +159,14 @@
               $("#ModalOnBoarding").modal();
           }
       });
+
+
+      // popovers Initialization
+      // popovers Initialization
+      $(function () {
+        $('[data-toggle="popover"]').popover()
+      })
+
+      // Data Picker Initialization
+      $('.datepicker').datepicker();
  </script>

@@ -381,6 +381,192 @@
         }
 
 
+        public function create_project_checklist($fields){
+            //fields
+            $project_id = $fields['project_id'];
+            $user_id = $fields['user_id'];
+            $checklist_item = $fields['checklist_item'];
+            $checklist_description = $fields['checklist_description'];
+
+            // to get time-stamp for 'date created' field
+            $timestamp = date('Y-m-d H:i:s');
+            $date_created = $timestamp;
+
+            // get time-stamp for 'date modified' field
+            $date_modified = $timestamp;
+
+            // sqlQuery
+            $sqlQuery = "Insert into project_checklists set project_id=:project_id, user_id=:user_id, item=:item, description=:description,
+            date_created=:date_created, date_modified=:date_modified";
+
+            $QueryExecutor = new PDO_QueryExecutor();
+            $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+            // bind parameters
+            $stmt->bindParam(":project_id", $project_id);
+            $stmt->bindParam(":user_id", $user_id);
+            $stmt->bindParam(":item", $checklist_item);
+            $stmt->bindParam(":description", $checklist_description);
+            $stmt->bindParam(":date_created", $date_created);
+            $stmt->bindParam(":date_modified", $date_modified);
+
+            // execute pdo object
+            $stmt->execute();
+
+            // return pdo object
+            return $stmt;
+        }
+
+
+        public function getUserLastProject($user_id){
+            $sqlQuery = "Select * from projects where creator=:creator order by id desc limit 1";
+
+            $QueryExecutor = new PDO_QueryExecutor();
+            $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+            // bind parameters
+            $stmt->bindParam(":creator", $user_id);
+
+            // execute pdo
+            $stmt->execute();
+
+            return $stmt;
+        }
+
+        public function getCheckListByUserAndProjectId($new_project_id, $user_id){
+
+            // $sqlQuery
+            $sqlQuery = "Select * from project_checklists where user_id=:user_id and project_id=:project_id";
+
+            $QueryExecutor = new PDO_QueryExecutor();
+            $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+            // bind parameters
+            $stmt->bindParam(":user_id", $user_id);
+            $stmt->bindParam(":project_id", $new_project_id);
+
+            // execute pdo
+            $stmt->execute();
+
+            return $stmt;
+
+        }
+
+        public function getLastCheckListByUserAndProjectId($new_project_id, $user_id){
+
+            // $sqlQuery
+            $sqlQuery = "Select * from project_checklists where user_id=:user_id and project_id=:project_id order by id desc limit 1";
+
+            $QueryExecutor = new PDO_QueryExecutor();
+            $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+            // bind parameters
+            $stmt->bindParam(":user_id", $user_id);
+            $stmt->bindParam(":project_id", $new_project_id);
+
+            // execute pdo
+            $stmt->execute();
+
+            return $stmt;
+
+        }
+
+        public function delete_project_checklist($checklist_id){
+
+          // sql Query
+          $sqlQuery = "Delete from project_checklists where id=:checklist_id";
+
+          // pdo object
+          $QueryExecutor = new PDO_QueryExecutor();
+          $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+          // bind parameters
+          $stmt->bindParam(":checklist_id", $checklist_id);
+
+          // execute PDO
+          $stmt->execute();
+
+          return $stmt;
+        }
+
+
+        public function create_project_milestone($fields){
+            //fields
+            $project_id = $fields['project_id'];
+            $user_id = $fields['user_id'];
+            $milestone_title = $fields['milestone_title'];
+            $description = $fields['description'];
+            $milestone_date = $fields['milestone_date'];
+
+            // to get time-stamp for 'date created' field
+            $timestamp = date('Y-m-d H:i:s');
+            $date_created = $timestamp;
+
+            // get time-stamp for 'date modified' field
+            $date_modified = $timestamp;
+
+            // sqlQuery
+            $sqlQuery = "Insert into project_milestones set project_id=:project_id, user_id=:user_id, title=:title, description=:description,
+            milestone_date=:milestone_date, date_created=:date_created, date_modified=:date_modified";
+
+            $QueryExecutor = new PDO_QueryExecutor();
+            $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+            // bind parameters
+            $stmt->bindParam(":project_id", $project_id);
+            $stmt->bindParam(":user_id", $user_id);
+            $stmt->bindParam(":title", $milestone_title);
+            $stmt->bindParam(":description", $description);
+            $stmt->bindParam(":milestone_date", $milestone_date);
+            $stmt->bindParam(":date_created", $date_created);
+            $stmt->bindParam(":date_modified", $date_modified);
+
+            // execute pdo object
+            $stmt->execute();
+
+            // return pdo object
+            return $stmt;
+        }
+
+
+        public function getLastMilestoneByUserAndProjectId($new_project_id, $user_id){
+          // $sqlQuery
+          $sqlQuery = "Select * from project_milestones where user_id=:user_id and project_id=:project_id order by id desc limit 1";
+
+          $QueryExecutor = new PDO_QueryExecutor();
+          $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+          // bind parameters
+          $stmt->bindParam(":user_id", $user_id);
+          $stmt->bindParam(":project_id", $new_project_id);
+
+          // execute pdo
+          $stmt->execute();
+
+          //echo $stmt->rowCount();
+          return $stmt;
+
+        }
+
+        public function delete_project_milestone($milestone_id){
+
+          // sql Query
+          $sqlQuery = "Delete from project_milestones where id=:milestone_id";
+
+          // pdo object
+          $QueryExecutor = new PDO_QueryExecutor();
+          $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+          // bind parameters
+          $stmt->bindParam(":milestone_id", $milestone_id);
+
+          // execute PDO
+          $stmt->execute();
+
+          return $stmt;
+        }
+
+
 
   } //end of class
 

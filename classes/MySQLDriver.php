@@ -1,5 +1,5 @@
 <?php
-    
+
     class MySQLDriver extends Database Implements DBInterface{
 
         private $host;
@@ -13,7 +13,7 @@
             $this->host = $host;
             $this->db = $db;
             $this->uid = $uid;
-            $this->password;
+            $this->password = $password;
         }
 
         //Establish Database connection

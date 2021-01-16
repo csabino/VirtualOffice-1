@@ -1,3 +1,32 @@
+<!-- Authentication //-->
+<?php
+
+  if (!isset($_SESSION['ulogin_state']) || $_SESSION['ulogin_state']!='200'){
+    header("location: {$baseUrl}index.php");
+  }
+  //----------------------------------------------------------------------------
+  if (!isset($_SESSION['ulogin_id']) || $_SESSION['ulogin_id']==''){
+    header("location: {$baseUrl}index.php");
+  }
+  //----------------------------------------------------------------------------
+  if (!isset($_SESSION['ulogin_userid']) || $_SESSION['ulogin_userid']==''){
+    header("location: {$baseUrl}index.php");
+  }
+  //----------------------------------------------------------------------------
+  if (!isset($_SESSION['ulogin_fileno']) || $_SESSION['ulogin_fileno']==''){
+    header("location: {$baseUrl}index.php");
+  }
+  //----------------------------------------------------------------------------
+  if (!isset($_SESSION['ulogin_email']) || $_SESSION['ulogin_email']==''){
+    header("location: {$baseUrl}index.php");
+  }
+  //----------------------------------------------------------------------------
+
+?>
+
+
+
+<!-- end of Authentication //-->
 
 <!--Navbar -->
 <nav class="mb-1 navbar navbar-expand-lg navbar-dark primary-color lighten-1">
@@ -43,7 +72,7 @@
         <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink-555">
           <a class="dropdown-item" href="#"> <i class="fas fa-suitcase"></i> Portfolio</a>
           <a class="dropdown-item" href="#"> <i class="far fa-comments"></i> Discussions</a>
-          <a class="dropdown-item" href="#"> <i class="far fa-comment-alt"></i> Meetings</a>
+          <a class="dropdown-item" href="<?php echo $baseUrl.'staff/meeting/meetings.php?en='.mask($_SESSION['ulogin_userid']); ?>"> <i class="far fa-comment-alt"></i> Meetings</a>
 
 
         </div>
@@ -109,8 +138,8 @@
           aria-haspopup="true" aria-expanded="false">Assistants
         </a>
         <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink-555">
-          <a class="dropdown-item" href="#"> <i class="far fa-calendar"></i> Calendar</a>
-          <a class="dropdown-item" href="#"> <i class="far fa-clock"></i> Scheduler</a>
+          <a class="dropdown-item" href="<?php echo $baseUrl.'staff/calendar/calendar.php?en='.mask($_SESSION['ulogin_userid']); ?>"> <i class="far fa-calendar"></i> Calendar</a>
+          <!-- <a class="dropdown-item" href="#"> <i class="far fa-clock"></i> Scheduler</a> //-->
           <a class="dropdown-item" href="#"> <i class="far fa-clock"></i> Reminder</a>
         </div>
       </li>
@@ -158,7 +187,7 @@
             <a class="dropdown-item" href="<?php echo $baseUrl.'staff/profile/my_profile.php?q='.mask($_SESSION['ulogin_userid']); ?>"> <i class="far fa-user"></i> Profile</a>
             <a class="dropdown-item" href="<?php echo $baseUrl.'staff/profile/change_password.php?q='.mask($_SESSION['ulogin_userid']); ?>"> <i class="fas fa-key"></i> Change Password</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="logout.php"> <i class="fas fa-sign-out-alt"></i> Logout</a>
+            <a class="dropdown-item" href="<?php echo $baseUrl.'staff/logout.php'; ?>"> <i class="fas fa-sign-out-alt"></i> Logout</a>
           </div>
     </li>
   </ul>

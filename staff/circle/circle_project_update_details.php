@@ -153,10 +153,13 @@
                         $code1 = mask($_GET_URL_cell_id);
                         $code2 = mask($_GET_URL_user_id);
                         $code3 = mask($_GET_URL_project_id);
-                        $post_project_updates_link = "circle_project_create_update.php?q=".$code1."&us=".$code2."&pid=".$code3;
-
+                        $post_project_create_link = "circle_project_create_update.php?q=".$code1."&us=".$code2."&pid=".$code3;
+                        $post_project_updates_link = "circle_project_updates.php?q=".$code1."&us=".$code2."&pid=".$code3;
                     ?>
-                    <a href="<?php echo $post_project_updates_link; ?>" class="btn btn-sm btn-primary btn-rounded"> <i class="fas fa-plus"></i> Post Update</a>
+                    <a href="<?php echo $post_project_updates_link; ?>" class="btn btn-sm btn-success btn-rounded"> <i class="fas fa-chevron-left"></i> &nbsp;Project Updates</a>
+
+                    <a href="<?php echo $post_project_create_link; ?>" class="btn btn-sm btn-primary btn-rounded"> <i class="fas fa-plus"></i> &nbsp;Create Update</a>
+
               </div>
 
       </div>
@@ -342,11 +345,11 @@
   </div> <!-- end of container //-->
 
 
-<input type="text" id="selected_del_comment_id"/>
-<input type="text" id="project_update_id" value="<?php echo $_GET_URL_project_update_id; ?>" >
-<input type="text" id="user_id" value="<?php echo $_GET_URL_user_id; ?>" >
-<input type="text" id="last_comment_id" value="<?php echo $last_comment_id; ?>" >
-<input type="text" id="total_comments" value="" >
+<input type="hidden" id="selected_del_comment_id"/>
+<input type="hidden" id="project_update_id" value="<?php echo $_GET_URL_project_update_id; ?>" >
+<input type="hidden" id="user_id" value="<?php echo $_GET_URL_user_id; ?>" >
+<input type="hidden" id="last_comment_id" value="<?php echo $last_comment_id; ?>" >
+<input type="hidden" id="total_comments" value="" >
 
 <br/><br/><br/>
 

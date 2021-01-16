@@ -194,7 +194,7 @@
                         $post_project_updates_link = "circle_project_updates.php?q=".$code1."&us=".$code2."&pid=".$code3;
 
                     ?>
-                    <a href="<?php echo $post_project_updates_link; ?>" class="btn btn-sm btn-primary btn-rounded"> <i class="fas chevron-left"></i> Project Updates</a>
+                    <a href="<?php echo $post_project_updates_link; ?>" class="btn btn-sm btn-success btn-rounded"> <i class="fas fa-chevron-left"></i> &nbsp;Project Updates</a>
               </div>
       </div>
       <!-- end of project update title and back button //-->

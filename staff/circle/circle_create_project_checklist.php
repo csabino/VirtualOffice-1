@@ -1,3 +1,22 @@
+<!-- get project_id created by the User //-->
+<?php
+    $project = new Project();
+    $project_info = $project->getUserLastProject($_GET_URL_user_id);
+
+    $new_project_id = '';
+    foreach($project_info as $row){
+        $new_project_id = $row['id'];
+    }
+
+
+
+
+
+
+?>
+<!-- end of get project_id created by the User //-->
+
+
 <div class="row border rounded" style="width:100%;">
 
 
@@ -54,10 +73,10 @@
     </div><!-- end of left pane //-->
 
     <!-- right pane //-->
-    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-6">
+    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-6 mt-4">
 
           <div class="col-xs-12" style="height:380px; overflow:auto;">
-            
+              <ul id='chkLstItems' style='list-style-type:none;'></ul>
           </div>
     </div>
     <!-- end of right pane //-->

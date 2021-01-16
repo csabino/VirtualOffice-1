@@ -114,9 +114,9 @@
 
                               // display columns data
                               echo "<tr>";
-                              echo "<td width='5%'>{$counter}.</td><td>{$type_name}</td>
-                                    <td>{$type_description}</td><td>{$type_date_created}</td>
-                                    <td align='center'>{$btn_type_view} {$btn_type_edit} {$btn_type_delete}</td>";
+                              echo "<td width='5%'>{$counter}.</td><td width='25%'>{$type_name}</td>
+                                    <td width='30%'>{$type_description}</td><td width='20%'>{$type_date_created}</td>
+                                    <td align='center' width='20%'>{$btn_type_view} {$btn_type_edit} {$btn_type_delete}</td>";
                               echo "</tr>";
 
                               $counter++;

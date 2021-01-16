@@ -36,6 +36,9 @@
                   $_SESSION['ulogin_fileno'] = $row['file_no'];
                   $_SESSION['ulogin_email'] = $row['email'];
 
+
+
+
                   //Redirect to appropriate dashboard
                   if ($_SESSION['ulogin_role']=='admin'){
                       header("location: cadmin/admin_dashboard.php");

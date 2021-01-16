@@ -70,8 +70,11 @@
         {
             $sqlQuery = "Select id, name, short_name, parent, type, description, date_created, date_modified
                         from cells where deleted='' order by parent, type, name ";
+
             $QueryExecutor = new MySQL_QueryExecutor();
             $stmt = $QueryExecutor::customQuery($sqlQuery);
+            //$QueryExecutor = new PDO_QueryExecutor();
+            //$stmt = $QueryExecutor::customQuery()->prepare($sqlQuery);
             return $stmt;
         }
 
