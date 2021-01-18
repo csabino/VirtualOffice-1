@@ -424,6 +424,7 @@ $("#step2_btn_save").bind("click", function(){
                //var result = jQuery.parseJSON(data);
                if (data!=''){
                   $("#chkLstItems").append(data);
+                  $("#divAddedCheckList").animate({"scrollTop": $("#divAddedCheckList")[0].scrollHeight}, "slow");
                }
 
                //alert(data);

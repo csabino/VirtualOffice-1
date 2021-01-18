@@ -31,10 +31,12 @@
       <div class="row">
 
             <?php
+                
                 $circle = new Circle();
                 $my_circle = $circle->get_user_circle($_SESSION['loggedIn_profile_user_id']);
                 //echo $my_circle->rowCount();
                 foreach($my_circle as $mc){
+
             ?>
 
 

@@ -58,10 +58,15 @@
                     $status = 'success';
                     //$response = array("status"=>$status, "checkListId"=>$checkListId,
                     //"item"=>$item, "description"=>$description);
+                    $li_id = 'chkLst'.$checkListId;
+                    $delete_icon_id = 'delChkLst'.$checkListId;
+                    $edit_icon_id = 'editChkLst'.$checkListId;
 
-                    $output =  "<li title='{$description}' id='chkLst{$checkListId}' style='cursor:pointer;padding:3px;'>
+                    $output =  "<div class='chklist_item' title='{$description}' id='chkLst{$checkListId}' style='cursor:pointer;padding:3px;'>
                                    <i class='far fa-square fa-1x green-text pr-3'></i>
-                                   {$item} &nbsp;<small><i id='delChkLst{$checkListId}' class='fas fa-times text-danger delChkLst'></i></small></li>";
+                                   {$item} &nbsp; &nbsp;<small><i id='delChkLst{$checkListId}' data-toggle='modal' data-target='#confirmDelete' class='fas fa-times text-danger delChkLst'></i></small>
+                                   &nbsp; &nbsp; <small><i title='Edit this item' id='{$edit_icon_id}' class='far fa-edit text-info delChkLst'></i></small>
+                                   </div>";
                     //$response = array("status"=>'success', "message"=>$output);
                     $response = $output;
                 } // end of foreach

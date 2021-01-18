@@ -62,7 +62,7 @@
   <div class="col-xs-12 col-sm-12 col-md-4 col-lg-6 mt-4">
 
         <div id='divAddedMilestones' class="col-xs-12" style="height:380px; overflow:auto;">
-            <ul id='milestoneItems'></ul>
+            <ul id='milestoneItems' style='list-style-type:none;'></ul>
         </div>
   </div>
   <!-- end of right pane //-->

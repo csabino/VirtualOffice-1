@@ -75,7 +75,7 @@
     <!-- right pane //-->
     <div class="col-xs-12 col-sm-12 col-md-4 col-lg-6 mt-4">
 
-          <div class="col-xs-12" style="height:380px; overflow:auto;">
+          <div id='divAddedCheckList' class="col-xs-12" style="height:380px; overflow:auto;">
               <ul id='chkLstItems' style='list-style-type:none;'></ul>
           </div>
     </div>

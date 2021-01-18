@@ -177,7 +177,7 @@
 
           $this->cell_id = $cell;
           $sqlQuery = "Select p.id, p.title as project_title, p.description, p.cell_id, p.creator, u.title as user_title, u.last_name, u.first_name,
-                       p.start_date, p.end_date, p.source, p.completed, p.date_created, p.date_modified
+                       p.start_date, p.end_date, p.source, p.completed, p.progress, p.date_created, p.date_modified
                        from projects p inner join users u on p.creator=u.id where p.cell_id=:cell_id order by id desc";
 
           // pdo object
@@ -567,7 +567,67 @@
         }
 
 
+        public function getProjectDefinitionByProjectId($project_id)
+        {
+          $this->project_id = $project_id;
 
+          // sql Query
+          $sqlQuery = "Select * from projects where id=:project_id";
+
+          //pdo object
+          $QueryExecutor = new PDO_QueryExecutor();
+          $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+          // bind Params
+          $stmt->bindParam(":project_id", $this->project_id);
+
+          // execute PDO
+          $stmt->execute();
+
+          return $stmt;
+        }
+
+
+
+        public function get_project_checklist_by_project_id($project_id){
+          $this->project_id = $project_id;
+
+          // sql Query
+          $sqlQuery = "Select * from project_checklists where project_id=:project_id";
+
+          // pdo object
+          $QueryExecutor = new PDO_QueryExecutor();
+          $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+          // bind Params
+          $stmt->bindParam(":project_id", $this->project_id);
+
+          // execute PDO
+          $stmt->execute();
+
+          return $stmt;
+        }
+
+        public function get_project_milestone_by_project_id($project_id){
+          $this->project_id = $project_id;
+
+          // sql query
+          $sqlQuery = "Select * from project_milestones where project_id=:project_id";
+
+          // pdo object
+          $QueryExecutor = new PDO_QueryExecutor();
+          $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+          // bind Params
+          $stmt->bindParam(":project_id", $this->project_id);
+
+          // execute PDO
+          $stmt->execute();
+
+          return $stmt;
+        }
+
+        
   } //end of class
 
 

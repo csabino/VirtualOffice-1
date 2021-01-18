@@ -120,19 +120,67 @@
               </div>
 
               <!-- General Discussion  //-->
-              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mb-4" style="height:350px; overflow:auto; border-bottom:2px solid #33b5e5;padding-bottom:2px;">
-                    THE Commissioner representing Lagos State at the Federal Character Commission (FCC) Abdulwasiu Kayode Bawa-Allah,
-                    on Friday pledged to stop the problem of non-indigenes violating the Federal Character Principle by impersonating Lagosians.
-                    <br/><br/>
-                    Bawa-Allah noted that some traditional rulers might be complicit in the problem out of ignorance.
-                    He spoke during a stakeholder engagement on the FCC’s activities with representatives of the three Lagos Senatorial Districts.
-                    President Muhammadu Buhari on July 2 appointed Bawa-Allah and one commissioner each from the 36 states of Nigeria and Federal Capital Territory (FCT).
-                    <br/><br/>
-                    The FCC is chaired by Dr. Muyiba Faridabah Dankaka. It was observed at the meeting that despite the FCC’s efforts, some non-indigenes fraudulently obtain Lagos certificates of origin, thereby depriving Lagosians of opportunities available under the Federal Character Principle. They noted that this explained the near non-existence of genuine Lagosians in some, particularly lower levels, of some Federal Government agencies. Bawa-Allah, a prince noted that one way out of the problem is to engage with taditional rulers who sign off such certificates.
-                    <br/><br/>
-                    He said: “The benefit of this appointment is that I am a born, raised, bred Lagosian. I have also played active politics in the state in the last 17 ye marars that I returned to Nigeria.
-                    <br/><br/>
-                    Also, coming from the Royal Family of Ojomu Ilase in Eti-Osa, and from the Eyo-Adimu Family in Isale Eko, I believe with this birthright and connection to the royalty, and understanding the fabric of Lagos State, this is a problem that we can overcome and solve with ease.
+              <div id="post_window" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mb-4" style="height:350px; overflow:auto; border-bottom:2px solid #33b5e5;padding-bottom:2px;">
+                  <?php
+                      $lastPostId = 0;
+                      $room = new GeneralRoom();
+                      $post = $room->getPostsByCell($_GET_URL_cell_id);
+
+                      foreach($post as $p){
+                        $postId = $p['id'];
+                        $user_id = $p['user_id'];
+                        $title = $p['title'];
+                        $lastname = $p['last_name'];
+                        $firstname = $p['first_name'];
+                        $message = nl2br(FieldSanitizer::outClean($p['message']));
+
+                        $date_posted_raw = new DateTime($p['date_created']);
+                        $date_posted = $date_posted_raw->format('D. jS M. Y');
+
+                        $time_posted = $date_posted_raw->format('g:i a');
+
+                        $avatar = '../images/avatar_100.png';
+
+                        if ($p['avatar']!=''){
+                          $avatar = '../avatars/'.$p['avatar'];
+                        }
+
+                        //generate delete link if comment is by same user
+                        $delete_pane = '';
+                        if ($user_id==$_GET_URL_user_id ){
+                          $delete_pane = "<div id='delete{$postId}' data-toggle='modal' data-target='#confirmDelete' class='btn_delete text-danger px-2' style='cursor:pointer;'><small> <i class='fas fa-times text-danger'></i> Delete</small></div> ";
+                        }
+
+                        //get $lastPostId
+                        $lastPostId = $postId;
+
+
+                  ?>
+
+                                  <div class="row border-bottom py-3 z-depth-0 mt-3 postpackage" style='border-radius:0px;' id="<?php echo $postId; ?>" >
+                                      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-left">
+                                          <div class='px-2' style="float:left; border:0px solid red;">
+                                              <img src="<?php echo $avatar; ?>" width="50px" class="img-fluid img-responsive z-depth-1 rounded-circle" />
+                                          </div>
+                                          <div style="float:left; width:80%; border:0px solid black;">
+                                                <div class='px-2'>
+                                                    <span id='user' class='font-weight-bold' ><small><strong><?php echo $title.' '.$lastname.' '.$firstname; ?></strong></small></span>&nbsp;&nbsp;
+                                                    <span id='date_posted' class=''><small><?php echo $date_posted;  ?></small></span>&nbsp;
+                                                    <span id="time_posted"><small><i class="far fa-clock"></i> <?php echo $time_posted; ?></small></span>
+                                                </div>
+
+                                                <div class='py-1 px-2' id='comment'> <?php echo $message; ?> </div>
+                                                <?php echo $delete_pane; ?>
+                                          </div>
+
+                                      </div>
+
+                                  </div>
+
+
+                  <?php
+                      }
+                  ?>
               </div>
               <!-- end of General Discussions //-->
 
@@ -141,14 +189,13 @@
               <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
                       <div class="form-group shadow-textarea">
                           <textarea id='post' class="form-control z-depth-1" rows="4" placeholder="Say something..." maxlength="200"></textarea>
-                            <!-- cell_id and user_id  //-->
-                            <input type='hidden' id='cell_id' value="<?php  ?>"  >
+
                       </div>
                       <div class="text-right " id="lbl_character_size"><small>Remaining Characters : 160</small></div>
 
               </div>
               <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 py-3">
-                   <button class="btn btn-lg btn-blue"> Post</button>
+                   <button id='btnPost' class="btn btn-lg btn-blue"> Post</button>
               </div>
 
               <!-- end of post //-->
@@ -161,8 +208,11 @@
   </div> <!-- end of container //-->
 
 <br/><br/><br/>
+<input type='text' id='cell_id' value="<?php echo $_GET_URL_cell_id; ?>" />
+<input type="text" id='user_id' value="<?php echo $_GET_URL_user_id; ?>" />
+<input type="text" id='last_post_id' value='<?php echo $lastPostId; ?>' />
 
-
+<br/><br/><br/>
 <?php
 
     //footer.php
@@ -171,15 +221,124 @@
 
 
 <script>
+
+
     $(document).ready(function(){
 
-          $("#post").on("keydown", function(e){
-                    if (this.value.length > 200){
-                       return false;
-                    }
+    setInterval(function(){
+      getPostUpdate();
+    }, 15000);
+// --------------------------------- Scroll to bottom of DIC ---------------------------------------------------------------------
+    scrollBottomOfMessagePane();
 
-                    $("#lbl_character_size").html("<small>Remaining characters : " + (200 - this.value.length) + "</small>");
+
+//---------------------------------- Post TextArea Key down-----------------------------------------------------------------------
+
+          $("#post").on("keydown", function(e){
+                if (this.value.length > 200){
+                   return false;
+                }
+
+                $("#lbl_character_size").html("<small>Remaining characters : " + (200 - this.value.length) + "</small>");
           });
-    });
+//--------------------------------- End of Post TextArea --------------------------------------------------------------------------
+
+//------------------------------ BtnPost -------------------------------------------------------------------------------------
+
+          $("#btnPost").on("click", function(){
+
+              // Disable btnPost
+              $(this).prop("disabled", true);
+
+
+              // collect values into variables
+              var cell_id = $("#cell_id").val();
+              var user_id = $("#user_id").val();
+              var post = $("#post").val();
+
+              // clear post
+              $("#post").val("");
+
+              if (post!='' && cell_id!='' && user_id!=''){
+                  $.ajax({
+                    url: '../../async/server/general_room/post_message.php',
+                    method: "POST",
+                    data: {cell_id: cell_id, user_id: user_id, post: post},
+                    dataType: 'html',
+                    cache: false,
+                    processdata: false,
+                    beforeSend: function(){},
+                    success: function(data){
+                       if (data!=''){
+                         getPostUpdate();
+                       }
+                    }
+                  });
+              }
+
+
+              $(this).prop("disabled", false);
+
+          }); // btnPost click
+
+
+//--------------------------- getPostUpdate -----------------------------------------------------
+
+   function getPostUpdate(){
+       console.log("Inside get update");
+
+       var cell_id = $("#cell_id").val();
+       var user_id = $("#user_id").val();
+       var lastPostId = $("#last_post_id").val();
+
+       $.ajax({
+           url: '../../async/server/general_room/get_new_messages.php',
+           method: "POST",
+           data: {cell_id: cell_id, last_post_id: lastPostId, user_id: user_id},
+           dataType: 'html',
+           cache: false,
+           processdata: false,
+           beforeSend: function(){},
+           success: function(data){
+             if (data!=''){
+                 // Append data to post view pane
+                 $("#post_window").append(data);
+
+                 // update latest post id
+                 var last_post_id = $(".postpackage:last").attr("id");
+                 $("#last_post_id").val(last_post_id);
+
+                 // scrollBottomMessage
+                 scrollBottomOfMessagePane();
+
+             }
+           }
+       });
+
+   }
+
+//--------------------------- End of getPostUpdate ------------------------------------------------
+
+
+//-------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+//--------------------------------------------------------------------------------------------------
+
+
+//----------------------------- Scroll Bottom function -------------------------------------------
+  function scrollBottomOfMessagePane()
+	{
+		   $("#post_window").animate({"scrollTop": $("#post_window")[0].scrollHeight}, "slow");
+	}
+
+ //-----------------------------------------------------------------------------------------------
+
+    });  // end of document ready
+
 
 </script>

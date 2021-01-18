@@ -30,6 +30,7 @@ require_once("../../interface/TaskInterface.php");
 require_once("../../interface/MemoInterface.php");
 require_once("../../interface/ContactInterface.php");
 require_once("../../interface/MeetingInterface.php");
+require_once("../../interface/GeneralRoomInterface.php");
 
 // Logged-In Header
 require_once("../../includes/logged_in_header.php");

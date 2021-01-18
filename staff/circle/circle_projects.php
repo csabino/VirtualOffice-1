@@ -150,17 +150,57 @@
                                       if ($recordFound>0){
                                           foreach($get_projects as $row){
                                               $project_id = $row['id'];
-                                              $project_title = $row['project_title'];
-                                              $creator = $row['user_title'].' '.$row['last_name'].' '.$row['first_name'];
+                                              $project_title = FieldSanitizer::outClean($row['project_title']);
+                                              $creator = FieldSanitizer::outClean($row['user_title']).' '.FieldSanitizer::outClean($row['last_name']).' '.FieldSanitizer::outClean($row['first_name']);
                                               $completed = $row['completed'];
+                                              $progress = $row['progress'];
+
                                               $date_created_raw = new DateTime($row['date_created']);
                                               $date_created = $date_created_raw->format('D jS F, Y');
                                               $time_created = $date_created_raw->format('g:i a');
 
 
+                                              // ---- is_completed
+                                              if ($completed!=1){
+                                                 $isCompleted = 'Not Completed';
+                                                 $isCompleted = "<span class='badge badge-pill badge-danger'>{$isCompleted}</span>";
+                                              }else{
+                                                 $isCompleted = 'Completed';
+                                                 $isCompleted = "<span class='badge badge-pill badge-success'>{$isCompleted}</span>";
+                                              }
+                                              // ---- end of is_completed
+
+
+                                              //------ progression
+                                              $class = 'progress-bar';
+
+                                              if ($progress==0){
+                                                $class = 'progress-bar';
+                                              }else if ($progress>0 && $progress<25){
+                                                $class = 'progress-bar bg-danger';
+                                              }else if ($progress>=25 && $progress<50){
+                                                $class = 'progress-bar bg-warning';
+                                              }else if ($progress>=50 && $progress<75){
+                                                $class = 'progress-bar bg-primary';
+                                              }else if ($progress>=75){
+                                                $class = 'progress-bar bg-success';
+                                              }
+
+                                              // // Progress Bar
+                                              // $progressBar = "
+                                              // <div class='progress md-progress' style='height:20px'>
+                                              //     <div class='{$class}' role='progressbar' style='width:{$progress}% height: 20px' aria-valuenow='{$progress}' aria-valuemin='0' aria-valuemax='100'>
+                                              //         {$progress}%
+                                              //     </div>
+                                              // </div>";
+                                              // // end of Progress Bar
+
+
+                                              // ------ end of Progression
+
                                               // display column data
                                               $project_link = "<a class='customlink' href='circle_project_updates.php?q=".mask($_GET_URL_cell_id)."&us=".mask($_GET_URL_user_id)."&pid=".mask($project_id)."'>{$project_title}</a>";
-                                              $project_info_link = "<a title='Setting information about this project' href='circle_project_info.php?q=".mask($_GET_URL_cell_id)."&pid=".mask($project_id)."'><i class='fas fa-cogs'></i> Project Info (0)</a>";
+                                              $project_info_link = "<a title='Setting information about this project' href='circle_project_info.php?q=".mask($_GET_URL_cell_id)."&us=".mask($_GET_URL_user_id)."&pid=".mask($project_id)."'><i class='fas fa-cogs'></i> Project Info </a>";
                                               $project_updates_link = "<a title='Latest progress updates on the project' href='circle_project_updates.php?q=".mask($_GET_URL_cell_id)."&pid=".mask($project_id)."'><i class='fas fa-sync'></i> Updates (0)</a>";
                                               $project_tasks_link = "<a title='Assigned tasks to members' href='circle_project_tasks.php?q=".mask($_GET_URL_cell_id)."&pid=".mask($project_id)."'><i class='fas fa-tasks'></i> Tasks (0)</a>";
                                               $project_files_link = "<a title='Files uploaded' href='circle_project_files.php?q=".mask($_GET_URL_cell_id)."&pid=".mask($project_id)."'><i class='far fa-copy'></i> Files (0)</a>";
@@ -175,6 +215,27 @@
                                                 echo "<div class='col-xs-4 col-sm-4 col-md-3 col-lg-3'> {$project_tasks_link} </div> ";
                                                 echo "<div class='col-xs-4 col-sm-4 col-md-3 col-lg-3'> {$project_files_link} </div>  ";
                                                 echo "</div></small>"; // end of row
+
+                                                // completion and progression row
+                                                echo "<div class='row'>";
+                                                //echo "<small>";
+                                                  echo "<div class='col-xs-12 col-sm-12 col-md-3 col-lg-3'>{$isCompleted}</div>";
+                                                  echo "<div class='col-xs-12 col-sm-12 col-md-9 col-lg-9'>";
+                                                  ?>
+                                                  <!-- Progress Bar //-->
+                                                  <div class="progress md-progress" style="height:20px">
+                                                      <div class="<?php echo $class; ?>" role="progressbar" style="width:<?php echo $progress; ?>%; height: 20px" aria-valuenow="<?php echo $progress; ?>" aria-valuemin="0" aria-valuemax="100">
+                                                          <?php echo $progress.'%'; ?>
+                                                      </div>
+                                                  </div>
+                                                  <!-- end of Progress Bar //-->
+
+                                                  <?php
+
+                                                  echo "</div>";
+                                                //echo "</small>";
+                                                echo "</div>";
+                                                // end of completion and progression row
                                               echo "</td>"; // end of table column
 
 

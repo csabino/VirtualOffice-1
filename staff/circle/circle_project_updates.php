@@ -140,10 +140,10 @@
                         $code2 = mask($_GET_URL_user_id);
                         $code3 = mask($_GET_URL_project_id);
                         $post_project_create_link = "circle_project_create_update.php?q=".$code1."&us=".$code2."&pid=".$code3;
-                        $post_project_updates_link = "circle_project_updates.php?q=".$code1."&us=".$code2."&pid=".$code3;
+                        $projects_link = "circle_projects.php?en=".$code1."&us=".$code2;
 
                     ?>
-                    <a href="<?php echo $post_project_updates_link; ?>" class="btn btn-sm btn-success btn-rounded"> <i class="fas fa-chevron-left"></i> &nbsp;Project Updates</a>
+                    <a href="<?php echo $projects_link; ?>" class="btn btn-sm btn-success btn-rounded"> <i class="fas fa-chevron-left"></i> &nbsp;Projects</a>
                     <a href="<?php echo $post_project_create_link; ?>" class="btn btn-sm btn-primary btn-rounded"> <i class="fas fa-plus"></i> &nbsp;Create Update</a>
               </div>
 
