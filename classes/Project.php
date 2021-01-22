@@ -1,5 +1,10 @@
 <?php
 
+  ini_set('display_errors', 1);
+  ini_set('display_startup_errors', 1);
+  error_reporting(E_ALL);
+
+
   class Project implements ProjectInterface{
       private $cell_id;
       private $user_id;
@@ -627,7 +632,31 @@
           return $stmt;
         }
 
-        
+        public function edit_project_checklist($fields){
+             $project_id = $fields['project_id'];
+             $checklist_id = $fields['checklist_id'];
+             $checklist_item = FieldSanitizer::inClean($fields['checklist_item']);
+             $checklist_description = FieldSanitizer::inClean($fields['checklist_description']);
+
+             $sqlQuery = "Update project_checklists set item=:item, description=:description where id=:id and project_id=:project_id";
+
+            // pdo object
+             $QueryExecutor = new PDO_QueryExecutor();
+             $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+            //
+            // // bind parameters
+            $stmt->bindParam(":item", $checklist_item);
+            $stmt->bindParam(":description", $checklist_description);
+            $stmt->bindParam(":id", $checklist_id);
+            $stmt->bindParam(":project_id", $project_id);
+            //
+            // // pdo execute
+             $stmt->execute();
+            //
+            // return $stmt;
+            return $stmt;
+        }
+
   } //end of class
 
 

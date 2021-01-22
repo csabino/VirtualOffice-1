@@ -149,8 +149,8 @@
 
               <!-- inside pane //-->
 
-
-              <div id='checklist_form' class="border rounded z-index-5 col-xs-12 col-sm-12 col-md-8 col-lg-8 mt-1" style='display:none;'><!-- checklist add pane //-->
+              <!--    CHECKLIST ADD FORM     //-->
+              <div id='checklist_add_form' class="border rounded z-index-5 col-xs-12 col-sm-12 col-md-8 col-lg-8 mt-1" style='display:none;'><!-- checklist add pane //-->
                 <!-- checklist add //-->
                                 <!-- Title //-->
                               <h4 class='mt-2'> Add Checklist</h4>
@@ -191,6 +191,56 @@
 
                 <!-- end of checklist add //-->
               </div><!-- Checklist add pane  //-->
+              <!-- END OF CHECKLIST ADD FORM //-->
+
+
+
+
+
+              <!--    CHECKLIST EDIT FORM     //-->
+              <div id='checklist_edit_form' class="border rounded  col-xs-12 col-sm-12 col-md-8 col-lg-8 mt-1" style='display:none;'><!-- checklist edit pane //-->
+                <!-- checklist add //-->
+                                <!-- Title //-->
+                              <h4 class='mt-2'> Edit Checklist</h4>
+
+                              <div id='edit_message'></div>
+
+                              <div class="form-group row">
+                                      <label for="target" class="col-xs-12 col-sm-12 col-md-3 col-form-label text-md-right">Item</label>
+                                      <div class="col-xs-12 col-sm-12 col-md-9">
+                                                  <input class="form-control" id="checklist_edit_item" placeholder="Item" required >
+                                                  <div id='checklist_edit_item-error' class='text-danger'></div>
+
+                                      </div>
+                              </div>
+                              <!-- end of Targets //-->
+
+                              <!-- Description //-->
+                              <div class="form-group row">
+                                      <label for="target" class="col-xs-12 col-sm-12 col-md-3 col-form-label text-md-right">Description</label>
+                                      <div class="col-xs-12 col-sm-12 col-md-9">
+                                                  <textarea class="form-control" id="checklist_edit_description" placeholder="Description" ></textarea>
+
+                                      </div>
+                              </div>
+                              <!-- end of Description //-->
+
+
+
+                               <!-- Save button //-->
+                               <div class="form-group row">
+                                       <label for="target" class="col-xs-12 col-sm-12 col-md-3 col-form-label text-md-right"></label>
+                                       <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+                                           <div id='step2_btn_update' class="btn btn-sm btn-success btn-rounded mb-4">Update</div>
+                                       </div>
+                               </div>
+                               <!-- end of save button //-->
+
+
+
+                <!-- end of checklist add //-->
+              </div><!-- Checklist add pane  //-->
+              <!-- END OF CHECKLIST EDIT FORM //-->
 
 
 
@@ -220,7 +270,7 @@
                               <div class='chklist_item' title='<?php echo $description; ?>' id='<?php echo $li_id; ?>' style='cursor:pointer;padding:3px;'>
                                          <i class='far fa-square fa-1x green-text pr-3'></i>
                                          <?php echo $item; ?> &nbsp; &nbsp;<small><i title='Delete this item' id='<?php echo $delete_icon_id; ?>' data-toggle='modal' data-target='#confirmDelete' class='fas fa-times text-danger delChkLst'></i></small>
-                                         &nbsp; &nbsp; <small><i title='Edit this item' id='<?php echo $edit_icon_id; ?>' class='far fa-edit text-info delChkLst'></i></small>
+                                         &nbsp; &nbsp; <small><i title='Edit this item' id='<?php echo $edit_icon_id; ?>' class='far fa-edit text-info editChkLst'></i></small>
                               </div>
                         </div>
                         <?php
@@ -252,6 +302,7 @@
 <input type='text' id='user_id' value='<?php echo $_GET_URL_user_id; ?>' />
 <input type='text' id='new_project_id' value='<?php echo $_GET_URL_project_id; ?>' />
 <input type='text' id='checklist_to_delete' value='' />
+<input type='text' id='checklist_to_edit' value='' />
 
 <br/><br/><br/>
 
@@ -291,24 +342,68 @@
  <script>
 
  $(document).ready(function(){
-   //-----------------------   Toggle checklist form ------------------------------------
+   //-----------------------   Toggle checklist Add form ------------------------------------
     $("#div_add_checklist").on("click", function(){
-        $("#checklist_form").toggle();
+        $("#checklist_edit_form").hide();
+        $("#checklist_add_form").toggle();
     });
 
-   //-------------------------------------------------------------------------------------
+   //------------------------  End of toggling checklist Add form-----------------------------
+
+
+   //------------------------ Toggle checklist Edit form -------------------------------------
+   $(document).on("click",".editChkLst", function(event){
+    $("#checklist_add_form").hide();
+    $("#checklist_edit_form").toggle();
+
+    var selected_checklist_id = $(this).attr("id").replace(/\D/g,'');
+
+
+    // get checklist item content and insert into title and description fields
+    var title_content = $("#chkLst"+selected_checklist_id).text();
+    title_content = $.trim(title_content);
+    var description_content = $("#chkLst"+selected_checklist_id).attr("title");
+
+    //alert(description_content);
+
+    // insert content into fields
+    $("#checklist_edit_item").val(title_content);
+    $("#checklist_edit_description").val(description_content);
+
+    // set checklist_to_edit
+    $("#checklist_to_edit").val(selected_checklist_id);
+
+
+     event.stopProgation();
+
+   })
+
+
+
+   //----------------------- End of checklist Edit form -------------------------------------
+
+
+   //-------------------------marking or unmarking of checklist--------------------------------------------
 
    $(document).on("click",".chklist_item", function(){
      var selected_checklist_id = $(this).attr('id');
      var checkList_id = $(this).attr('id').replace(/\D/g,'');
 
      var state = $("#"+selected_checklist_id+">i").attr("class");
+     var action = '';
 
      if (state == 'far fa-square fa-1x green-text pr-3'){
         $("#"+selected_checklist_id+">i").attr("class", "far fa-check-square fa-1x green-text pr-3");
+        action = "check";
      }else{
         $("#"+selected_checklist_id+">i").attr("class", "far fa-square fa-1x green-text pr-3");
+        action = "uncheck";
      }
+
+     // call async service for checking or unchecking of checklist item
+     $.post("../../async/server/projects/set_checklist_executed_status.php", {"checklist_id":checkList_id, "action":action}, function(data){
+
+     });
 
 
    });
@@ -338,6 +433,10 @@
                   //var result = jQuery.parseJSON(data);
                   if (data!=''){
                      $(".chklist_item:last").after(data);
+
+                     var success_message = "<div class='alert alert-success mb-1' role='alert'>The Item has been successfully added to the Checklist</div>";
+                     $("#add_message").html(success_message).slideDown().delay(5000).slideUp(2000);
+
                      //$("#divAddedCheckList").animate({"scrollTop": $("#divAddedCheckList")[0].scrollHeight}, "slow");
                   }
 
@@ -345,6 +444,12 @@
 
                }
              });
+       }else{
+           // if title field is blank
+           var error_message = "<div class='alert alert-danger mb-1' role='alert'>The title of the <strong>Item</strong> and <strong>description</strong> are required</div>";
+           $("#add_message").html(error_message).slideDown().delay(5000).slideUp(2000);
+
+
        }
    });
 
@@ -391,13 +496,59 @@
   });
 
 
-
-
-
-
-
-
 //---------------------------------------- End of Delete Selected Checklist Item -------------------------------------------------------
+
+
+
+//----------------------------------------- BtnUpdate for Checklist item edit -------------------------------------------------
+$("#step2_btn_update").bind("click", function(event){
+
+  var checklist_edit_item = $("#checklist_edit_item").val();
+  var checklist_description = $("#checklist_edit_description").val();
+  var project_id = $("#new_project_id").val();
+  var checklist_id = $("#checklist_to_edit").val();
+
+  if (checklist_edit_item==''){
+
+     $("#checklist_edit_item-error").html("<small>Checklist item is required");
+
+  }else{
+
+    //-------------   Ajax -----------------------------------------------------
+     $.ajax({
+        url: '../../async/server/projects/edit_project_checklist.php',
+        method: "POST",
+        data: {project_id: project_id, checklist_item: checklist_edit_item, checklist_description: checklist_description, checklist_id: checklist_id},
+        dataType: 'html',
+        cache: false,
+        processdata: false,
+        beforeSend: function(){},
+        success: function(data){
+
+            if (data==1){
+                  var success_message = "<div class='alert alert-success mb-1' role='alert'>The Item has been successfully edited and updated.</div>";
+                  $("#edit_message").html(success_message).slideDown().delay(5000).slideUp(2000);
+
+            }else{
+                 var error_message = "<div class='alert alert-danger mb-1' role='alert'>No update is performed. Make a change and update.</div>";
+                 $("#edit_message").html(error_message).slideDown().delay(5000).slideUp(2000);
+            }
+        }
+     });
+     //------------- end of ajax -----------------------------------------------
+
+  }
+
+  event.stopProgation();
+
+})
+
+
+
+
+
+
+//---------------------------------------- End BtnUpdate for Checklist item Edit ---------------------------------------------
 
 
 

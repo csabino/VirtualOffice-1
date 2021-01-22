@@ -120,12 +120,12 @@
 
                   $salutation = '';
                   if ($meridiem=='AM'){
-                      $salutation = "Good morning, ";
+                      $salutation = "Good Morning, ";
                   }else{
                       if ($hour==12 || $hour<4){
-                          $salutation = "Good afternoon, ";
+                          $salutation = "Good Afternoon, ";
                       }else{
-                          $salutation = "Good evening, ";
+                          $salutation = "Good Evening, ";
                       }
                   }
                   echo "<span class='font-weight-light'>".$salutation.' '.$_SESSION['loggedIn_profile_title'].' '.$_SESSION['loggedIn_profile_firstname'].' '.$_SESSION['loggedIn_profile_lastname']."</span>";
@@ -137,7 +137,7 @@
 
       <div>
 
-        
+
 
 
 
