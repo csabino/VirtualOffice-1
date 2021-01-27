@@ -170,6 +170,10 @@
                                               }
                                               // ---- end of is_completed
 
+                                              // project progress indicator
+                                              $percent_progress = $project->get_project_progress_indicator($project_id);
+                                              $progress = $percent_progress;
+
 
                                               //------ progression
                                               $class = 'progress-bar';

@@ -27,7 +27,7 @@
 
 
 
-    $page_title = 'Work Circle - Projects';
+    $page_title = 'Work Circle - Projects | Milestone - Edit';
 
     require_once("../../config/step2/init_wp.php");
     require_once("../../nav/staff_nav.php");
@@ -149,32 +149,42 @@
 
               <!-- inside pane //-->
 
-              <!--    CHECKLIST ADD FORM     //-->
-              <div id='checklist_add_form' class="border rounded z-index-5 col-xs-12 col-sm-12 col-md-8 col-lg-8 mt-1" style='display:none;'><!-- checklist add pane //-->
-                <!-- checklist add //-->
+              <!--    MILESTONE ADD FORM     //-->
+              <div id='milestone_add_form' class="border rounded z-index-5 col-xs-12 col-sm-12 col-md-8 col-lg-8 mt-1" style='display:none;'><!-- checklist add pane //-->
+                <!-- milestone add //-->
                                 <!-- Title //-->
-                              <h4 class='mt-2'> Add Checklist</h4>
+                              <h4 class='mt-2'> Add Milestone</h4>
 
                               <div id='add_message'></div>
 
                               <div class="form-group row">
-                                      <label for="target" class="col-xs-12 col-sm-12 col-md-3 col-form-label text-md-right">Item</label>
+                                      <label for="milestone_title" class="col-xs-12 col-sm-12 col-md-3 col-form-label text-md-right">Item</label>
                                       <div class="col-xs-12 col-sm-12 col-md-9">
-                                                  <input class="form-control" id="checklist_item" placeholder="Item" required >                                                  
+                                                  <input class="form-control" id="milestone_title" placeholder="Title" required >
 
                                       </div>
                               </div>
-                              <!-- end of Targets //-->
+                              <!-- end of title //-->
 
                               <!-- Description //-->
                               <div class="form-group row">
-                                      <label for="target" class="col-xs-12 col-sm-12 col-md-3 col-form-label text-md-right">Description</label>
+                                      <label for="milestone_description" class="col-xs-12 col-sm-12 col-md-3 col-form-label text-md-right">Description</label>
                                       <div class="col-xs-12 col-sm-12 col-md-9">
-                                                  <textarea class="form-control" id="checklist_description" placeholder="Description" ></textarea>
+                                                  <textarea class="form-control" id="milestone_description" placeholder="Description" ></textarea>
 
                                       </div>
                               </div>
                               <!-- end of Description //-->
+
+                              <!-- Start Date //-->
+                               <div class="form-group row">
+                                       <label for="milestoneDate" class="col-xs-12 col-sm-12 col-md-3 col-form-label text-md-right">Start Date</label>
+                                       <div class="col-xs-12 col-sm-12 col-md-9">
+                                                   <input class="form-control datepicker" id="milestoneDate" placeholder="Start Date" >
+
+                                       </div>
+                               </div>
+                               <!-- end of Start Date //-->
 
 
 
@@ -182,48 +192,58 @@
                                <div class="form-group row">
                                        <label for="target" class="col-xs-12 col-sm-12 col-md-3 col-form-label text-md-right"></label>
                                        <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-                                           <div id='step2_btn_save' class="btn btn-sm btn-success btn-rounded mb-4">Save</div>
+                                           <div id='btn_save_milestone' class="btn btn-sm btn-success btn-rounded mb-4">Save</div>
                                        </div>
                                </div>
                                <!-- end of save button //-->
 
 
 
-                <!-- end of checklist add //-->
-              </div><!-- Checklist add pane  //-->
-              <!-- END OF CHECKLIST ADD FORM //-->
+                <!-- end of milestone add //-->
+              </div><!-- Milestone add pane  //-->
+              <!-- END OF MILESTONE ADD FORM //-->
 
 
 
 
 
-              <!--    CHECKLIST EDIT FORM     //-->
-              <div id='checklist_edit_form' class="border rounded  col-xs-12 col-sm-12 col-md-8 col-lg-8 mt-1" style='display:none;'><!-- checklist edit pane //-->
-                <!-- checklist add //-->
+              <!--    MILESTONE EDIT FORM     //-->
+              <div id='milestone_edit_form' class="border rounded  col-xs-12 col-sm-12 col-md-8 col-lg-8 mt-1" style='display:none;'><!-- checklist edit pane //-->
+                <!-- milestone add //-->
                                 <!-- Title //-->
-                              <h4 class='mt-2'> Edit Checklist</h4>
+                              <h4 class='mt-2'> Edit Milestone</h4>
 
                               <div id='edit_message'></div>
 
                               <div class="form-group row">
-                                      <label for="target" class="col-xs-12 col-sm-12 col-md-3 col-form-label text-md-right">Item</label>
+                                      <label for="milestone_edit_title" class="col-xs-12 col-sm-12 col-md-3 col-form-label text-md-right">Title</label>
                                       <div class="col-xs-12 col-sm-12 col-md-9">
-                                                  <input class="form-control" id="checklist_edit_item" placeholder="Item" required >
-                                                  <div id='checklist_edit_item-error' class='text-danger'></div>
+                                                  <input class="form-control" id="milestone_edit_title" placeholder="Title" required >
+                                                  <div id='milestone_edit_title-error' class='text-danger'></div>
 
                                       </div>
                               </div>
-                              <!-- end of Targets //-->
+                              <!-- end of title //-->
 
                               <!-- Description //-->
                               <div class="form-group row">
-                                      <label for="target" class="col-xs-12 col-sm-12 col-md-3 col-form-label text-md-right">Description</label>
+                                      <label for="milestone_edit_description" class="col-xs-12 col-sm-12 col-md-3 col-form-label text-md-right">Description</label>
                                       <div class="col-xs-12 col-sm-12 col-md-9">
-                                                  <textarea class="form-control" id="checklist_edit_description" placeholder="Description" ></textarea>
+                                                  <textarea class="form-control" id="milestone_edit_description" placeholder="Description" ></textarea>
 
                                       </div>
                               </div>
                               <!-- end of Description //-->
+
+                              <!-- Start Date //-->
+                               <div class="form-group row">
+                                       <label for="startingDate" class="col-xs-12 col-sm-12 col-md-3 col-form-label text-md-right">Start Date</label>
+                                       <div class="col-xs-12 col-sm-12 col-md-9">
+                                                   <input class="form-control datepicker" id="startingDate" placeholder="Start Date" >
+
+                                       </div>
+                               </div>
+                               <!-- end of Start Date //-->
 
 
 
@@ -231,71 +251,58 @@
                                <div class="form-group row">
                                        <label for="target" class="col-xs-12 col-sm-12 col-md-3 col-form-label text-md-right"></label>
                                        <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-                                           <div id='step2_btn_update' class="btn btn-sm btn-success btn-rounded mb-4">Update</div>
+                                           <div id='btn_milestone_update' class="btn btn-sm btn-success btn-rounded mb-4">Update</div>
                                        </div>
                                </div>
                                <!-- end of save button //-->
 
 
 
-                <!-- end of checklist add //-->
-              </div><!-- Checklist add pane  //-->
-              <!-- END OF CHECKLIST EDIT FORM //-->
+                <!-- end of milestone add //-->
+              </div><!-- Milestone add pane  //-->
+              <!-- END OF MILESTONE EDIT FORM //-->
 
 
 
               <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mt-3">
-                  <div id='div_add_checklist' class='text-primary' style='cursor:pointer;'><i class="fas fa-plus mb-3 text-primary"></i> Add Checklist </div>
+                  <div id='div_add_milestone' class='text-primary' style='cursor:pointer;'><i class="fas fa-plus mb-3 text-primary"></i> Add Milestone </div>
                   <!-- check list display from database //-->
 
-
+                      <ul id='milestoneItems' style='list-style-type:none;'>
 
 
                         <?php
-                          $get_checklist = $project->get_project_checklist_by_project_id($_GET_URL_project_id);
+                          $get_milestones = $project->get_project_milestone_by_project_id($_GET_URL_project_id);
 
-                          foreach($get_checklist as $gc){
-                              $checklist_id = $gc['id'];
-                              $creator_id = $gc['user_id'];
-                              $item = FieldSanitizer::outClean($gc['item']);
-                              $description = FieldSanitizer::outClean($gc['description']);
-                              $executed = $gc['executed'];
+                          foreach($get_milestones as $gm){
+                              $milestone_id = $gm['id'];
+                              $creator_id = $gm['user_id'];
+                              $title = FieldSanitizer::outClean($gm['title']);
+                              $description = FieldSanitizer::outClean($gm['description']);
+                              $milestone_date = $gm['milestone_date'];
 
-                              // set checklist check icon
-                              $checklist_checkboxIcon = '';
-                              if ($executed==1){
-                                $checklist_checkboxIcon = "<i class='far fa-check-square fa-1x green-text pr-3'></i>";
-                              }else{
-                                $checklist_checkboxIcon = "<i class='far fa-square fa-1x green-text pr-3'></i>";
+                              $the_specified_date = '';
+                              if ($milestone_date!=''){
+                                 $the_specified_date = "<span id='mdate{$milestone_id}'>".$milestone_date.'</span> <small><i class="fas fa-chevron-right"></i></small> ';
+                                 $title = "<span id='mtitle{$milestone_id}'>".$title."</span>";
                               }
 
-
-                              $li_id = 'chkLst'.$checklist_id;
-                              $delete_icon_id = 'delChkLst'.$checklist_id;
-                              $edit_icon_id = 'editChkLst'.$checklist_id;
+                              $li_id = 'milestone'.$milestone_id;
+                              $delete_icon_id = 'delMilestone'.$milestone_id;
+                              $edit_icon_id = 'editMilestone'.$milestone_id;
 
                         ?>
-                        <div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>
-                              <div class='chklist_item' title='<?php echo $description; ?>' id='<?php echo $li_id; ?>' style='cursor:pointer;padding:3px;'>
-                                         <!--<i class='far fa-square fa-1x green-text pr-3'></i> //-->
-                                         <?php echo $checklist_checkboxIcon; ?>
-                                         <?php echo $item; ?> &nbsp; &nbsp;<small><i title='Delete this item' id='<?php echo $delete_icon_id; ?>' data-toggle='modal' data-target='#confirmDelete' class='fas fa-times text-danger delChkLst'></i></small>
-                                         &nbsp; &nbsp; <small><i title='Edit this item' id='<?php echo $edit_icon_id; ?>' class='far fa-edit text-info editChkLst'></i></small>
-                              </div>
-                        </div>
+                                              <li  class='li_milestone_item' title='<?php echo $description; ?>' id='<?php echo $li_id; ?>' style='cursor:pointer;padding:3px;'>
+                                                    <i class='far fa-calendar-check fa-1x green-text pr-2'></i>
+                                                    &nbsp; <?php echo $the_specified_date.$title; ?> &nbsp;&nbsp; <small><i title='Delete this item' id='<?php echo $delete_icon_id; ?>' data-toggle='modal' data-target='#confirmDelete' class='fas fa-times text-danger delMilestone'>
+                                                    </i> &nbsp; &nbsp; <i title='Edit this item' id='<?php echo $edit_icon_id; ?>' class='far fa-edit text-info editMilestone'></i></small>
+                                              </li>
                         <?php
-
                           } // end of foreach
                         ?>
+                  <!-- end of milestone item loop//-->
 
-
-
-
-
-
-                  <!-- end of checklist //-->
-
-
+                    </ul>
 
               </div><!-- end of inside pane //-->
       </div>
@@ -311,8 +318,8 @@
 <input type='hidden' id='cell_id' value='<?php echo $_GET_URL_cell_id ?>' />
 <input type='hidden' id='user_id' value='<?php echo $_GET_URL_user_id; ?>' />
 <input type='hidden' id='new_project_id' value='<?php echo $_GET_URL_project_id; ?>' />
-<input type='hidden' id='checklist_to_delete' value='' />
-<input type='hidden' id='checklist_to_edit' value='' />
+<input type='hidden' id='milestone_to_delete' value='' />
+<input type='hidden' id='milestone_to_edit' value='' />
 
 <br/><br/><br/>
 
@@ -335,7 +342,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
-        <button type="button" id="delete_checklist_item" class="btn btn-danger" data-dismiss="modal"><i class="far fa-trash-alt"></i> Delete</button>
+        <button type="button" id="delete_milestone_item" class="btn btn-danger" data-dismiss="modal"><i class="far fa-trash-alt"></i> Delete</button>
       </div>
     </div>
   </div>
@@ -349,39 +356,46 @@
     require('../../includes/footer.php');
  ?>
 
+ <script src="../../lib/js/custom/project/from-to-date.js"></script>
+ <script src="../../lib/js/custom/circle/from-to-date.js"></script>
+
  <script>
 
  $(document).ready(function(){
    //-----------------------   Toggle checklist Add form ------------------------------------
-    $("#div_add_checklist").on("click", function(){
-        $("#checklist_edit_form").hide();
-        $("#checklist_add_form").toggle();
+    $("#div_add_milestone").on("click", function(){
+        $("#milestone_edit_form").hide();
+        $("#milestone_add_form").toggle();
     });
 
    //------------------------  End of toggling checklist Add form-----------------------------
 
 
-   //------------------------ Toggle checklist Edit form -------------------------------------
-   $(document).on("click",".editChkLst", function(event){
-    $("#checklist_add_form").hide();
-    $("#checklist_edit_form").toggle();
+   //------------------------ Toggle milestone Edit form -------------------------------------
+   $(document).on("click",".editMilestone", function(event){
+    $("#milestone_add_form").hide();
+    $("#milestone_edit_form").toggle();
 
-    var selected_checklist_id = $(this).attr("id").replace(/\D/g,'');
+    var selected_milestone_id = $(this).attr("id").replace(/\D/g,'');
 
 
     // get checklist item content and insert into title and description fields
-    var title_content = $("#chkLst"+selected_checklist_id).text();
+    //var title_content = $("#milestone"+selected_milestone_id).text();
+    var title_content = $("#mtitle"+selected_milestone_id).text();
     title_content = $.trim(title_content);
-    var description_content = $("#chkLst"+selected_checklist_id).attr("title");
+
+    var description_content = $("#milestone"+selected_milestone_id).attr("title");
+    var date_content = $("#mdate"+selected_milestone_id).text();
 
     //alert(description_content);
 
     // insert content into fields
-    $("#checklist_edit_item").val(title_content);
-    $("#checklist_edit_description").val(description_content);
+    $("#milestone_edit_title").val(title_content);
+    $("#milestone_edit_description").val(description_content);
+    $("#startingDate").val(date_content);
 
     // set checklist_to_edit
-    $("#checklist_to_edit").val(selected_checklist_id);
+    $("#milestone_to_edit").val(selected_milestone_id);
 
 
      event.stopProgation();
@@ -420,20 +434,22 @@
 
    //--------------------------------------------------------------------------------------
 
-   //--------------------------------------------- Checklist Save Item by Save button click --------------------------------------------
+   //--------------------------------------------- Milestone Save Item by Save button click --------------------------------------------
 
-   $("#step2_btn_save").bind("click", function(){
-       if ($("#checklist_item").val()!=''){
-             $("#checklist_item-error").hide();
+   $("#btn_save_milestone").bind("click", function(){
+       if ($("#milestone_title").val()!=''){
+             $("#milestone_title-error").hide();
 
              var project_id = $('#new_project_id').val();
              var user_id = $('#user_id').val();
-             var checklist_item = $("#checklist_item").val();
-             var checklist_description = $("#checklist_description").val();
+             var milestone_title = $("#milestone_title").val();
+             var milestone_description = $("#milestone_description").val();
+             var milestone_date = $("#milestoneDate").val();
+
              $.ajax({
-               url: '../../async/server/projects/create_project_checklist_with_div.php',
+               url: '../../async/server/projects/create_project_milestone.php',
                method: "POST",
-               data: {project_id: project_id, user_id: user_id, checklist_item: checklist_item, checklist_description: checklist_description},
+               data: {project_id: project_id, user_id: user_id, milestone_title: milestone_title, description: milestone_description, milestone_date: milestone_date},
                dataType: 'html',
                cache: false,
                processdata: false,
@@ -442,17 +458,17 @@
 
                   //var result = jQuery.parseJSON(data);
                   if (data!=''){
-                     $(".chklist_item:last").after(data);
+                     //$(".chklist_item:last").after(data);
+                     //$(".li_milestone_item:last").after(data);
+                     $("#milestoneItems").append(data);
 
                      var success_message = "<div class='alert alert-success mb-1' role='alert'>The Item has been successfully added to the Checklist</div>";
                      $("#add_message").html(success_message).slideDown().delay(5000).slideUp(2000);
 
                      //$("#divAddedCheckList").animate({"scrollTop": $("#divAddedCheckList")[0].scrollHeight}, "slow");
                   }
+               } // end of success: function(data)
 
-                  //alert(data);
-
-               }
              });
        }else{
            // if title field is blank
@@ -466,12 +482,13 @@
 
    //-----------------------------------------------------------------------------------------------------------------------------------
 
-   //------------------------------------- delChkLst click event -----------------------------------------------------------------------
+   //------------------------------------- delMilestone click event -----------------------------------------------------------------------
 
-   $(document).on("click", ".delChkLst", function(event){
-     var icon_delete_checklist_id = $(this).attr('id');
-     var icon_delete_checklist_id_value = $(this).attr('id').replace(/\D/g,'');
-     $("#checklist_to_delete").val(icon_delete_checklist_id_value);
+   $(document).on("click", ".delMilestone", function(event){
+
+     var icon_delete_milestone_id = $(this).attr('id');
+     var icon_delete_milestone_id_value = $(this).attr('id').replace(/\D/g,'');
+     $("#milestone_to_delete").val(icon_delete_milestone_id_value);
 
      //alert(icon_delete_checklist_id);
 
@@ -488,12 +505,12 @@
 
 //----------------------------------------- Delete Selected Checklist Item -------------------------------------------------------------
 
-  $("#delete_checklist_item").on("click", function(){
-    //var selected_checklist_id = $(this).attr('id');
-    var selected_checklist_id = $("#checklist_to_delete").val();
+  $("#delete_milestone_item").on("click", function(){
+    //var selected_milestone_id = $(this).attr('id');
+    var selected_milestone_id = $("#milestone_to_delete").val();
     //var checkList_id = $("#checklist_to_delete").attr('id').replace(/\D/g,'');
 
-    $.post("../../async/server/projects/delete_checklist.php", {"checklist_id":selected_checklist_id}, function(data){
+    $.post("../../async/server/projects/delete_milestone.php", {"milestone_id":selected_milestone_id}, function(data){
 
           if (data==1){
 
@@ -511,24 +528,25 @@
 
 
 //----------------------------------------- BtnUpdate for Checklist item edit -------------------------------------------------
-$("#step2_btn_update").bind("click", function(event){
+$("#btn_milestone_update").bind("click", function(event){
 
-  var checklist_edit_item = $("#checklist_edit_item").val();
-  var checklist_description = $("#checklist_edit_description").val();
+  var milestone_title = $("#milestone_edit_title").val();
+  var milestone_description = $("#milestone_edit_description").val();
+  var milestone_date = $("#startingDate").val();
   var project_id = $("#new_project_id").val();
-  var checklist_id = $("#checklist_to_edit").val();
+  var milestone_id = $("#milestone_to_edit").val();
 
-  if (checklist_edit_item==''){
+  if (milestone_title==''){
 
-     $("#checklist_edit_item-error").html("<small>Checklist item is required");
+     $("#milestone_edit_title-error").html("<small>Milestone title is required");
 
   }else{
 
     //-------------   Ajax -----------------------------------------------------
      $.ajax({
-        url: '../../async/server/projects/edit_project_checklist.php',
+        url: '../../async/server/projects/edit_project_milestone.php',
         method: "POST",
-        data: {project_id: project_id, checklist_item: checklist_edit_item, checklist_description: checklist_description, checklist_id: checklist_id},
+        data: {project_id: project_id, milestone_title: milestone_title, milestone_description: milestone_description, milestone_date: milestone_date, milestone_id: milestone_id},
         dataType: 'html',
         cache: false,
         processdata: false,

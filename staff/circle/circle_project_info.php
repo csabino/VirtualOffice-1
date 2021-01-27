@@ -185,10 +185,11 @@
                               $start_date = $gpf['start_date'];
                               $end_date = $gpf['end_date'];
                               $completed =  $gpf['completed'];
-                              $progress = $gpf['progress'];
+                              //$progress = $gpf['progress'];
                               $creator = $gpf['creator'];
                           }
 
+                          // project completion indicator
                           if ($completed!=1){
                              $isCompleted = 'Not Completed';
                              $isCompleted = "<span class='badge badge-pill badge-danger'>{$isCompleted}</span>";
@@ -197,17 +198,25 @@
                              $isCompleted = "<span class='badge badge-pill badge-success'>{$isCompleted}</span>";
                           }
 
+
+                          // project progress indicator
+                          $percent_progress = $project->get_project_progress_indicator($project_id);
+                          $progress = $percent_progress;
+
+                          // progress indicator css class
                           $class = 'progress-bar';
 
                           if ($progress==0){
                             $class = 'progress-bar';
-                          }else if ($progress>0 && $progress<25){
+                          } else if ($progress>0 && $progress<5){
                             $class = 'progress-bar bg-danger';
-                          }else if ($progress>=25 && $progress<50){
+                          } else if ($progress>=5 && $progress<25){
                             $class = 'progress-bar bg-warning';
-                          }else if ($progress>=50 && $progress<75){
-                            $class = 'progress-bar bg-primary';
-                          }else if ($progress>=75){
+                          } else if ($progress>=25 && $progress<50){
+                            $class = 'progress-bar bg-info';
+                          } else if ($progress>=50 && $progress<75){
+                              $class = 'progress-bar bg-primary';
+                          } else if ($progress>=75){
                             $class = 'progress-bar bg-success';
                           }
 
@@ -353,13 +362,24 @@
                               $description = FieldSanitizer::outClean($gc['description']);
                               $executed = $gc['executed'];
 
+
+                              // set checklist check icon
+                              $checklist_checkboxIcon = '';
+                              if ($executed==1){
+                                $checklist_checkboxIcon = "<i class='far fa-check-square fa-1x green-text pr-3'></i>";
+                              }else{
+                                $checklist_checkboxIcon = "<i class='far fa-square fa-1x green-text pr-3'></i>";
+                              }
+
+
                               $li_id = 'chkLst'.$checklist_id;
                               $icon_id = 'delChkLst'.$checklist_id;
 
                         ?>
                         <div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>
                           <li title='<?php echo $description; ?>' id='<?php echo $li_id; ?>' style='cursor:pointer;padding:3px;'>
-                                         <i class='far fa-square fa-1x green-text pr-3'></i>
+                                         <!-- <i class='far fa-square fa-1x green-text pr-3'></i> //-->
+                                         <?php echo $checklist_checkboxIcon; ?>
                                          <?php echo $item; ?> &nbsp;</li>
                         </div>
                         <?php

@@ -290,7 +290,24 @@
       }
 
 
+      public function getFiles($cell){
 
+          $this->cell_id = $cell;
+          $sqlQuery = "Select a.id, a.cell_id, a.author, u.title as user_title, u.first_name, u.last_name,
+                      u.other_names, u.position, u.avatar, a.title, a.message, a.file_type, a.file, a.date_created,
+                      a.date_modified from announcements a inner join users u on a.author=u.id where a.cell_id=:cell
+                      and a.file<>'' order by a.id desc";
+
+          $QueryExecutor = new PDO_QueryExecutor();
+          $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+          // set fields and parameters
+          $stmt->bindParam(":cell", $this->cell_id);
+
+          // execute pdo Object
+          $stmt->execute();
+          return $stmt;
+      }
 
 
 

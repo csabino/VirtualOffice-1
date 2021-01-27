@@ -63,12 +63,18 @@
                     //"item"=>$item, "description"=>$description);
 
                     if ($milestone_date!=''){
-                      $title = $milestone_date." <small><i class='fas fa-chevron-right'></i></small> ".$title;
+                      $mdate = "<span id='mdate{$milestoneId}'>".$milestone_date."</span> <small><i class='fas fa-chevron-right'></i></small> ";
                     }
+
+                      $title = "<span id='mtitle{$milestoneId}'>".$title."</span>";
 
                     $output =  "<li title='{$description}' id='milestone{$milestoneId}' style='cursor:pointer;padding:3px;'>
                                    <i class='far fa-calendar-check fa-1x green-text pr-2'></i>
-                                   &nbsp; {$title} &nbsp;<small><i id='delMilestone{$milestoneId}' class='fas fa-times text-danger delMilestone'></i></small></li>";
+                                   &nbsp; {$mdate}{$title} &nbsp;&nbsp;
+                                   <small>
+                                   <i title='Delete this item' id='delMilestone{$milestoneId}' data-toggle='modal' data-target='#confirmDelete' class='fas fa-times text-danger delMilestone'></i>
+                                   &nbsp; &nbsp; <i title='Edit this item' id='editMilestone{$milestoneId}' class='far fa-edit text-info editMilestone'></i>
+                                   </small></li>";
                     //$response = array("status"=>'success', "message"=>$output);
                     $response = $output;
                 } // end of foreach

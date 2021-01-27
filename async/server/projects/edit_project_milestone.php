@@ -29,14 +29,27 @@
   if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH']=='XMLHttpRequest')
   {
 
-      $checklist_id = $_POST['checklist_id'];
-      $action = $_POST['action'];
+      $project_id = $_POST['project_id'];
+      $milestone_id = $_POST['milestone_id'];
+      $milestone_title = $_POST['milestone_title'];
+      $milestone_description = $_POST['milestone_description'];
+      $milestone_date = $_POST['milestone_date'];
 
-      $project = new Project();
-      $result = $project->set_checklist_executed_status($checklist_id, $action);
 
-      echo $result->rowCount();
 
+      if ($project_id!='' && $milestone_title!='' && $milestone_id!=''){
+         $dataArray = array("project_id"=>$project_id, "milestone_id"=>$milestone_id, "milestone_title"=>$milestone_title,
+         "milestone_description"=>$milestone_description,"milestone_date"=>$milestone_date);
+
+         //var_dump($dataArray);
+
+         $project = new Project();
+         $result = $project->edit_project_milestone($dataArray);
+
+         //echo json_encode($response);
+      }
+       //echo $result;
+       echo $result->rowCount();
 
   }
 

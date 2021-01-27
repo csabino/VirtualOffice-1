@@ -657,6 +657,131 @@
             return $stmt;
         }
 
+        public function set_checklist_executed_status($checklist_id, $action){
+
+            // $sqlQuery
+            $sqlQuery = '';
+
+            if ($action=='check'){
+
+                $sqlQuery = "Update project_checklists set executed='1' where id={$checklist_id}";
+
+            }else{
+
+                $sqlQuery = "Update project_checklists set executed='' where id={$checklist_id}";
+
+            }
+
+            // pdo object
+            $QueryExecutor = new PDO_QueryExecutor();
+            $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+            // pdo execute
+            $stmt->execute();
+
+            return $stmt;
+
+        }
+
+        public function get_project_progress_indicator($project_id){
+
+          // declare and initialize progress percent
+          $progress_percent = 0;
+
+          // declare and initialize executed checklist
+          $checklist_item_executed = 0;
+
+          $this->project_id = $project_id;
+
+          // get project checklist and executed field data
+          $sqlQuery = "Select executed from project_checklists where project_id=:project_id";
+
+          // pdo object
+          $QueryExecutor = new PDO_QueryExecutor();
+          $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+          // bind parameter
+          $stmt->bindParam(":project_id", $this->project_id);
+
+          // pdo execute
+          $stmt->execute();
+
+          // get total number of items
+          $total_items = $stmt->rowCount();
+
+          // calculate percent per item where the total number of items is greater than zero
+          if ($total_items > 0){
+
+              // percentage per item
+              $percent_per_item = round(100/$total_items);
+
+              // retrieve the executed checklist
+              while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+                 if ($row['executed']==1)
+                 {
+                     $checklist_item_executed++;
+                 }
+              }
+
+              // calculate project progress
+              $progress_percent = $percent_per_item * $checklist_item_executed;
+              $progress_percent = ($progress_percent > 100) ? 100 : $progress_percent;
+
+          } // end of if ($total_items > 0 )
+
+            return $progress_percent;
+        }
+
+
+        public function edit_project_milestone($fields){
+             $project_id = $fields['project_id'];
+             $milestone_id = $fields['milestone_id'];
+
+             $milestone_title = FieldSanitizer::inClean($fields['milestone_title']);
+             $milestone_description = FieldSanitizer::inClean($fields['milestone_description']);
+             $milestone_date = $fields['milestone_date'];
+
+             $sqlQuery = "Update project_milestones set title=:title, description=:description, milestone_date=:milestone_date
+                          where id=:id and project_id=:project_id";
+
+            // pdo object
+             $QueryExecutor = new PDO_QueryExecutor();
+             $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+            //
+            // // bind parameters
+            $stmt->bindParam(":title", $milestone_title);
+            $stmt->bindParam(":description", $milestone_description);
+            $stmt->bindParam(":milestone_date", $milestone_date);
+            $stmt->bindParam(":id", $milestone_id);
+            $stmt->bindParam(":project_id", $project_id);
+            //
+            // // pdo execute
+             $stmt->execute();
+            //
+            // return $stmt;
+            return $stmt;
+        }
+
+        public function get_project_updates_files_by_cell($cell){
+            $this->cell_id = $cell;
+
+            // sqlQuery
+            $sqlQuery = "Select * from projects_updates where cell_id=:cell_id and file<>'' order by id desc";
+
+            // pdo object
+            $QueryExecutor = new PDO_QueryExecutor();
+            $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+            // bind parameter
+            $stmt->bindParam(":cell_id", $this->cell_id);
+
+            // pdo execute
+            $stmt->execute();
+
+            return $stmt;
+
+        }
+
   } //end of class
 
 

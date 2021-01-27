@@ -70,7 +70,7 @@
           aria-haspopup="true" aria-expanded="false">  Projects
         </a>
         <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink-555">
-          <a class="dropdown-item" href="#"> <i class="fas fa-suitcase"></i> Portfolio</a>
+          <!--<a class="dropdown-item" href="#"> <i class="fas fa-suitcase"></i> Portfolio</a> //-->
           <a class="dropdown-item" href="#"> <i class="far fa-comments"></i> Discussions</a>
           <a class="dropdown-item" href="<?php echo $baseUrl.'staff/meeting/meetings.php?en='.mask($_SESSION['ulogin_userid']); ?>"> <i class="far fa-comment-alt"></i> Meetings</a>
 

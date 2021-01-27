@@ -185,7 +185,40 @@
                     // ------------------   Get Update Details ----------------------
                     foreach($get_projects_update as $gpu){
                       $message = $gpu['message'];
+                      $file_type = $gpu['file_type'];
+                      $file = $gpu['file'];
                       $author_id = $gpu['user_id'];
+
+                          // ---- File location and size
+                                if ($file!=''){
+                                     if ($file_type=='document'){
+                                       $file_size = filesize("../../uploads/projects/documents/${file}");
+                                       if ($file_size<1000000){
+                                          $file_size = round(($file_size/1024),2);
+                                          $file_size = $file_size.' KB';
+                                       } else{
+                                          $file_size = round(($file_size/1024/1024),2);
+                                          $file_size = $file_size.' MB';
+                                       }
+
+                                     $file_url = "<a target='_blank' class='text-info' href='../../uploads/projects/documents/${file}'><div><small><i class='far fa-file-alt'></i> {$file_type} Attachment (${file_size})</small></div></a>";
+                                   }else{
+                                       $file_size = filesize("../../uploads/projects/images/${file}");
+                                       if ($file_size<1000000){
+                                          $file_size = round(($file_size/1024),2);
+                                          $file_size = $file_size.' KB';
+                                       } else{
+                                          $file_size = round(($file_size/1024/1024),2);
+                                          $file_size = $file_size.' MB';
+                                       }
+                                       $file_url = "<a target='_blank' class='text-info' href='../../uploads/projects/images/${file}'><div><small><i class='far fa-file-image'></i> ${file_type} Attachment (${file_size})</small></div></a>";
+                                   }
+
+                                 }
+                              // ----- end of file location and size
+
+
+
                     }
 
                     //--------------------- Get User Info ---------------------------
@@ -217,7 +250,8 @@
                     <?php
                         echo "<div class='text-info font-weight-normal' >{$author_fullname}</div>";
                         echo "<div style='margin-bottom:15px;font-size:13px;'>{$date_created}</div>";
-                        echo "<div>{$message}</div>";
+                        echo "<div>{$file_url}</div>";
+                        echo "<div class='mt-3 mb-3'>{$message}</div>";
 
                     ?>
 
