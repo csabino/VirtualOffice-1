@@ -22,6 +22,7 @@ if (!isset($_GET['ut']) || $_GET['ut']==''){
 
     // create cell object
     $user = new StaffUser();
+    $auth = new Auth();
 
     // create and initialize err params...
     $errFlag = 0;
@@ -66,6 +67,39 @@ if (!isset($_GET['ut']) || $_GET['ut']==''){
                                 if ($user_creator->rowCount()){
                                     $errFlag = 0;
                                     $errmsg = "The User <strong>{$title} {$firstname} {$lastname} {$othernames}</strong> has been successfully created.";
+
+                                    // ----   generate password   -------------------------------- --------------------
+
+                                      $password = $auth->generate_password();
+                                      $password_encrypt = sha1(md5(sha1($password)));
+
+                                      //------- Insert password into auth user record  ---------------------------------
+                                      $auth_password = $auth->insert_auth_password($file_no, $password_encrypt);
+
+                                      //----------- Send mail -----------------------------------------------------------
+                                        if ($auth_password->rowCount()){
+                                          // send mail
+                                          $sender = "Ogun State WorkPlace";
+                                          $subject = "WorkPlace Staff Account";
+                                          $sender_email = 'Ogun State WorkPlace kondishiva007@gmail.com';
+                                          //$recipient = $email;
+                                          $recipient = "kondishiva007@gmail.com";
+                                          $send_message = 'Dear '.$lastname.' '.$firstname.',<br/><br/>';
+                                          $send_message .= 'Please find below your login credentials to access the Ogun State WorkPlace at https://workplace.ogunstate.gov.ng.';
+                                          $send_message .= 'Username: '.$file_no.'<br/>';
+                                          $send_message .= 'Password: '.$password.'<br/><br/>';
+
+
+
+
+                                          $mail = new Mail();
+                                          $sent_response = $mail->sendMail($sender, $sender_email, $recipient, $subject, $send_message);
+                                          echo $sent_response;
+                                        }
+
+                                    //------------------ End of send mail ----------------------------------------------------
+
+
                                 }else{
                                     $errFlag = 1;
                                     $errmsg = "An error occurred creating the User <strong>'".$name."'.</strong>";

@@ -146,6 +146,7 @@
                                       $get_projects = $project->get_projects_by_cell($_GET_URL_cell_id);
 
                                       $recordFound = $get_projects->rowCount();
+                                      $user = new StaffUser();
 
                                       if ($recordFound>0){
                                           foreach($get_projects as $row){
@@ -154,13 +155,35 @@
                                               $creator = FieldSanitizer::outClean($row['user_title']).' '.FieldSanitizer::outClean($row['last_name']).' '.FieldSanitizer::outClean($row['first_name']);
                                               $completed = $row['completed'];
                                               $progress = $row['progress'];
+                                              $creator_avatar = '../../images/user_avatar.png';
+
+
+
+                                              // -- creator avatar --------------------------------------------------------------------
+                                              $get_creator = $user->getUserById($row['creator']);
+                                              foreach($get_creator as $gc)
+                                              {
+                                                if ($gc['avatar']!=''){
+                                                  $creator_avatar = '../../staff/avatars/'.$gc['avatar'];
+                                                }
+
+
+                                                 //$creator_fullname = $gc['title'].' '.$gc['last_name'].' '.$gc['first_name'];
+
+                                                 $creator_profile_url = '../../staff/profile/user_profile.php?q='.mask($row['creator']);
+                                                 //$creator_profile_url = "<a class='text-info' href='{$creator_profile_url}'>{$creator}</a>";
+                                              }
+
+
+
+
 
                                               $date_created_raw = new DateTime($row['date_created']);
                                               $date_created = $date_created_raw->format('D jS F, Y');
                                               $time_created = $date_created_raw->format('g:i a');
 
 
-                                              // ---- is_completed
+                                              // ---- is_completed  -------------------------------------------------------------------
                                               if ($completed!=1){
                                                  $isCompleted = 'Not Completed';
                                                  $isCompleted = "<span class='badge badge-pill badge-danger'>{$isCompleted}</span>";
@@ -168,14 +191,14 @@
                                                  $isCompleted = 'Completed';
                                                  $isCompleted = "<span class='badge badge-pill badge-success'>{$isCompleted}</span>";
                                               }
-                                              // ---- end of is_completed
+                                              // ---- end of is_completed  ------------------------------------------------------------
 
                                               // project progress indicator
                                               $percent_progress = $project->get_project_progress_indicator($project_id);
                                               $progress = $percent_progress;
 
 
-                                              //------ progression
+                                              //------ progression  -------------------------------------------------------------------
                                               $class = 'progress-bar';
 
                                               if ($progress==0){
@@ -206,7 +229,7 @@
                                               $project_link = "<a class='customlink' href='circle_project_updates.php?q=".mask($_GET_URL_cell_id)."&us=".mask($_GET_URL_user_id)."&pid=".mask($project_id)."'>{$project_title}</a>";
                                               $project_info_link = "<a title='Setting information about this project' href='circle_project_info.php?q=".mask($_GET_URL_cell_id)."&us=".mask($_GET_URL_user_id)."&pid=".mask($project_id)."'><i class='fas fa-cogs'></i> Project Info </a>";
                                               $project_updates_link = "<a title='Latest progress updates on the project' href='circle_project_updates.php?q=".mask($_GET_URL_cell_id)."&pid=".mask($project_id)."'><i class='fas fa-sync'></i> Updates (0)</a>";
-                                              $project_tasks_link = "<a title='Assigned tasks to members' href='circle_project_tasks.php?q=".mask($_GET_URL_cell_id)."&pid=".mask($project_id)."'><i class='fas fa-tasks'></i> Tasks (0)</a>";
+                                              $project_tasks_link = "<a title='Assigned tasks to members' href='circle_project_tasks.php?q=".mask($_GET_URL_cell_id)."&us=".mask($_GET_URL_user_id)."&pid=".mask($project_id)."'><i class='fas fa-tasks'></i> Tasks (0)</a>";
                                               $project_files_link = "<a title='Files uploaded' href='circle_project_files.php?q=".mask($_GET_URL_cell_id)."&pid=".mask($project_id)."'><i class='far fa-copy'></i> Files (0)</a>";
 
                                               echo "<tr>";
@@ -245,7 +268,7 @@
 
                                               echo "<td width='25%' class='px-2'>";
                                                   echo "<div class='chip' style='background-color:pink;'>";
-                                                      echo "<img class='border-1' src='https://mdbootstrap.com/img/Photos/Avatars/avatar-6.jpg' alt='Author'>{$creator}";
+                                                      echo "<a style='color:#666666;' href='{$creator_profile_url}'><img class='border-1' src='{$creator_avatar}' alt='Author'>{$creator}</a>";
                                                   echo "<div>";
                                               echo "</td>";
 

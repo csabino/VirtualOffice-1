@@ -33,7 +33,42 @@
           return $stmt;
       }
 
-    
+      public function generate_password()
+      {
+          $code = '';
+          $i = 0;
+          $characters = "012345689abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+          $character_length = strlen($characters);
+
+           $randIndex = mt_rand(0, $character_length-1);
+           for($i=0; $i<8; $i++ ){
+              $randIndex = mt_rand(0, $character_length-1);
+              $code .= $characters[$randIndex];
+           }
+           return $code;
+      }
+
+
+      public function insert_auth_password($fileno, $password_encrypt){
+          // $sqlQuery
+          $sqlQuery = "Update auth set password=:password where file_no=:file_no";
+
+          // PDO object
+          $QueryExecutor = new PDO_QueryExecutor();
+          $stmt = $QueryExecutor->customQuery()->prepare($sqlQuery);
+
+          // bind params
+          $stmt->bindParam(":password", $password_encrypt);
+          $stmt->bindParam(":file_no", $fileno);
+
+          // execute
+          $stmt->execute();
+
+          return $stmt;
+
+      }
+
+
 
 
   }

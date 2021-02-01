@@ -22,6 +22,22 @@
   }
   //----------------------------------------------------------------------------
 
+  //----------------------------------------------------------------------------
+  if (!isset($_SESSION['ulogin_role']) || $_SESSION['ulogin_role']!='staff'){
+    header("location: {$baseUrl}index.php");
+  }
+  //----------------------------------------------------------------------------
+
+
+
+
+  // -- user avatar
+  $my_avatar = 'images/user_avatar.png';
+  if ($_SESSION['ulogin_avatar']!='')
+  {
+      $my_avatar = 'staff/avatars/'.$_SESSION['ulogin_avatar'];
+  }
+
 ?>
 
 
@@ -30,7 +46,7 @@
 
 <!--Navbar -->
 <nav class="mb-1 navbar navbar-expand-lg navbar-dark primary-color lighten-1">
-  <a class="navbar-brand" href="#" id="logged-in-header-title">WorkPlace</a>
+  <a class="navbar-brand" href="<?php echo $baseUrl.'staff/my_dashboard.php'; ?>" id="logged-in-header-title">WorkPlace</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-555"
     aria-controls="navbarSupportedContent-555" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -58,7 +74,7 @@
           <a class="dropdown-item" href="<?php echo $baseUrl.'staff/circle/work_circle.php'; ?>"> <i class="fas fa-users"></i> Circle</a>
           <a class="dropdown-item" href="<?php echo $baseUrl.'staff/task/tasks.php?en='.mask($_SESSION['ulogin_userid']); ?>"> <i class="fas fa-list-ol"></i> Tasks</a>
           <a class="dropdown-item" href="<?php echo $baseUrl.'staff/memo/memos.php?en='.mask($_SESSION['ulogin_userid']); ?>"> <i class="far fa-file-alt"></i> Memos</a>
-          <a class="dropdown-item" href="#"> <i class="far fa-list-alt"></i> Notes</a>
+          <!-- <a class="dropdown-item" href="#"> <i class="far fa-list-alt"></i> Notes</a> //-->
           <a class="dropdown-item" href="#"> <i class="fas fa-list"></i> Reports</a>
         </div>
       </li>
@@ -85,7 +101,7 @@
           aria-haspopup="true" aria-expanded="false">  Conference
         </a>
         <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink-555">
-          <a class="dropdown-item" href="<?php echo $baseUrl.'staff/conference/meeting.php?en='.mask($_SESSION['ulogin_userid']); ?>"> <i class="fas fa-users"></i> Meeting</a>
+          <a class="dropdown-item" href="<?php //echo $baseUrl.'staff/conference/meeting.php?en='.mask($_SESSION['ulogin_userid']); ?>"> <i class="fas fa-users"></i> Meeting</a>
         </div>
       </li>
 
@@ -179,7 +195,7 @@
     <li class="nav-item avatar dropdown notification-bar-item">
           <a class="nav-link dropdown-toggle dropdown-menu-right" id="navbarDropdownMenuLink-55" data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
-            <img src="<?php echo $baseUrl."images/avatars/avatar-2.jpg";  ?>" class="img-fluid rounded-circle z-depth-0"
+            <img src="<?php echo $baseUrl.$my_avatar;  ?>" class="img-fluid rounded-circle z-depth-0"
               alt="My Avatar" >
           </a>
           <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left dropdown-primary"

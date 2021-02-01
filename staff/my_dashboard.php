@@ -135,13 +135,191 @@
       </div>
       <!-- end of page header //-->
 
-      <div>
+      <!-- notification bar //-->
+      <div class="row mt-3">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="alert alert-success" role="alert">
+                    <h5 class="alert-heading">Notifications</h5>
+
+                    <!--
+                        <p>Aww yeah, you successfully read this important alert message. This example text is going to run a bit longer so that you can see how spacing within an alert works with this kind of content.</p>
+                        <hr>
+                        <p class="mb-0">Whenever you need to, be sure to use margin utilities to keep things nice and tidy.</p>
+                    //-->
+            </div>
+          </div>
+      </div>
+      <!-- end of notification bar //-->
+
+      <!-- Feature containers //-->
+      <div class="row d-flex justify-content-center">
+
+          <!--  My Circle  //-->
+          <div class="col-x-12 col-sm-12 col-md-4 col-lg-4 d-flex justify-content-center mt-2 mb-2">
+              <!-- container //-->
+
+                  <div class='border text-center rounded z-depth-3' style='width:90%;padding:20px;'>
+                       <a href="<?php echo $baseUrl.'staff/circle/work_circle.php'; ?>">
+                         <h4><i class="fas fa-users"></i><br/>My Circles</h4>
+                       </a>
+                  </div>
+
+              <!-- end of container //-->
+
+          </div>
+          <!--  end of My Circle //-->
+
+
+          <!--  Memo  //-->
+          <div class="col-x-12 col-sm-12 col-md-4 col-lg-4 d-flex justify-content-center mt-2 mb-2">
+              <!-- container //-->
+              <div class='border text-center rounded z-depth-3' style='width:90%;padding:20px;'>
+                    <a href="<?php echo $baseUrl.'staff/memo/memos.php?en='.mask($_SESSION['ulogin_userid']); ?>">
+                      <h4><i class="far fa-file-alt"></i><br/>Memos</h4>
+                    </a>
+              </div>
+              <!-- end of container //-->
+
+          </div>
+          <!--  end of Memo //-->
+
+
+          <!--  Projects  //-->
+          <div class="col-x-12 col-sm-12 col-md-4 col-lg-4 d-flex justify-content-center mt-2 mb-2">
+              <!-- container //-->
+              <div class='border text-center rounded z-depth-3' style='width:90%;padding:20px;'>
+                   <a href="<?php echo $baseUrl.'staff/circle/work_circle.php'; ?>">
+                      <h4><i class="fas fa-project-diagram"></i><br/>Projects</h4>
+                   </a>
+              </div>
+              <!-- end of container //-->
+
+          </div>
+          <!--  end of Projects //-->
+
+          <!--  Tasks  //-->
+          <div class="col-x-12 col-sm-12 col-md-4 col-lg-4 d-flex justify-content-center mt-2 mb-2">
+              <!-- container //-->
+              <div class='border text-center rounded z-depth-3' style='width:90%;padding:20px;'>
+                   <a href="<?php echo $baseUrl.'staff/task/tasks.php?en='.mask($_SESSION['ulogin_userid']); ?>">
+                      <h4><i class="fas fa-list-ol"></i><br/>Tasks</h4>
+                   </a>
+              </div>
+              <!-- end of container //-->
+
+          </div>
+          <!--  end of Tasks //-->
+
+          <!--  Meeting  //-->
+          <div class="col-x-12 col-sm-12 col-md-4 col-lg-4 d-flex justify-content-center mt-2 mb-2">
+              <!-- container //-->
+              <div class='border text-center rounded z-depth-3' style='width:90%;padding:20px;'>
+                   <a href="<?php echo $baseUrl.'staff/meeting/meetings.php?en='.mask($_SESSION['ulogin_userid']); ?>">
+                      <h4><i class="fas fa-video"></i><br/>Meetings</h4>
+                   </a>
+              </div>
+              <!-- end of container //-->
+
+          </div>
+          <!--  end of Meeting //-->
+
+
+          <!--  Discussions  //-->
+          <div class="col-x-12 col-sm-12 col-md-4 col-lg-4 d-flex justify-content-center mt-2 mb-2">
+              <!-- container //-->
+              <div class='border text-center rounded z-depth-3' style='width:90%;padding:20px;'>
+
+                   <h4><i class="far fa-comments"></i><br/>Discussions</h4>
+              </div>
+              <!-- end of container //-->
+
+          </div>
+          <!--  end of Discussions //-->
+
+
+          <!--  Discussions  //-->
+          <div class="col-x-12 col-sm-12 col-md-4 col-lg-4 d-flex justify-content-center mt-2 mb-2">
+              <!-- container //-->
+              <div class='border text-center rounded z-depth-3' style='width:90%;padding:20px;'>
+                   <a href="<?php echo $baseUrl.'staff/circle/work_circle.php'; ?>">
+                      <h4><i class="fas fa-bullhorn"></i><br/>Announcements</h4>
+                   </a>
+              </div>
+              <!-- end of container //-->
+
+          </div>
+          <!--  end of Discussions //-->
+
+
+          <!--  Discussions  //-->
+          <div class="col-x-12 col-sm-12 col-md-4 col-lg-4 d-flex justify-content-center mt-2 mb-2">
+              <!-- container //-->
+              <div class='border text-center rounded z-depth-3' style='width:90%;padding:20px;'>
+
+                   <h4><i class="far fa-clipboard"></i><br/>Reports</h4>
+              </div>
+              <!-- end of container //-->
+
+          </div>
+          <!--  end of Discussions //-->
+
+
+          <!--  Discussions  //-->
+          <div class="col-x-12 col-sm-12 col-md-4 col-lg-4 d-flex justify-content-center mt-2 mb-2">
+              <!-- container //-->
+              <div class='border text-center rounded z-depth-3' style='width:90%;padding:20px;'>
+
+                   <h4><i class="far fa-sticky-note"></i><br/>Notes</h4>
+              </div>
+              <!-- end of container //-->
+
+          </div>
+          <!--  end of Discussions //-->
+
+
+          <!--  Discussions  //-->
+          <div class="col-x-12 col-sm-12 col-md-4 col-lg-4 d-flex justify-content-center mt-2 mb-2">
+              <!-- container //-->
+              <div class='border text-center rounded z-depth-3' style='width:90%;padding:20px;'>
+
+                   <h4><i class="far fa-copy"></i><br/>Files</h4>
+              </div>
+              <!-- end of container //-->
+
+          </div>
+          <!--  end of Discussions //-->
+
+
+          <!--  Discussions  //-->
+          <div class="col-x-12 col-sm-12 col-md-4 col-lg-4 d-flex justify-content-center mt-2 mb-2">
+              <!-- container //-->
+              <div class='border text-center rounded z-depth-3' style='width:90%;padding:20px;'>
+
+                   <h4><i class="far fa-envelope"></i><br/>Messages</h4>
+              </div>
+              <!-- end of container //-->
+
+          </div>
+          <!--  end of Discussions //-->
+
+          <!--  Discussions  //-->
+          <div class="col-x-12 col-sm-12 col-md-4 col-lg-4 d-flex justify-content-center mt-2 mb-2">
+              <!-- container //-->
+              <div class='border text-center rounded z-depth-3' style='width:90%;padding:20px;'>
+
+                   <h4><i class="fas fa-user-friends"></i><br/>Co-workers</h4>
+              </div>
+              <!-- end of container //-->
+
+          </div>
+          <!--  end of Discussions //-->
 
 
 
 
 
       </div>
+      <!-- end of Feature containers //-->
 
 
 

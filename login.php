@@ -1,5 +1,14 @@
 <?php
 
+      session_start();
+      session_destroy();
+
+
+      ini_set('display_errors', 1);
+      ini_set('display_startup_errors', 1);
+      error_reporting(E_ALL);
+      session_start();
+
       $page_title = "Login";
       // Core
       require_once("core/config.php");
@@ -17,26 +26,45 @@
           $username = FieldSanitizer::inClean($_POST['loginUsername']);
           $password = FieldSanitizer::inClean($_POST['loginPassword']);
 
+
+
           if (($username != "") || ($password != "")){
 
+              // password encrypt
+              $password_encrypt = sha1(md5(sha1($password)));
+
               $auth = new Auth();
-              $stmt = $auth->login($username, $password);
+              $stmt = $auth->login($username, $password_encrypt);
               $recordFound = $stmt->rowCount();
               if ($recordFound){
 
-                  // login succeeds
+                  // ------- login succeeds  ---------------------------
                   $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+
+                  // check for and get user avatar
+                  $user = new StaffUser();
+                  $get_user = $user->getUserById($row['user_id']);
+
+
+                  //--------- Read user record and get avatar ---------
+                  $gu = $get_user->fetch(PDO::FETCH_ASSOC);
+                  $my_avatar = $gu['avatar'];
+
+
 
                   //Start session
                   session_start();
                   $_SESSION['ulogin_state'] = 200;
-                  $_SESSION['ulogin_id'] = $row['id'];
+                  $_SESSION['ulogin_id'] = $row['id'];  // ulogin_id is auth_id
                   $_SESSION['ulogin_userid'] = $row['user_id'];
                   $_SESSION['ulogin_role'] = $row['role'];
                   $_SESSION['ulogin_fileno'] = $row['file_no'];
                   $_SESSION['ulogin_email'] = $row['email'];
+                  $_SESSION['ulogin_avatar'] = $my_avatar;
 
-
+                  //echo "id: ".$row['id'];
+                  //echo "<br/>userid: ".$row['user_id'];
 
 
                   //Redirect to appropriate dashboard

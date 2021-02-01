@@ -54,9 +54,11 @@
 
                         $code1 = mask($_GET_URL_user_id);
 
+                        $tasks_list_link = "tasks.php?en=".$code1;
                         $create_task_link = "create_task.php?q=".$code1;
 
                     ?>
+                    <a href="<?php echo $tasks_list_link; ?>" class="btn btn-sm btn-warning btn-rounded"> <i class="fas fa-chevron-left"></i>&nbsp; Tasks List</a>
                     <a href="<?php echo $create_task_link; ?>" class="btn btn-sm btn-primary btn-rounded"> <i class="fas fa-plus"></i>&nbsp; New Task</a>
               </div>
               <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
@@ -71,6 +73,8 @@
                         $task_id = $gt['id'];
                         $title = FieldSanitizer::outClean($gt['subject']);
                         $description = nl2br(FieldSanitizer::outClean($gt['description']));
+                        $file_type = $gt['file_type'];
+                        $file = $gt['file'];
                         $first_name = FieldSanitizer::outClean($gt['first_name']);
                         $last_name = FieldSanitizer::outClean($gt['last_name']);
                         $creator = $gt['title'].' '.$first_name.' '.$last_name;
@@ -82,7 +86,40 @@
                       }
 
 
+                      //----------- file type  -------------------------------------
+                      $file_url = '';
+                      if ($file!=''){
+                         if ($file_type=='document'){
+                           $file_size = filesize("../../uploads/tasks/documents/${file}");
+                           if ($file_size<1000000){
+                              $file_size = round(($file_size/1024),2);
+                              $file_size = $file_size.' KB';
+                           } else{
+                              $file_size = round(($file_size/1024/1024),2);
+                              $file_size = $file_size.' MB';
+                           }
+
+                           $file_url = "<div class='mb-2'><small><a target='_blank' href='../../uploads/tasks/documents/${file}'><i class='fas fa-paperclip'></i> ".ucfirst($file_type)." Attachment (${file_size})</a></small></div>";
+                         }else{
+                           $file_size = filesize("../../uploads/tasks/images/${file}");
+                           if ($file_size<1000000){
+                              $file_size = round(($file_size/1024),2);
+                              $file_size = $file_size.' KB';
+                           } else{
+                              $file_size = round(($file_size/1024/1024),2);
+                              $file_size = $file_size.' MB';
+                           }
+                           $file_url = "<div class='mb-2'><small><a target='_blank' href='../../uploads/tasks/images/${file}'><i class='fas fa-paperclip'></i> ".ucfirst($file_type)." Attachment (${file_size})</a></small></div>";
+                         }
+                       }
+                     // ---------- end of file type   -----------------------------
+
+
+
+
                   ?>
+
+
 
                   <div class="py-2 px-2" id="announcement_header" style="background-color:#f1f1f1;">
                         <?php
@@ -91,9 +128,11 @@
                             .$date_created."&nbsp;&nbsp;&nbsp;<i class='far fa-clock'></i> ".$time_created."</small></div>";
                         ?>
                   </div>
-                  <div class="px-2 py-4">
+
+                  <div class="px-2 py-2 mb-2">
 
                       <?php
+                            echo $file_url;
                             echo ($description);
                        ?>
                   </div>

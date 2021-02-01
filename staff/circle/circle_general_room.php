@@ -208,9 +208,9 @@
   </div> <!-- end of container //-->
 
 <br/><br/><br/>
-<input type='text' id='cell_id' value="<?php echo $_GET_URL_cell_id; ?>" />
-<input type="text" id='user_id' value="<?php echo $_GET_URL_user_id; ?>" />
-<input type="text" id='last_post_id' value='<?php echo $lastPostId; ?>' />
+<input type='hidden' id='cell_id' value="<?php echo $_GET_URL_cell_id; ?>" />
+<input type="hidden" id='user_id' value="<?php echo $_GET_URL_user_id; ?>" />
+<input type="hidden" id='last_post_id' value='<?php echo $lastPostId; ?>' />
 
 <br/><br/><br/>
 <?php

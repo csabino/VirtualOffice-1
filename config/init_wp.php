@@ -37,6 +37,7 @@
   require_once("../interface/ContactInterface.php");
   require_once("../interface/MeetingInterface.php");
   require_once("../interface/GeneralRoomInterface.php");
+  require_once("../interface/MailInterface.php");
 
 
 

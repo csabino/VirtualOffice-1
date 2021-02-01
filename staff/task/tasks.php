@@ -53,110 +53,36 @@
               </div>
 
               <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                      <!-- Tab //-->
+                      <nav class='mt-4'>
+                          <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link active" id="nav-myTask-tab" data-toggle="tab" href="#nav-myTask" role="tab"
+                              aria-controls="nav-home" aria-selected="true">My Tasks</a>
+                            <a class="nav-item nav-link" id="nav-projectTask-tab" data-toggle="tab" href="#nav-projectTask" role="tab"
+                              aria-controls="nav-project" aria-selected="false">Assigned Project Tasks</a>
+                          </div>
+                      </nav>
 
-                      <table id='tblData' class="table table-responsive table-striped table-bordered table-sm" cellspacing="0" width="100%">
-                            <thead>
-                                <tr>
-                                    <th class="th-sm" >SN</th>
-                                    <th class="th-sm" >Task</th>
-                                    <th class="th-sm" >Creator</th>
-                                    <th class="th-sm" >Project</th>
-                                    <th class="th-sm" >Date Created</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tblBody">
-                              <!--task list //-->
-                              <?php
-                                  $counter = 1;
-                                  $project = new Project();
-                                  $task = new Task();
-                                  $task_list = $task->get_tasks_listing($_GET_URL_user_id);
+                      <div class="tab-content" id="nav-tabContent"> <!-- Tab Content //-->
+                          <div class="tab-pane fade show active" id="nav-myTask" role="tabpanel" aria-labelledby="nav-myTask-tab">
+                                <!-- include my task //-->
+                                  <?php
+                                      require_once("my_tasks.inc.php");
+                                  ?>
+                                <!-- end of include of task //-->
+                          </div>
 
-                                  $recordFound = $task_list->rowCount();
+                          <div class="tab-pane fade" id="nav-projectTask" role="tabpanel" aria-labelledby="nav-projectTask-tab">
 
-                                  if ($recordFound > 0){
-                                      // foreach
-                                      foreach($task_list as $tlst){
-                                          $task_id = $tlst['id'];
-                                          $title = FieldSanitizer::outClean($tlst['subject']);
-                                          $creator = $tlst['title'].' '.$tlst['first_name'].' '.$tlst['last_name'];
-                                          $creator_avatar = '..\..\images\avatardefault100.png';
-                                          if ($tlst['avatar']!=''){
-                                              $creator_avatar = '../avatars/'.$tlst['avatar'];
-                                          }
+                          </div>
 
-
-                                          $project_name = FieldSanitizer::outClean($tlst['project_name']);
-                                          $project_cell_id = '';
-
-                                          $task_updates_link = '';
-
-                                          // if project_id is not blank, get project title as name from project
-                                          if ($tlst['project_id']!=''){
-                                               $get_project_name = $project->get_project_by_id($tlst['project_id']);
-                                               foreach($get_project_name as $gpn){
-                                                  $project_name =  FieldSanitizer::outClean($gpn['title']);
-                                                  $project_cell_id = ($gpn['cell_id']);
-                                               }
-
-
-                                               $task_href = "circle_project_task_updates.php?q=".mask($task_id)."&us=".mask($_GET_URL_user_id)."&cid=".mask($project_cell_id)."&pid=".mask($tlst['project_id']);
-                                               $task_updates_link= "<a href='{$task_href}' class='text-secondary font-weight-bold'>{$title}</a>";
-                                          }else{
-                                               $task_href = "task_updates.php?q=".mask($task_id)."&us=".mask($_GET_URL_user_id);
-                                               $task_updates_link = "<a class='text-info font-weight-bold' href='{$task_href}'>{$title}</a>";
-                                          }
-                                          // end of if project_id
-
-                                          $status = $tlst['status'];
-
-                                          $date_created_raw = new DateTime($tlst['date_created']);
-                                          $date_created = $date_created_raw->format('D. jS M., Y');
-                                          $time_created = $date_created_raw->format('g:i a');
-
-                                          // Edit link info
-                                          $edit_href = 'edit_task.php?q='.mask($_GET_URL_user_id)."&t=".mask($task_id);
-                                          $edit_link = "<a class='text-info' href='{$edit_href}'><i class='far fa-edit'></i> Edit</a>";
-
-                                          // Delete link info
-                                          $delete_href = 'task_delete.php?q='.mask($_GET_URL_user_id)."&t=".mask($task_id);
-                                          $delete_link = "<a id='del{$task_id}' class='text-danger sel_delete_task' href='{$delete_href}' data-toggle='modal' data-target='#confirmDelete'><i class='far fa-trash-alt'></i> Delete</a>";
-
-
-
-                                          echo "<tr>";
-                                          echo "<td class='text-right px-1' width='1px' >{$counter}.</td>";
-                                          echo "<td width='40%' class='px-2'><strong>{$task_updates_link}</strong>";
-                                               echo "<small><div class='row px-0 py-1'> "; // begin of rows
-                                                  echo "<div class='col-xs-4 col-sm-4 col-md-3 col-lg-3'>{$edit_link}</div>";
-                                                  echo "<div class='col-xs-4 col-sm-4 col-md-3 col-lg-3'>{$delete_link}</div>";
-                                                  echo "<div class='col-xs-4 col-sm-4 col-md-3 col-lg-3'>{$status}</div>";
-                                               echo "</div></small>";
-                                          echo "</td>";
-                                          echo "<td width='20%' class='px-2'>";
-                                               echo "<div class='chip' style='background-color:pink;'>";
-                                               echo "<img class='border-1' src='{$creator_avatar}' width='100px' alt='Author'>{$creator}";
-                                               echo "<div>";
-                                          echo "</td>";
-                                          echo "<td width='20%' class='px-2'>{$project_name}</td>";
-                                          echo "<td width='15%' class='px-2'> <i class='far fa-calendar'></i> {$date_created}
-                                                <div class='py-1'> <small> <i class='far fa-clock'></i> {$time_created}  </small></div> </td>";
-
-
-                                          echo "</tr>";
-
-
-
-                                      } // end of foreach
-                                  }
-
-
-                               ?> <!-- end of task list //-->
-
-                            </tbody>
-                      </table>
-
+                      </div><!-- end of Tab  Content //-->
               </div>
+
+
+
+
+
       </div>
 
 
@@ -222,12 +148,13 @@
            cache: false,
          }).done(function(data){
             var result = jQuery.parseJSON(data);
-            alert(result.status);
+            
+            //reload page
+            location.reload(true);
          });
          //--------------------end of Ajax module ------------------------------
 
-         //reload page
-         location.reload(true);
+
     });
 
     $("body").on("click",".sel_delete_task",function(){

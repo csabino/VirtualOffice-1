@@ -22,15 +22,36 @@
     $flagMsg = '';
     if (isset($_POST['btnSubmit'])){
         $title = FieldSanitizer::inClean($_POST['title']);
-        $project = FieldSanitizer::inClean($_POST['project']);
+        $project_name = FieldSanitizer::inClean($_POST['project']);
+        $project_id = '';
         $description = FieldSanitizer::inClean($_POST['description']);
+        $file = '';
+        $cell_id = '';
+
+
+      //  ------ check if file upload type is checked  ------------------------------
+      if (!isset($_POST['file_upload_type'])){
+
+          $file_upload_type = '';
+
+      }else{
+
+         $file_upload_type = $_POST['file_upload_type'];
+           // check if file has been uploaded
+           if (isset($_SESSION['task_file'])){
+              $file = $_SESSION['task_file'];
+           } // end of check for file upload
+
+      } // ------- end of check file upload type   ----------------------------------
+
 
       // Check if all fields are filled in
       if ($title!='' && $description!=''){
             // create data array and populate data
             $source = "My Task";
-            $dataArray = array("author"=>$_GET_URL_user_id,"title"=>$title,"project"=>$project,
-                          "description"=>$description, "source"=>$source);
+            $dataArray = array("cell_id"=>$cell_id, "author"=>$_GET_URL_user_id, "project_id"=>$project_id,
+                         "project_name"=>$project_name, "title"=>$title, "description"=>$description, "source"=>$source,
+                         "file_upload_type"=>$file_upload_type, "file"=>$file);
 
             // call class and method
             $task = new Task();
@@ -38,16 +59,18 @@
 
             if ($result){
                 $errFlag = 0;
-                $flagMsg = 'The <strong>Task</strong> has been successfully created.';
+                $flagMsg = 'The <strong>Task</strong> has been successfully created and published.';
             }else{
                 $errFlag = 1;
                 $flagMsg = 'There was a problem creating the <strong>Task</strong>. <br/>Please try again or contact the Administrator.';
             }
 
-
+            // unset SESSION for the task_file;
+            unset($_SESSION['task_file']);
       }else{
         $errFlag = 1;
         $flagMsg = "The <strong>Title</strong> and <strong>Description</strong> are required to create a <strong>Task</strong>";
+        unset($_SESSION['task_file']);
       } // end of all fields check
 
 
@@ -127,6 +150,58 @@
                       <label for="description" class="text-info font-weight-normal">Description<span class='text-danger'>*</span></label>
                       <textarea id="description" rows="5" name="description" class="form-control mb-3 " placeholder="Description" required></textarea>
 
+                      <!-- File Type  -->
+                      <div>
+                        <label for="file_upload" class="text-info font-weight-normal">File Upload Type<span class='text-danger'></span></label>
+                      </div>
+                      <!-- Default inline 1-->
+                      <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" class="custom-control-input" id="file_upload_type_document" name="file_upload_type"  value="document" <?php if(isset($_POST['btnSubmit'])){ if(!$errFlag){echo "unchecked";} } ?> >
+                        <label class="custom-control-label" for="file_upload_type_document">Document</label>
+                      </div>
+
+                      <!-- Default inline 2-->
+                      <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" class="custom-control-input" id="file_upload_type_image" name="file_upload_type" value="image">
+                        <label class="custom-control-label" for="file_upload_type_image">Image</label>
+                      </div>
+
+                      <!-- spinner //-->
+                      <div id='spinner' style="display:none;">
+                            <?php
+                                include("../../functions/BigBlueSpinner.php");
+                                echo "<span class='text-primary'>Uploading...</span>";
+                            ?>
+                      </div>
+                      <!-- end of spinner //-->
+
+                      <div id='activity_notifier'>
+                          <?php
+                              if (isset($_SESSION['task_file'])){
+                                   $msgblock = "<div class='py-3' id='myuploadedfile_div'><i class='fas fa-paperclip'></i> <span id='myuploadedfile'>".$_SESSION['task_file']."</span>";
+                                   $msgblock .= "&nbsp;&nbsp;&nbsp;<span id='deletefile' title='Delete file' style='cursor:pointer'><i class='fas fa-times text-danger'></i></span>";
+                                   $msgblock .= "</div>";
+
+                                  echo $msgblock;
+                              }
+                          ?>
+                      </div>
+
+                      <!-- file uploader //-->
+                      <div class="md-form" id='file_uploader' style="display:none;">
+                          <div class="file-field">
+                              <div class="btn btn-info btn-sm float-left">
+                                <span>Choose file</span>
+                                <input type="file" id="file">
+                              </div>
+                              <div class="file-path-wrapper">
+                                <input class="file-path validate"  type="text" placeholder="Upload your file">
+                              </div>
+                          </div>
+                     </div>
+                      <!-- end of file uploader //-->
+
+
                       <div class='mt-3'>
                         <button id="btnSubmit" name="btnSubmit" class="btn btn-info btn-sm btn-rounded" type="submit"> Create</button>
                       </div>
@@ -153,4 +228,5 @@
     //footer.php
     require('../../includes/footer.php');
  ?>
-  <script src="../../lib/js/custom/tblData.js"></script>
+  <!-- <script src="../../lib/js/custom/tblData.js"></script> //-->
+<script src="../../async/client/task/upload_file.js"></script>

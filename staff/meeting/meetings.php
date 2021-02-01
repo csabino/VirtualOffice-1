@@ -50,7 +50,7 @@
 
                     ?>
                     <a href="<?php echo $create_task_link; ?>" class="btn btn-sm btn-primary btn-rounded"> <i class="fas fa-plus"></i>&nbsp; Create Meeting</a>
-                    <a href="<?php echo $create_task_link; ?>" class="btn btn-sm btn-warning btn-rounded"> <i class="fas fa-plus"></i>&nbsp; Invited Meetings</a>
+                    <a href="#" class="btn btn-sm btn-warning btn-rounded"> <i class="fas fa-users"></i>&nbsp; Invited Meetings</a>
               </div>
 
               <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">

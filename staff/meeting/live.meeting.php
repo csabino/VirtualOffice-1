@@ -46,8 +46,8 @@ src="" style="height: 100%; width: 100%; border: 0px;"></iframe>
 
 
 
-<input type="text" id='code' value="<?php echo $_GET_URL_meeting_code; ?>" >
-<input type="text" id="title" value="<?php echo $_GET_URL_meeting_title; ?>" >
+<input type="hidden" id='code' value="<?php echo $_GET_URL_meeting_code; ?>" >
+<input type="hidden" id="title" value="<?php echo $_GET_URL_meeting_title; ?>" >
 
 
 <script>
